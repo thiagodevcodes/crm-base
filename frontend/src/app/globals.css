@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .layout-grid {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: 60px 1fr 40px;
+    grid-template-areas:
+      "header header"
+      "sidebar main"
+      "footer footer";
+    height: 100dvh;
+  }
+
+  .area-header {
+    grid-area: header;
+  }
+  .area-sidebar {
+    grid-area: sidebar;
+  }
+  .area-main {
+    grid-area: main;
+  }
+  .area-footer {
+    grid-area: footer;
+  }
+}
