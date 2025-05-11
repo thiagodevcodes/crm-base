@@ -1,3 +1,17 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Table from "@/components/table";
+
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
+
 export default function Equipe() {
     const dados = [
         { id: 1, nome: 'João', idade: 25, cidade: 'São Paulo' },
@@ -6,26 +20,30 @@ export default function Equipe() {
     ];
 
     return (
-        <div className="px-5 py-5">
-            <h1 className="text-4xl font-bold">Equipe</h1>
-            <table className="min-w-full mt-5">
-                <thead className="bg-gray-200 border border-gray-300 rounded-full">
-                    <tr>
-                        <th className=" px-4 py-2">Nome</th>
-                        <th className=" px-4 py-2">Idade</th>
-                        <th className=" px-4 py-2">Cidade</th>
-                    </tr>
-                </thead>
-                <tbody className="border-gray-300 border">
-                    {dados.map((usuario, index) => (
-                        <tr key={usuario.id} className={`${ index % 2 == 0 ? "bg-white" : "bg-gray-200"} hover:bg-gray-100`}>
-                            <td className="text-center px-4 py-2">{usuario.nome}</td>
-                            <td className="text-center px-4 py-2">{usuario.idade}</td>
-                            <td className="text-center px-4 py-2">{usuario.cidade}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className="px-10 py-5">
+            <div className="flex justify-between items-center h-16">
+                <h1 className="text-4xl font-bold ">Equipe</h1>
+                <Link href={"/admin/equipe/adicionar"}><Button className="cursor-pointer">Adicionar</Button></Link>
+            </div>
+
+            <Table></Table>
+
+            <Pagination className="mt-5">
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious href="#"/>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#">1</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext href="#" />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
     );
 }

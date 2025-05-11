@@ -2,15 +2,25 @@
 
 import { useSidebar } from "@/contexts/sidebarContext";
 import { useDeviceType } from "@/hooks/useDeviceType";
-import { ChevronFirst, ChevronLast } from "lucide-react"
+import { ChevronFirst, ChevronLast, EllipsisVertical, Settings } from "lucide-react"
 import Link from "next/link"
 import { createContext, ReactNode, useContext, useState } from "react";
+import { SidebarItemsType } from "@/types";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 type SidebarItemProps = {
   icon: ReactNode;
   text: string;
   active?: boolean;
+  options?: SidebarItemsType[];
   url: string;
 };
 
@@ -23,13 +33,13 @@ export function Sidebar({ children }: SidebarProps) {
   const device = useDeviceType()
 
   return (
-    <div className={`h-[calc(100vh-64px)] ${expanded ? "w-full" : "w-0"} flex z-100 relative`}>
-      <nav className={`${device != "mobile" && "w-full" }  border-r bg-slate-200 shadow-sm border-gray-300 h-full flex flex-col justify-between px-2`}>
+    <div className={`h-[calc(100vh-64px)] ${expanded ? "w-full" : "w-0"} flex z-10 relative`}>
+      <nav className={`${device != "mobile" && "w-full"}  border-r bg-slate-200 shadow-sm border-gray-300 h-full flex flex-col justify-between px-2`}>
         <div>
           <div className="flex items-center justify-between px-3 py-3">
-            <img className={`overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`} src="https://img.logoipsum.com/243.svg" alt="" />
+            <img className={`overflow-hidden transition-all ${expanded ? "w-full" : "w-0"}`} src="https://img.logoipsum.com/243.svg" alt="" />
 
-            { device == "mobile" &&
+            {device == "mobile" &&
               <button onClick={() => setExpanded(curr => !curr)} className="p-2 bg-slate-300 rounded-lg cursor-pointer">
                 {expanded ? <ChevronFirst /> : <ChevronLast />}
               </button>
@@ -43,15 +53,82 @@ export function Sidebar({ children }: SidebarProps) {
   );
 }
 
-export function SidebarItem({ icon, text, url, active }: SidebarItemProps) {
+export function SidebarItem({ icon, text, url, active, options }: SidebarItemProps) {
   const { expanded } = useSidebar();
 
   return (
-    <li>
-      <Link href={url} className={`flex gap-2 py-2 ${active ? "bg-gradient-to-tr from-indigo-300 to-indigo-200 text-indigo-800 rounded-lg font-bold" : ""} transition-all duration-200 hover:bg-slate-300 hover:rounded-lg my-1 pl-5 cursor-pointer`}>
-        {icon}
-        <span className={`overflow-hidden transition-all block ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+    <li className="flex justify-between">
+      <Link href={url} className={`w-full flex gap-2 py-2 ${active ? "bg-gradient-to-tr from-indigo-300 to-indigo-200 text-indigo-800 rounded-lg font-bold" : ""} transition-all duration-200 hover:bg-slate-300 hover:rounded-lg my-1 pl-5 cursor-pointer`}>
+        <div>{icon}</div>
+        <span className={`overflow-hidden transition-all block text-start ${expanded ? "w-full ml-3" : "w-0"}`}>{text}</span>
+
+        {options && expanded &&
+
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="cursor-pointer" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Opções</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {options?.map((item, index) => {
+                return (
+                  <Link key={index} href={item.url} className="cursor-pointer">
+                    <DropdownMenuItem>
+                      {item.text}
+                    </DropdownMenuItem>
+                  </Link>
+                )
+              })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+        }
       </Link>
     </li>
   );
 }
+
+{/* <Link href={item.url}>{item.text}</Link> */ }
+
+
+
+
+
+
+
+
+{/* <li className="flex justify-between">
+{options ?
+  <DropdownMenu>
+    <DropdownMenuTrigger className={`w-full flex gap-2 py-2 ${active ? "bg-gradient-to-tr from-indigo-300 to-indigo-200 text-indigo-800 rounded-lg font-bold" : ""} transition-all duration-200 hover:bg-slate-300 hover:rounded-lg my-1 pl-5 cursor-pointer`}>
+      {icon}
+      <span className={`overflow-hidden transition-all block text-start ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+    </DropdownMenuTrigger>
+    <DropdownMenuContent>
+      <DropdownMenuLabel>Opções</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      {options?.map((item, index) => {
+        return (
+          <Link key={index} href={item.url} className="cursor-pointer">
+            <DropdownMenuItem>
+              {item.text}
+            </DropdownMenuItem>
+          </Link>
+        )
+      })}
+    </DropdownMenuContent>
+  </DropdownMenu>
+
+  :
+
+  <Link href={url} className={`w-full flex gap-2 py-2 ${active ? "bg-gradient-to-tr from-indigo-300 to-indigo-200 text-indigo-800 rounded-lg font-bold" : ""} transition-all duration-200 hover:bg-slate-300 hover:rounded-lg my-1 pl-5 cursor-pointer`}>
+    {icon}
+    <span className={`overflow-hidden transition-all block text-start ${expanded ? "w-52 ml-3" : "w-0"}`}>{text}</span>
+
+    <div>
+      <EllipsisVertical />
+    </div>
+  </Link>
+}
+</li> */}
