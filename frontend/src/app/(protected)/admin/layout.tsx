@@ -28,10 +28,10 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
   const pathname = usePathname()
 
   return (
-    <div className={`layout-grid grid ${device == 'mobile' ? "grid-cols-[100px_1fr]" : "grid-cols-[250px_1fr]"}`}>
+    <div className={`layout-grid ${device == 'mobile' ? "grid-cols-[64px_1fr]" : "grid-cols-[250px_1fr]"}`}>
       <header className="area-header bg-slate-200 w-full border-b border-gray-300 flex justify-between p-5">
         <div className="flex border-gray-300 items-center gap-2">
-          <img src="https://ui-avatars.com/api/?background=c7d2fe&color=3730a3&bold=true" className="rounded-full w-10" alt="" />
+          <img src="https://ui-avatars.com/api/?background=black&color=fff&bold=true" className="rounded-full w-10" alt="" />
           <p className="font-bold">John Doe</p>
         </div>
 
@@ -54,7 +54,6 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
           <SidebarItem icon={<Building width={25} />} text="Equipe" url={"/admin/equipe"} active={pathname == '/admin/equipe'} options={[{ text: 'Adicionar', url: '/admin/equipe/adicionar' }, { text: 'Listar', url: '/admin/equipe' }]}/>
           <SidebarItem icon={<Users width={25} />} text="Usuários" url={"/admin/usuarios"} active={pathname == '/admin/usuarios'} />
           <SidebarItem icon={<Settings width={25} />} text="Configurações" url={"#"} />
-          <SidebarItem icon={<Settings width={25} />} text="Configurações" url={"#"} options={[{ text: 'Equipe', url: '/' }]} />
         </Sidebar>
       </aside>
 

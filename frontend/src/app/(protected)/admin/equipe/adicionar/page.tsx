@@ -32,7 +32,7 @@ export default function Equipe() {
                 </div>
             </div>
 
-            <div className="flex justify-center mt-5 gap-5">
+            <div className="flex justify-center mt-5 gap-5 flex-wrap">
                 <Button type="submit" className="cursor-pointer w-40">Enviar</Button>
                 <Link href={"/admin/equipe"}>
                     <Button type="button" className="cursor-pointer w-40">Voltar</Button>
