@@ -51,7 +51,7 @@ function AdminLayoutContent({ children }: { children: ReactNode }) {
       <aside className="area-sidebar">
         <Sidebar>
           <SidebarItem icon={<Home width={25} />} text="Home" url={"/admin"} active={pathname == '/admin'} />
-          <SidebarItem icon={<Building width={25} />} text="Equipe" url={"/admin/equipe"} active={pathname == '/admin/equipe'} options={[{ text: 'Adicionar', url: '/' }, { text: 'Listar', url: '/admin/equipe' }]}/>
+          <SidebarItem icon={<Building width={25} />} text="Equipe" url={"/admin/equipe"} active={pathname == '/admin/equipe'} options={[{ text: 'Adicionar', url: '/admin/equipe/adicionar' }, { text: 'Listar', url: '/admin/equipe' }]}/>
           <SidebarItem icon={<Users width={25} />} text="Usuários" url={"/admin/usuarios"} active={pathname == '/admin/usuarios'} />
           <SidebarItem icon={<Settings width={25} />} text="Configurações" url={"#"} />
           <SidebarItem icon={<Settings width={25} />} text="Configurações" url={"#"} options={[{ text: 'Equipe', url: '/' }]} />
