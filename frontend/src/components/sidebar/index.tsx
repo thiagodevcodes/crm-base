@@ -34,19 +34,28 @@ export function Sidebar({ children }: SidebarProps) {
   const device = useDeviceType()
 
   return (
-    <div className={`h-[calc(100vh-64px)] ${expanded ? "w-60" : "w-20"} transition-all duration-200 z-10 relative`}>
+    <div className={`h-dvh ${expanded ? "w-full" : "w-20"} transition-all duration-200`}>
       <nav className={`border-r bg-slate-200 shadow-sm border-gray-300 h-full flex flex-col justify-between px-2`}>
         <div>
           <div className="flex items-center justify-between px-3 py-3">
+            <div className="flex items-center gap-1.5">
+              <img src="https://ui-avatars.com/api/?background=black&color=fff&bold=true" className="rounded-full w-10" alt="" />
+              
+              { expanded && 
+              <div className="flex flex-col">
+                <p className="font-bold">John Doe</p>
+                <p className="text-sm font-light">johndoe@gmail.com</p>
+              </div>
+              }
+            </div>
 
-            <Image className={`overflow-hidden transition-all`} alt="Logo SOS" src="/sos.png" width={80} height={80} />
- 
-
-            
+       
               <button onClick={() => setExpanded(curr => !curr)} className="p-2 bg-slate-300 rounded-lg cursor-pointer">
                 {expanded ? <ChevronFirst /> : <ChevronLast />}
               </button>
             
+
+
 
           </div>
           <ul>{children}</ul>

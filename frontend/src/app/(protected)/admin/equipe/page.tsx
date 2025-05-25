@@ -20,7 +20,7 @@ export default function Equipe() {
     ];
 
     return (
-        <div className="px-10 py-5">
+        <div className="">
             <div className="flex justify-between items-center h-16">
                 <h1 className="text-4xl font-bold ">Equipe</h1>
                 <Link href={"/admin/equipe/adicionar"}><Button className="cursor-pointer">Adicionar</Button></Link>

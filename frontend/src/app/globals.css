@@ -6,25 +6,38 @@
 @layer utilities {
   .layout-grid {
     display: grid;
-    grid-template-rows: 60px 1fr 40px;
+    grid-template-rows: 60px 1fr ;
     grid-template-areas:
-      "header header header"
-      "sidebar main main"
-      "footer footer footer";
+      "header header"
+      "sidebar main"
+      "sidebar main";
     height: 100dvh;
-  }
-
+    /* Ocupa toda a altura da tela */
+  } 
   .area-header {
     grid-area: header;
   }
+
   .area-sidebar {
     grid-area: sidebar;
   }
+
   .area-main {
     grid-area: main;
   }
+
   .area-footer {
     grid-area: footer;
+  }
+
+  @media (max-width: 1024px) {
+    .layout-grid {
+      grid-template-areas:
+        "header header"
+        "main main"
+        "main main";
+    }
+
   }
 }
 
@@ -134,4 +147,3 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
-
