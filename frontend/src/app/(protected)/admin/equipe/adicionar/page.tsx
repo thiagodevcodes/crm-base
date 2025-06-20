@@ -1,44 +1,39 @@
+'use client'
+
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+
+type FormData = {
+    name: string;
+    email: string;
+};
 
 export default function Equipe() {
-    const dados = [
-        { id: 1, nome: 'João', idade: 25, cidade: 'São Paulo' },
-        { id: 2, nome: 'Maria', idade: 30, cidade: 'Rio de Janeiro' },
-        { id: 3, nome: 'Carlos', idade: 22, cidade: 'Belo Horizonte' },
-    ];
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+    };
 
     return (
         <div className="px-10 py-5">
-            <div className="flex justify-between items-center h-16">
-                <h1 className="text-4xl font-bold ">Adicionar Colaborador</h1>
+            <h1 className="text-center font-bold text-3xl mb-5">Adicionar</h1>
 
-            </div>
+            <form className="flex flex-col justify-center items-center" onSubmit={handleSubmit(onSubmit)}>
+                <div className="md:w-1/2 flex gap-3 flex-col">
+                    <div>
+                        <input className="border-[1px] px-2 py-1 w-full rounded-lg" {...register("name", { required: "Nome obrigatório" })} placeholder="Nome" />
+                        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+                    </div>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-10">
-                <div className="flex flex-col w-full">
-                    <Label className="mb-2">Nome</Label>
-                    <Input></Input>
+                    <div>
+                        <input className="border-[1px] px-2 py-1 w-full rounded-lg" {...register("email", { required: "Email obrigatório" })} placeholder="Email" />
+                        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                    </div>
+
+                    <button className="bg-black text-white w-full px-2 py-2 rounded-lg cursor-pointer" type="submit">Enviar</button>
                 </div>
-                <div className="flex flex-col w-full">
-                    <Label className="mb-2">Email</Label>
-                    <Input></Input>
-                </div>
-                <div className="flex flex-col w-full">
-                    <Label className="mb-2">Telefone</Label>
-                    <Input></Input>
-                </div>
-            </div>
-
-            <div className="flex justify-center mt-5 gap-5 flex-wrap">
-                <Button type="submit" className="cursor-pointer w-40">Enviar</Button>
-                <Link href={"/admin/equipe"}>
-                    <Button type="button" className="cursor-pointer w-40">Voltar</Button>
-                </Link>
-            </div>
-
+            </form>
         </div>
     );
 }

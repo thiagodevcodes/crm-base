@@ -1,5 +1,5 @@
+import Link from 'next/link';
 import React from 'react';
-import { Button } from '../ui/button';
 
 const dados = [
     { id: 1, nome: 'João', idade: 25, cidade: 'São Paulo' },
@@ -27,9 +27,8 @@ const Table = () => {
                             <td className="text-center px-4 py-2">{usuario.idade}</td>
                             <td className="text-center px-4 py-2">{usuario.cidade}</td>
                             <td className="text-center px-4 py-2 flex items-center justify-center gap-2">
-                                <Button className="bg-blue-500 hover:bg-blue-800 cursor-pointer" >Editar</Button>
-                                <Button className="bg-red-500 hover:bg-red-800 cursor-pointer">Excluir</Button>
-
+                                <Link href={"/"} className="bg-blue-500 hover:bg-blue-800 cursor-pointer text-white px-5 py-2 rounded-2xl">Editar</Link>
+                                <Link href={"/"} className="bg-red-500 hover:bg-red-800 cursor-pointer text-white px-5 py-2 rounded-2xl">Excluir</Link>
                             </td>
                         </tr>
                     ))}

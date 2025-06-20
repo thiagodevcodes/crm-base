@@ -1,16 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import Table from "@/components/table";
-
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 
 export default function Equipe() {
     const dados = [
@@ -23,27 +12,10 @@ export default function Equipe() {
         <div className="">
             <div className="flex justify-between items-center h-16">
                 <h1 className="text-4xl font-bold ">Equipe</h1>
-                <Link href={"/admin/equipe/adicionar"}><Button className="cursor-pointer">Adicionar</Button></Link>
+                <Link href={"/admin/equipe/adicionar"} className="bg-black text-white px-5 py-2 rounded-2xl">Adicionar</Link>
             </div>
 
-            <Table></Table>
-
-            <Pagination className="mt-5">
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#"/>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            <Table/>
         </div>
     );
 }
