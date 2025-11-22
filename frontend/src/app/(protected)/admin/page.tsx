@@ -18,7 +18,6 @@ export default function Home() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });

@@ -1,3 +1,5 @@
+import { UseFormRegisterReturn } from "react-hook-form";
+
 export function InputField({
   label,
   type = "text",
@@ -9,7 +11,7 @@ export function InputField({
   type?: string;
   error?: string | null;
   placeholder?: string;
-  registerReturn: any;
+  registerReturn: UseFormRegisterReturn;
 }) {
   return (
     <div>
