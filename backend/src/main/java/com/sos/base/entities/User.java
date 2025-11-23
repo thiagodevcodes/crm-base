@@ -31,9 +31,11 @@ public class User {
     @Column(name = "user_id")
     private UUID userId;
 
-    @Column(unique = true)
     private String name;
+    
+    @Column(unique = true)
     private String username;
+
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
