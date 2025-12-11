@@ -1,40 +1,69 @@
 package com.sos.base.services;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
+import java.time.Instant;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
+
+import com.sos.base.controllers.dto.LoginRequest;
+import com.sos.base.controllers.dto.LoginResponse;
+import com.sos.base.entities.Role;
+import com.sos.base.repositories.UserRepository;
+
 
 @Service
 public class AuthService {
+    @Autowired
+    private UserRepository userRepository;
 
-    private final JwtDecoder jwtDecoder;
-    private final String cookieName = "token"; // o nome do cookie HttpOnly que você envia no login
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    public AuthService(JwtDecoder jwtDecoder) {
-        this.jwtDecoder = jwtDecoder;
-    }
+    @Autowired
+    private JwtEncoder jwtEncoder;
 
-    public Jwt getJwtFromRequest(HttpServletRequest req) {
-        System.out.println(req);
-        
-        if (req.getCookies() == null) return null;
+    
+    public LoginResponse login(LoginRequest loginRequest) {
+        var user = userRepository.findByUsername(loginRequest.username());
 
-        for (Cookie c : req.getCookies()) {
-            if (cookieName.equals(c.getName())) {
-                try {
-                    return jwtDecoder.decode(c.getValue());
-                } catch (Exception e) {
-                    return null; // inválido ou expirado
-                }
-            }
+        if (user.isEmpty() || !user.get().isLoginCorrect(loginRequest, passwordEncoder)) {
+            throw new BadCredentialsException("user or password is invalid!");
         }
-        return null;
-    }
 
-    public String getUserIdFromRequest(HttpServletRequest req) {
-        Jwt jwt = getJwtFromRequest(req);
-        return jwt == null ? null : jwt.getSubject();
+        var now = Instant.now();
+        var expiresIn = 300L;
+
+        var scopes = user.get().getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(Collectors.joining(" "));
+
+        var claims = JwtClaimsSet.builder()
+                .issuer("mybackend")
+                .subject(user.get().getUserId().toString())
+                .issuedAt(now)
+                .expiresAt(now.plusSeconds(expiresIn))
+                .claim("scope", scopes)
+                .build();
+
+        var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
+        // montar cookie HttpOnly
+        ResponseCookie cookie = ResponseCookie.from("token", jwtValue)
+                .httpOnly(true)
+                .secure(false) // DEV = false
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(expiresIn)
+                .build();
+
+        return new LoginResponse(jwtValue, cookie, expiresIn, user.get().getUsername(), user.get().getName(), user.get().getRoles());
     }
 }
