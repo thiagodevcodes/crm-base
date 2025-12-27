@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import { Spinner } from "@/components/spinner";
+import { delay } from "@/utils/functions";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -24,6 +26,7 @@ export default function Login() {
 
   useEffect(() => {
     async function checkAuth() {
+      await delay(1000); // ⏳ 0.5s de delay
       try {
         const res = await axios.get("http://localhost:8080/auth/me", {
           withCredentials: true,
@@ -62,7 +65,7 @@ export default function Login() {
     axios.defaults.withCredentials = true; // idealmente setar fora do submit
 
     try {
-      const response = await axios.post("http://localhost:8080/login", {
+      const response = await axios.post("http://localhost:8080/auth/sign_in", {
         username: data.email,
         password: data.password,
       });
@@ -110,6 +113,8 @@ export default function Login() {
     }
   }
 
+  if (loading) return <Spinner />;
+  
   return (
     <div className="grid lg:grid-cols-2">
       <div className="bg-blue-800 h-dvh flex justify-center items-center">
