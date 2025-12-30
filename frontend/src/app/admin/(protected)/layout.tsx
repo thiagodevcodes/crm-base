@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { Layout } from "@/components/admin/layout";
+import { MobileMenuProvider } from "@/contexts/mobileMenuContext";
 
 type AdminLayoutProps = {
   children: ReactNode;
@@ -9,8 +10,8 @@ type AdminLayoutProps = {
 
 export default function AdminLayout({ children }: Readonly<AdminLayoutProps>) {
   return (
-    <Layout>
-      {children}
-    </Layout> 
+    <MobileMenuProvider>
+      <Layout>{children}</Layout>
+    </MobileMenuProvider>
   );
 }
