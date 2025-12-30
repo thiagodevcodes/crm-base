@@ -29,18 +29,35 @@ public class AdminUserConfig implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name()); 
-        var userAdmin = userRepository.findByUsername("admin");
+        var userTest = userRepository.findByUsername("teste@admin.com");
+        var userThiago = userRepository.findByUsername("thiago@gmail.com");
 
-        if(userAdmin != null) {
-            userAdmin.ifPresentOrElse(
+
+        if(userTest != null) {
+            userTest.ifPresentOrElse(
                 (user) -> {
-                    System.out.println("Admin já existe");
+                    System.out.println("Teste já existe");
                 },
                 () -> {
                     var user = new User();
-                    user.setUsername("admin");
-                    user.setName("admin");
-                    user.setPassword(passwordEncoder.encode("123"));
+                    user.setUsername("teste@gmail.com");
+                    user.setName("Teste");
+                    user.setPassword(passwordEncoder.encode("123321123"));
+                    user.setRoles(Set.of(roleAdmin));
+                    userRepository.save(user);
+                });
+        }
+
+        if(userThiago != null) {
+            userThiago.ifPresentOrElse(
+                (user) -> {
+                    System.out.println("Thiago já existe");
+                },
+                () -> {
+                    var user = new User();
+                    user.setUsername("thiago@gmail.com");
+                    user.setName("Thiago");
+                    user.setPassword(passwordEncoder.encode("12345678"));
                     user.setRoles(Set.of(roleAdmin));
                     userRepository.save(user);
                 });

@@ -14,7 +14,7 @@ import { delay } from "@/utils/functions";
 
 const loginSchema = z.object({
   email: z.string(),
-  password: z.string().min(2, "A senha deve ter no mínimo 2 caracteres"),
+  password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
 });
 
 type LoginData = z.infer<typeof loginSchema>;
@@ -146,7 +146,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-900 text-white py-2 rounded-md font-medium hover:bg-blue-950 transition disabled:opacity-60"
+            className="w-full bg-blue-900 text-white py-2 rounded-md font-medium hover:bg-blue-950 transition disabled:opacity-60 cursor-pointer"
           >
             {isSubmitting ? "Entrando..." : "Entrar"}
           </button>
