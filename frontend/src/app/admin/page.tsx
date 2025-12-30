@@ -5,12 +5,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputField } from "@/components/global/inputField";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
-import axios, { AxiosError } from "axios";
-import { useEffect, useState } from "react";
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
-import { delay } from "@/utils/functions";
+import { AxiosError } from "axios";
+
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/global/spinner";
 

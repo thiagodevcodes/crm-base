@@ -1,10 +1,9 @@
 "use client";
 
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { delay } from "@/utils/functions";
-import axios, { Axios, AxiosError, AxiosResponse } from "axios";
+import axios from "axios";
 import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export interface User {
   id: string;
