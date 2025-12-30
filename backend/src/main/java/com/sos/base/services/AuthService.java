@@ -38,7 +38,7 @@ public class AuthService {
         }
 
         var now = Instant.now();
-        var expiresIn = 300L;
+        long expiresIn = 60 * 60 * 24; // 86400
 
         var scopes = user.get().getRoles()
                 .stream()
