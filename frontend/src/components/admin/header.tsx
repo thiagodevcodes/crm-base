@@ -35,8 +35,9 @@ export function Header() {
         trigger={
           <div className="flex items-center gap-4">
             <span className="text-white/80 text-sm">Olá, {user?.name}</span>
-            <div className="w-9 h-9 rounded-full bg-[#0d8cd7] flex items-center text-white justify-center font-bold">
-              T
+
+            <div className="w-9 h-9 rounded-full bg-[#0d8cd7] flex items-center justify-center text-white font-bold">
+              {user?.name?.charAt(0).toUpperCase()}
             </div>
           </div>
         }
