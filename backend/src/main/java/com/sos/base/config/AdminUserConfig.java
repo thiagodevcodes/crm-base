@@ -29,21 +29,39 @@ public class AdminUserConfig implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name()); 
-        var userTest = userRepository.findByUsername("teste@admin.com");
-        var userThiago = userRepository.findByUsername("thiago@gmail.com");
+        var roleBasic = roleRepository.findByName(Role.Values.BASIC.name()); 
+        
+        var userBasic = userRepository.findByUsername("basic@test.com");
+        var userAdmin = userRepository.findByUsername("admin@test.com");
+        var userThiago = userRepository.findByUsername("thiago@test.com");
 
 
-        if(userTest != null) {
-            userTest.ifPresentOrElse(
+        if(userAdmin != null) {
+            userAdmin.ifPresentOrElse(
                 (user) -> {
-                    System.out.println("Teste já existe");
+                    System.out.println("Admin já existe");
                 },
                 () -> {
                     var user = new User();
-                    user.setUsername("teste@gmail.com");
-                    user.setName("Teste");
-                    user.setPassword(passwordEncoder.encode("123321123"));
+                    user.setUsername("admin@test.com");
+                    user.setName("Admin");
+                    user.setPassword(passwordEncoder.encode("admin123"));
                     user.setRoles(Set.of(roleAdmin));
+                    userRepository.save(user);
+                });
+        }
+
+                if(userBasic != null) {
+            userBasic.ifPresentOrElse(
+                (user) -> {
+                    System.out.println("Basic já existe");
+                },
+                () -> {
+                    var user = new User();
+                    user.setUsername("basic@test.com");
+                    user.setName("Basic");
+                    user.setPassword(passwordEncoder.encode("basic123"));
+                    user.setRoles(Set.of(roleBasic));
                     userRepository.save(user);
                 });
         }
@@ -55,10 +73,10 @@ public class AdminUserConfig implements CommandLineRunner {
                 },
                 () -> {
                     var user = new User();
-                    user.setUsername("thiago@gmail.com");
+                    user.setUsername("thiago@test.com");
                     user.setName("Thiago");
                     user.setPassword(passwordEncoder.encode("12345678"));
-                    user.setRoles(Set.of(roleAdmin));
+                    user.setRoles(Set.of(roleAdmin, roleBasic));
                     userRepository.save(user);
                 });
         }

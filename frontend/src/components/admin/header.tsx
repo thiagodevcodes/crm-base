@@ -3,24 +3,11 @@ import { Dropdown, DropdownItem } from "../global/dropdown";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAuth } from "@/hooks/useAuth";
+import { Spinner } from "../global/spinner";
 
 export function Header() {
   const router = useRouter();
-
-  const [authenticated, setAuthenticated] = useState(false);
-  const { user } = useAuth();
-
-  async function handleLogout() {
-    try {
-      await axios.post("http://localhost:8080/auth/sign_out", null, {
-        withCredentials: true,
-      });
-      setAuthenticated(false);
-      router.replace("/admin"); // redireciona para login
-    } catch (err) {
-      console.error("Erro ao deslogar", err);
-    }
-  }
+  const { user, logout } = useAuth();
 
   return (
     <header
@@ -29,12 +16,16 @@ export function Header() {
         z-20
         "
     >
-      <h2 className="text-xl font-semibold">Dashboard</h2>
+      <h2 className="text-xl font-semibold text-white">Dashboard</h2>
 
       <Dropdown
         trigger={
           <div className="flex items-center gap-4">
             <span className="text-white/80 text-sm">Olá, {user?.name}</span>
+
+            {user?.roles.map(role => (
+              <span key={role.roleId} className="text-white">{role.name}</span>
+            ))}
 
             <div className="w-9 h-9 rounded-full bg-[#0d8cd7] flex items-center justify-center text-white font-bold">
               {user?.name?.charAt(0).toUpperCase()}
@@ -42,7 +33,7 @@ export function Header() {
           </div>
         }
       >
-        <DropdownItem onClick={handleLogout}>Sair</DropdownItem>
+        <DropdownItem onClick={logout}>Sair</DropdownItem>
       </Dropdown>
     </header>
   );

@@ -2,9 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Aside() {
   const pathname = usePathname();
+  const { user } = useAuth();
 
   return (
     <aside className="row-span-3 bg-slate-900 px-6">
@@ -29,15 +31,19 @@ export function Aside() {
           <LayoutDashboard width={20} />
           Dashboard
         </Link>
-        <Link
-          href={"/admin/dashboard"}
-          className={`nav-link ${
-            pathname == "/admin/usuarios" ? "active" : ""
-          }`}
-        >
-          <Users width={20} />
-          Usuários
-        </Link>
+
+
+        {user?.roles?.some(role => role.name === "ADMIN") && (
+          <Link
+            href="/admin/dashboard"
+            className={`nav-link ${
+              pathname === "/admin/usuarios" ? "active" : ""
+            }`}
+          >
+            <Users width={20} />
+            Usuários
+          </Link>
+        )}
       </nav>
     </aside>
   );

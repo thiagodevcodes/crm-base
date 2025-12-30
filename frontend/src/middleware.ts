@@ -2,19 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
+  const { pathname } = req.nextUrl;
 
-  const pathname = req.nextUrl.pathname;
+  const isAdminRoute = pathname.startsWith("/admin");
+  const isLoginRoute = pathname === "/admin";
 
-  const isAdmin = pathname.startsWith("/admin");
-  const isLogin = pathname === "/admin";
-
-  // ❌ Não logado tentando acessar área protegida
-  if (isAdmin && !isLogin && !token) {
+  // 🔒 Não autenticado tentando acessar área protegida
+  if (isAdminRoute && !isLoginRoute && !token) {
     return NextResponse.redirect(new URL("/admin", req.url));
   }
 
-  // 🔁 Logado tentando acessar login
-  if (isLogin && token) {
+  // 🔁 Autenticado tentando acessar login
+  if (isLoginRoute && token) {
     return NextResponse.redirect(
       new URL("/admin/dashboard", req.url)
     );

@@ -50,10 +50,14 @@ public class AuthController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        
+        System.out.println();
 
         UUID userId = UUID.fromString(authentication.getName());
 
         User user = userRepository.findById(userId).get();
+
+        System.out.println(user.toString());
 
         return ResponseEntity.ok(Map.of(
             "authenticated", true,

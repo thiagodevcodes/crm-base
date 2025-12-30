@@ -11,6 +11,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { Spinner } from "@/components/global/spinner";
 import { delay } from "@/utils/functions";
+import { useAuth } from "@/hooks/useAuth";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -20,37 +21,7 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    async function checkAuth() {
-      await delay(700); // ⏳ 0.7s de delay
-      try {
-        const res = await axios.get("http://localhost:8080/auth/me", {
-          withCredentials: true,
-        });
-
-        console.log(res)
-
-        if (res.status === 200) {
-          setAuthenticated(true);
-          router.push("/admin/dashboard"); 
-        } else {
-          setAuthenticated(false);
-          router.push("/admin"); // redireciona se não autenticado
-        }
-      } catch (err) {
-        setAuthenticated(false);
-        router.push("/admin");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    checkAuth();
-  }, [router]);
+  const { authenticated, loading, login } = useAuth();
 
   const {
     register,
@@ -61,31 +32,19 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
+  // 🔥 enquanto decide, não renderiza NADA
+  if (loading) return <Spinner />;
+
+  // 🔒 já logado → não renderiza login
+  if (authenticated) return <Spinner />; // ou null, mas spinner é mais seguro
+
   async function onSubmit(data: LoginData) {
-    axios.defaults.withCredentials = true; // idealmente setar fora do submit
-
     try {
-      const response = await axios.post("http://localhost:8080/auth/sign_in", {
-        username: data.email,
-        password: data.password,
-      });
-
-      // se chegou aqui, status foi 2xx
-      if (response.status === 200) {
-        router.push("/admin/dashboard");
-        return;
-      }
-
-      // caso queira um fallback (normalmente não é necessário porque 4xx/5xx vai pro catch)
-      setError("root", {
-        type: "manual",
-        message: "Erro inesperado. Tente novamente.",
-      });
+      await login(data.email, data.password);
     } catch (err) {
-      // tipagem segura para axios
       const error = err as AxiosError<any>;
 
-      // Erro de autenticação
+      // 401 → credenciais inválidas
       if (error.response?.status === 401) {
         setError("root", {
           type: "manual",
@@ -94,9 +53,12 @@ export default function Login() {
         return;
       }
 
-      // caso o backend envie uma mensagem específica no body
+      // mensagem vinda do backend
       const backendMessage =
-        error.response?.data?.message || error.response?.data || null;
+        error.response?.data?.message ??
+        error.response?.data ??
+        null;
+
       if (backendMessage) {
         setError("root", {
           type: "manual",
@@ -105,7 +67,7 @@ export default function Login() {
         return;
       }
 
-      // Erro de rede ou outro
+      // erro genérico / rede
       setError("root", {
         type: "manual",
         message: "Erro de conexão. Verifique sua rede e tente novamente.",
@@ -113,8 +75,9 @@ export default function Login() {
     }
   }
 
-  if (loading) return <Spinner />;
-  
+
+
+
   return (
     <div className="grid lg:grid-cols-2">
       <div className="bg-slate-950 h-dvh flex justify-center items-center">
