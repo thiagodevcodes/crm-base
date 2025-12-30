@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { Spinner } from "@/components/global/spinner";
+import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { delay } from "@/utils/functions";
 import { useAuth } from "@/hooks/useAuth";
+import { Spinner } from "@/components/global/spinner";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -21,7 +22,7 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>;
 
 export default function Login() {
-  const { authenticated, loading, login } = useAuth();
+  const { login } = useAuth();
 
   const {
     register,
@@ -31,12 +32,6 @@ export default function Login() {
   } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
   });
-
-  // 🔥 enquanto decide, não renderiza NADA
-  if (loading) return <Spinner />;
-
-  // 🔒 já logado → não renderiza login
-  if (authenticated) return <Spinner />; // ou null, mas spinner é mais seguro
 
   async function onSubmit(data: LoginData) {
     try {
@@ -111,7 +106,7 @@ export default function Login() {
             disabled={isSubmitting}
             className="w-full bg-blue-900 text-white py-2 rounded-md font-medium hover:bg-blue-950 transition disabled:opacity-60 cursor-pointer"
           >
-            {isSubmitting ? "Entrando..." : "Entrar"}
+            {isSubmitting ? <Spinner/> : "Entrar"}
           </button>
 
           {errors.root && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { Spinner } from "@/components/global/spinner";
+import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { delay } from "@/utils/functions";
 import axios, { Axios, AxiosError, AxiosResponse } from "axios";
 import { useRouter } from "next/navigation";

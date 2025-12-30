@@ -3,7 +3,7 @@ import { Dropdown, DropdownItem } from "../global/dropdown";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAuth } from "@/hooks/useAuth";
-import { Spinner } from "../global/spinner";
+import { Spinner } from "../global/spinnerLoading";
 
 export function Header() {
   const router = useRouter();
