@@ -3,13 +3,13 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputField } from "@/components/inputField";
+import { InputField } from "@/components/global/inputField";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { Spinner } from "@/components/spinner";
+import { Spinner } from "@/components/global/spinner";
 import { delay } from "@/utils/functions";
 
 const loginSchema = z.object({
@@ -26,7 +26,7 @@ export default function Login() {
 
   useEffect(() => {
     async function checkAuth() {
-      await delay(1000); // ⏳ 0.5s de delay
+      await delay(700); // ⏳ 0.7s de delay
       try {
         const res = await axios.get("http://localhost:8080/auth/me", {
           withCredentials: true,
@@ -117,8 +117,8 @@ export default function Login() {
   
   return (
     <div className="grid lg:grid-cols-2">
-      <div className="bg-blue-800 h-dvh flex justify-center items-center">
-        <Image src={"/sos-logo.svg"} width={550} height={550} alt=""></Image>
+      <div className="bg-slate-950 h-dvh flex justify-center items-center">
+        <Image src={"/login.png"} width={550} height={550} alt=""></Image>
       </div>
 
       <div className="flex justify-center items-center">
@@ -146,7 +146,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-800 text-white py-2 rounded-md font-medium hover:bg-blue-700 transition disabled:opacity-60"
+            className="w-full bg-blue-900 text-white py-2 rounded-md font-medium hover:bg-blue-950 transition disabled:opacity-60"
           >
             {isSubmitting ? "Entrando..." : "Entrar"}
           </button>

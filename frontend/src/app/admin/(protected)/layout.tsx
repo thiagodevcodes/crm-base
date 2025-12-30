@@ -3,8 +3,11 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Spinner } from "@/components/spinner";
+import { Spinner } from "@/components/global/spinner";
 import { delay } from "@/utils/functions";
+import { Header } from "@/components/admin/header";
+import { Footer } from "@/components/admin/footer";
+import { Aside } from "@/components/admin/aside";
 
 type AdminLayoutProps = {
   children: ReactNode;
@@ -12,12 +15,13 @@ type AdminLayoutProps = {
 
 export default function AdminLayout({ children }: Readonly<AdminLayoutProps>) {
   const router = useRouter();
+  
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
 
   async function checkAuth() {
-    await delay(1000); // ⏳ 0.5s de delay
+    await delay(700); // ⏳ 0.7s de delay
 
     try {
       const res = await axios.get('http://localhost:8080/auth/me', { withCredentials: true });
@@ -57,16 +61,16 @@ export default function AdminLayout({ children }: Readonly<AdminLayoutProps>) {
     <>
       {authenticated && (
         <>
-          {/* Botão de logout */}
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
+          <div className="grid min-h-screen grid-cols-[260px_1fr] grid-rows-[auto_1fr_auto]">      
+            <Aside/>
+            <Header/>
 
-          {/* Conteúdo do layout */}
-          <div>{children}</div>
+            <main className="col-start-2 bg-white p-8">
+              {children}
+            </main>
+
+            <Footer/>
+          </div>
         </>
       )}
     </>
