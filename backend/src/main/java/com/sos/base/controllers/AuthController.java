@@ -1,6 +1,8 @@
 package com.sos.base.controllers;
 
 import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sos.base.controllers.dto.LoginRequest;
 import com.sos.base.controllers.dto.LoginResponse;
+import com.sos.base.entities.User;
+import com.sos.base.repositories.UserRepository;
 import com.sos.base.services.AuthService;
 
 
@@ -23,6 +27,9 @@ import com.sos.base.services.AuthService;
 public class AuthController {
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/sign_in")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
@@ -44,9 +51,15 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        UUID userId = UUID.fromString(authentication.getName());
+
+        User user = userRepository.findById(userId).get();
+
         return ResponseEntity.ok(Map.of(
             "authenticated", true,
-            "user", authentication.getName()
+            "id", user.getUserId(),
+            "name", user.getName(),
+            "roles", user.getRoles()
         ));
     }
 

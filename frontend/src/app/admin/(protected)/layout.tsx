@@ -8,6 +8,7 @@ import { delay } from "@/utils/functions";
 import { Header } from "@/components/admin/header";
 import { Footer } from "@/components/admin/footer";
 import { Aside } from "@/components/admin/aside";
+import { AuthProvider } from "@/contexts/authContext";
 
 type AdminLayoutProps = {
   children: ReactNode;
@@ -58,7 +59,7 @@ export default function AdminLayout({ children }: Readonly<AdminLayoutProps>) {
   if (loading) return <Spinner />;
 
   return (
-    <>
+    <AuthProvider>
       {authenticated && (
         <>
           <div className="grid min-h-screen grid-cols-[260px_1fr] grid-rows-[auto_1fr_auto]">      
@@ -73,6 +74,7 @@ export default function AdminLayout({ children }: Readonly<AdminLayoutProps>) {
           </div>
         </>
       )}
-    </>
+    </AuthProvider>
+
   );
 }

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Dropdown, DropdownItem } from "../global/dropdown";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Header() {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
+  const { user } = useAuth();
 
   async function handleLogout() {
     try {
@@ -34,7 +34,7 @@ export function Header() {
       <Dropdown
         trigger={
           <div className="flex items-center gap-4">
-            <span className="text-white/80 text-sm">Olá, Thiago</span>
+            <span className="text-white/80 text-sm">Olá, {user?.name}</span>
             <div className="w-9 h-9 rounded-full bg-[#0d8cd7] flex items-center text-white justify-center font-bold">
               T
             </div>
