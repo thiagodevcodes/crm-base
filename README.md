@@ -27,13 +27,11 @@
 
 GERAR CHAVE PRIVADA
 
-```bash
-openssl genrsa > private_key.pem
+`bash openssl genrsa > private_key.pem
 
-GERAR CHAVE PÚBLICA
+GERAR CHAVE PÚBLICA COM BASE NA CHAVE PRIVADA
 
-```bash
-openssl rsa -in private_key.pem -pubout -out public_key.pem
+`bash openssl rsa -in private_key.pem -pubout -out public_key.pem
 
 
 - URL: https://localhost:8080 (Servidor local)
