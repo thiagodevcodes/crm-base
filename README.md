@@ -21,8 +21,6 @@
 ### Back-end: 
 
 - Versões utilizadas: Maven 3.9.9, Java 21, NextJS 15.5.3, React 18
-- mvn spring-boot:run
-
 - Para conseguir rodar o projeto é preciso ter chaves RSA públicas e privadas dentro da pasta resources
 
 - GERAR CHAVE PRIVADA
@@ -37,13 +35,29 @@
   openssl rsa -in private_key.pem -pubout -out public_key.pem
 ```
 
+- RODAR O PROJETO
+  
+```bash
+  mvn spring-boot:run
+```
+
 - URL: https://localhost:8080 (Servidor local)
 
 ### Front-end:
 
-- URL: http://localhost:3000 (Servidor local)
+- INSTALAR DEPENDÊNCIAS NA PASTA /frontend
+  
+```bash
+  npm install
+```
 
-- Acessar a pasta frontend pelo CMD e digitar "npm install" em seguida "npm run dev"
+- R0DAR O PROJETO
+
+```bash
+  npm run dev
+```
+
+- URL: http://localhost:3000 (Servidor local)
 
 ### Fotos do Projeto
 
