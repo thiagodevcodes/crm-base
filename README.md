@@ -1,1 +1,42 @@
-# crm-base
+<h1>CRM</h1>
+
+<img height="28" src="https://img.shields.io/badge/-Em_Desenvolvimento...-83B81A?style=fot-the-badge">
+
+### Tecnologias :
+
+- <img height="28" src="https://img.shields.io/badge/Java-FF9E0F.svg?style=flat&https://img.shields.io/badge/Spring%20Boot-64a43a.svg?style=flat&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCwwLDI1NiwyNTYiPgo8ZyBmaWxsPSIjRkZGRkZGIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtZGFzaGFycmF5PSIiIHN0cm9rZS1kYXNob2Zmc2V0PSIwIiBmb250LWZhbWlseT0ibm9uZSIgZm9udC13ZWlnaHQ9Im5vbmUiIGZvbnQtc2l6ZT0ibm9uZSIgdGV4dC1hbmNob3I9Im5vbmUiIHN0eWxlPSJtaXgtYmxlbmQtbW9kZTogbm9ybWFsIj48ZyB0cmFuc2Zvcm09InNjYWxlKDUuMTIsNS4xMikiPjxwYXRoIGQ9Ik0yOC4xODc1LDBjMi43NSw2LjM2MzI4IC05Ljg1OTM3LDEwLjI5Mjk3IC0xMS4wMzEyNSwxNS41OTM3NWMtMS4wNzQyMiw0Ljg3MTA5IDcuNDkyMTksMTAuNTMxMjUgNy41LDEwLjUzMTI1Yy0xLjMwMDc4LC0yLjAxNTYyIC0yLjI1NzgxLC0zLjY3NTc4IC0zLjU2MjUsLTYuODEyNWMtMi4yMDcwMywtNS4zMDQ2OSAxMy40NDE0MSwtMTAuMTA1NDcgNy4wOTM3NSwtMTkuMzEyNXpNMzYuNTYyNSw4LjgxMjVjMCwwIC0xMS4wNjI1LDAuNzEwOTQgLTExLjYyNSw3Ljc4MTI1Yy0wLjI1LDMuMTQ4NDQgMi45MTAxNiw0LjgwNDY5IDMsNy4wOTM3NWMwLjA3NDIyLDEuODcxMDkgLTEuODc1LDMuNDM3NSAtMS44NzUsMy40Mzc1YzAsMCAzLjU0Njg4LC0wLjY3NTc4IDQuNjU2MjUsLTMuNTMxMjVjMS4yMzA0NywtMy4xNjc5NyAtMi4zOTg0NCwtNS4zMDg1OSAtMi4wMzEyNSwtNy44NDM3NWMwLjM1MTU2LC0yLjQyNTc4IDcuODc1LC02LjkzNzUgNy44NzUsLTYuOTM3NXpNMTkuMTg3NSwyNS4xNTYyNWMwLDAgLTEwLjEyNSwtMC4xNDQ1MyAtMTAuMTI1LDIuNzE4NzVjMCwyLjk5MjE5IDEzLjI1MzkxLDMuMjE0ODQgMjIuNzE4NzUsMS4zNzVjMCwwIDIuNTE1NjMsLTEuNzMwNDcgMy4xODc1LC0yLjM3NWMtNi4yMDMxMiwxLjI2NTYzIC0yMC4zNDM3NSwxLjQwNjI1IC0yMC4zNDM3NSwwLjMxMjVjMCwtMS4wMDc4MSA0LjU2MjUsLTIuMDMxMjUgNC41NjI1LC0yLjAzMTI1ek0zOC42NTYyNSwyNS4xNTYyNWMtMC45OTIxOSwwLjA3ODEzIC0yLjA2MjUsMC40NjA5NCAtMy4wMzEyNSwxLjE1NjI1YzIuMjgxMjUsLTAuNDkyMTkgNC4yMTg3NSwwLjkyMTg4IDQuMjE4NzUsMi41MzEyNWMwLDMuNjI1IC01LjI1LDcuMDMxMjUgLTUuMjUsNy4wMzEyNWMwLDAgOC4xMjUsLTAuOTIxODcgOC4xMjUsLTYuODc1YzAsLTIuNzAzMTIgLTEuODc4OTEsLTQuMDE1NjIgLTQuMDYyNSwtMy44NDM3NXpNMTYuNzUsMzAuNzE4NzVjLTEuNTU0NjksMCAtMy44NzUsMS4yMTg3NSAtMy44NzUsMi4zNzVjMCwyLjMyNDIyIDExLjY4NzUsNC4xMTMyOCAyMC4zNDM3NSwwLjcxODc1bC0zLC0xLjg0Mzc1Yy01Ljg2NzE5LDEuODc4OTEgLTE2LjY3MTg3LDEuMjY1NjMgLTEzLjQ2ODc1LC0xLjI1ek0xOC4xODc1LDM1LjkzNzVjLTIuMTI4OTEsMCAtMy41MzEyNSwxLjI4NTE2IC0zLjUzMTI1LDIuMjVjMCwyLjk4NDM4IDEyLjcxNDg0LDMuMjg1MTYgMTcuNzUsMC4yNWwtMy4xODc1LC0yLjAzMTI1Yy0zLjc2MTcyLDEuNTg5ODQgLTEzLjIwMzEyLDEuODMyMDMgLTExLjAzMTI1LC0wLjQ2ODc1ek0xMS4wOTM3NSwzOC42MjVjLTMuNDY4NzUsLTAuMDcwMzEgLTUuNzE4NzUsMS40ODgyOCAtNS43MTg3NSwyLjc4MTI1YzAsNi44NzUgMzUuNSw2LjU1ODU5IDM1LjUsLTAuNDY4NzVjMCwtMS4xNjc5NyAtMS4zNDc2NiwtMS43MzQzNyAtMS44NDM3NSwtMmMyLjkwMjM0LDYuNzE4NzUgLTI5LjA2MjUsNi4xODM1OSAtMjkuMDYyNSwyLjIxODc1YzAsLTAuOTAyMzQgMi4zNTE1NiwtMS43NjU2MiA0LjUzMTI1LC0xLjM0Mzc1bC0xLjg0Mzc1LC0xLjA2MjVjLTAuNTQyOTcsLTAuMDgyMDMgLTEuMDY2NDEsLTAuMTEzMjggLTEuNTYyNSwtMC4xMjV6TTQ0LjYyNSw0My4yNWMtNS4zOTg0NCw1LjExNzE5IC0xOS4wNzgxMiw2Ljk3MjY2IC0zMi44NDM3NSwzLjgxMjVjMTMuNzYxNzIsNS42MzI4MSAzMi43NzczNCwyLjQ3MjY2IDMyLjg0Mzc1LC0zLjgxMjV6Ij48L3BhdGg+PC9nPjwvZz4KPC9zdmc+">
+
+- <img height="28" src="https://img.shields.io/badge/-SpringBoot-6DB33F?logo=springboot&logoColor=white&style=fot-the-badge">
+
+- <img height="28" src="https://img.shields.io/badge/-Hibernate-59666C?logo=hibernate&logoColor=white&style=fot-the-badge">
+
+- <img height="28" src="https://img.shields.io/badge/postgresql-4169e1?logo=postgresql&logoColor=white&style=fot-the-badge">
+
+- <img height="28" src="https://img.shields.io/badge/-React-1ac5ff?logo=react&logoColor=white&style=fot-the-badge">
+
+- <img height="28" src="https://img.shields.io/badge/-NextJS-000000?logo=next.js&logoColor=white&style=fot-the-badge">
+
+
+
+
+
+### Back-end: 
+
+- Necessita do Maven 3 e do Java 17
+- mvn spring-boot:run
+
+- URL: https://localhost:8080 (Servidor local)
+
+### Front-end:
+- URL: http://localhost:3000 (Servidor local)
+
+- Acessar a pasta frontend pelo CMD e digitar "npm install" em seguida "npm run dev"
+
+### Fotos do Projeto
+
+<img width="700px" src="./frontend//public/img1.png">
+<img width="700px" src="./frontend//public/img2.png">
+<img width="700px" src="./frontend//public/img3.png">
+
+
+
