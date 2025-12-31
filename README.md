@@ -22,12 +22,13 @@
 
 ### Back-end: 
 
-- Necessita do Maven 3 e do Java 17
+- Versões utilizadas: Maven 3.9.9, Java 21, NextJS 15.5.3, React 18
 - mvn spring-boot:run
 
 - URL: https://localhost:8080 (Servidor local)
 
 ### Front-end:
+
 - URL: http://localhost:3000 (Servidor local)
 
 - Acessar a pasta frontend pelo CMD e digitar "npm install" em seguida "npm run dev"
