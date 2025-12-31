@@ -37,9 +37,9 @@ export function Aside() {
 
           {user?.roles?.some((role) => role.name === "ADMIN") && (
             <Link
-              href="/admin/dashboard"
+              href="/admin/users"
               className={`nav-link ${
-                pathname === "/admin/usuarios" ? "active" : ""
+                pathname === "/admin/users" ? "active" : ""
               }`}
             >
               <Users width={20} />

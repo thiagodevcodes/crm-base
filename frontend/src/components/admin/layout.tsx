@@ -4,7 +4,6 @@ import { ReactNode, useEffect, useState } from "react";
 import { Header } from "@/components/admin/header";
 import { Footer } from "@/components/admin/footer";
 import { Aside } from "@/components/admin/aside";
-import MobileMenu from "./menuMobile";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 
 type Props = {

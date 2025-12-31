@@ -1,18 +1,14 @@
-"use client";
+import DashboardClient from "@/pages/dashboard";
+import { Metadata } from "next";
 
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
-import { useAuth } from "@/hooks/useAuth";
+export const metadata: Metadata = {
+  title: "CRM - Dashboard",
+  description: "Página de visualização de dados",
+};
 
-export default function Dashboard() {
-  const { authenticated, loading } = useAuth();
+export default function DashboardPage() {
+  // Aqui você pode fazer fetch server-side se precisar
+  // Ex: dados iniciais ou verificações via cookies
 
-  if (loading) return <SpinnerLoading />;
-
-  if (!authenticated) return <SpinnerLoading />;
-
-  return (
-    <div className="">
-   
-    </div>
-  );
+  return <DashboardClient />;
 }
