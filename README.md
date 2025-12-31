@@ -25,10 +25,10 @@
 - Necessita do Maven 3 e do Java 17
 - mvn spring-boot:run
 
-- URL: https://localhost:8080
+- URL: https://localhost:8080 (Servidor local)
 
 ### Front-end:
-- URL: http://localhost:3000
+- URL: http://localhost:3000 (Servidor local)
 
 - Acessar a pasta frontend pelo CMD e digitar "npm install" em seguida "npm run dev"
 
