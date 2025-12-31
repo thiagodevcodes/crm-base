@@ -18,12 +18,23 @@
 
 
 
-
-
 ### Back-end: 
 
 - Versões utilizadas: Maven 3.9.9, Java 21, NextJS 15.5.3, React 18
 - mvn spring-boot:run
+
+- Para conseguir rodar o projeto é preciso ter chaves RSA públicas e privadas
+
+GERAR CHAVE PRIVADA
+
+```bash
+openssl genrsa > private_key.pem
+
+GERAR CHAVE PÚBLICA
+
+```bash
+openssl rsa -in private_key.pem -pubout -out public_key.pem
+
 
 - URL: https://localhost:8080 (Servidor local)
 
