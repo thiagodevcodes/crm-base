@@ -16,7 +16,7 @@
 
 - <img height="28" src="https://img.shields.io/badge/-NextJS-000000?logo=next.js&logoColor=white&style=fot-the-badge">
 
-- <img height="28" src="https://img.shields.io/badge/-NextJS-000000?logo=next.js&logoColor=white&style=fot-the-badge](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
+- <img height="28" src="https://img.shields.io/badge/-NextJS-000000?logo=next.js&logoColor=white&style=fot-the-badge">
 
 
 
