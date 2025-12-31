@@ -10,7 +10,7 @@
 
 - <img height="28" src="https://img.shields.io/badge/-Hibernate-59666C?logo=hibernate&logoColor=white&style=fot-the-badge">
 
-- <img height="28" src="https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white">
+- <img height="28" src="https://img.shields.io/badge/postgresql-4169e1?logo=react&logoColor=white&style=fot-the-badge">
 
 - <img height="28" src="https://img.shields.io/badge/-React-1ac5ff?logo=react&logoColor=white&style=fot-the-badge">
 
