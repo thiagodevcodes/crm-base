@@ -8,7 +8,7 @@ export default function Users() {
 
   if (loading) return <SpinnerLoading />;
 
-  if (!authenticated) return <SpinnerLoading />; // ou redirect client-side
+  if (!authenticated) return <SpinnerLoading />;
 
   return (
     <div className="p-6">
