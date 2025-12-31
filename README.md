@@ -34,9 +34,8 @@
 
 ### Fotos do Projeto
 
-<img width="700px" src="./frontend//public/img1.png">
-<img width="700px" src="./frontend//public/img2.png">
-<img width="700px" src="./frontend//public/img3.png">
+<img width="700px" src="./frontend//public/img-1.png">
+<img width="700px" src="./frontend//public/img-2.png">
 
 
 
