@@ -41,7 +41,7 @@
   mvn spring-boot:run
 ```
 
-- URL: https://localhost:8080 (Servidor local)
+- URL: http://localhost:8080 (Servidor local)
 
 ### Front-end:
 
