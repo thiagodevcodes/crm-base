@@ -28,7 +28,7 @@
 - GERAR CHAVE PRIVADA
 
 ```bash
-`bash openssl genrsa > private_key.pem
+  openssl genrsa > private_key.pem
 ```
 
 - GERAR CHAVE PÚBLICA COM BASE NA CHAVE PRIVADA
