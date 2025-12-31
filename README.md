@@ -23,16 +23,19 @@
 - Versões utilizadas: Maven 3.9.9, Java 21, NextJS 15.5.3, React 18
 - mvn spring-boot:run
 
-- Para conseguir rodar o projeto é preciso ter chaves RSA públicas e privadas
+- Para conseguir rodar o projeto é preciso ter chaves RSA públicas e privadas dentro da pasta resources
 
-GERAR CHAVE PRIVADA
+- GERAR CHAVE PRIVADA
 
+```bash
 `bash openssl genrsa > private_key.pem
+```
 
-GERAR CHAVE PÚBLICA COM BASE NA CHAVE PRIVADA
+- GERAR CHAVE PÚBLICA COM BASE NA CHAVE PRIVADA
 
-`bash openssl rsa -in private_key.pem -pubout -out public_key.pem
-
+```bash
+  openssl rsa -in private_key.pem -pubout -out public_key.pem
+```
 
 - URL: https://localhost:8080 (Servidor local)
 
