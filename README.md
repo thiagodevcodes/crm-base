@@ -20,7 +20,7 @@
 
 ### Back-end: 
 
-- Versões desejadas para bom funcionamento do projeto: Maven 3.9.9, Java 21, NextJS v15.5.3, React 18, NodeJS 22.18.0
+- Versões desejadas para bom funcionamento do projeto: Maven 3.9.9, Java 21, NodeJS 22.18.0
 - Para conseguir rodar o projeto corret é preciso ter chaves RSA públicas e privadas dentro da pasta "\backend\src\main\resources"
 
 - GERAR CHAVE PRIVADA
