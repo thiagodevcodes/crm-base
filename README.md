@@ -20,7 +20,7 @@
 
 ### Back-end: 
 
-- Versões utilizadas: Maven 3.9.9, Java 21, NextJS 15.5.3, React 18
+- Versões utilizadas: Maven 3.9.9, Java 21, NextJS 15.5.3, React 18, NodeJS 22.18.0
 - Para conseguir rodar o projeto é preciso ter chaves RSA públicas e privadas dentro da pasta resources
 
 - GERAR CHAVE PRIVADA
