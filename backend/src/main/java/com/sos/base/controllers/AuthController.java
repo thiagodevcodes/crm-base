@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,6 @@ import com.sos.base.controllers.dto.LoginResponse;
 import com.sos.base.entities.User;
 import com.sos.base.repositories.UserRepository;
 import com.sos.base.services.AuthService;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -40,8 +40,7 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, response.cookie().toString())
                 .body(Map.of(
                         "accessToken", response.accessToken(),
-                        "expiresIn", response.expiresIn()
-                ));
+                        "expiresIn", response.expiresIn()));
     }
 
     @GetMapping("/me")
@@ -50,7 +49,7 @@ public class AuthController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        
+
         System.out.println();
 
         UUID userId = UUID.fromString(authentication.getName());
@@ -60,26 +59,42 @@ public class AuthController {
         System.out.println(user.toString());
 
         return ResponseEntity.ok(Map.of(
-            "authenticated", true,
-            "id", user.getUserId(),
-            "name", user.getName(),
-            "roles", user.getRoles()
-        ));
+                "authenticated", true,
+                "id", user.getUserId(),
+                "name", user.getName(),
+                "roles", user.getRoles()));
     }
 
     @PostMapping("/sign_out")
     public ResponseEntity<Map<String, Object>> logout() {
         ResponseCookie cookie = ResponseCookie.from("token", "")
-            .httpOnly(true)
-            .secure(false) // true em produção
-            .sameSite("Lax")
-            .path("/")
-            .maxAge(0)
-            .build();
+                .httpOnly(true)
+                .secure(false) // true em produção
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0)
+                .build();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(Map.of("message", "Logged out"));
+    }
+
+    @GetMapping("/debug")
+    public ResponseEntity<Map<String, Object>> debug() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        ResponseCookie cookie = ResponseCookie.from("token", "")
+                .httpOnly(true)
+                .secure(false) // true em produção
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .body(Map.of("roles", auth.getAuthorities()));
     }
 
 }
