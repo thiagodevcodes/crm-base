@@ -7,8 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  // Aqui você pode fazer fetch server-side se precisar
-  // Ex: dados iniciais ou verificações via cookies
-
   return <DashboardClient />;
 }

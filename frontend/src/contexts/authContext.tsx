@@ -1,29 +1,17 @@
 "use client";
 
-import { delay } from "@/utils/functions";
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import { createContext, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getMe, signIn, signOut } from "@/services/auth";
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  roles: Role[]
-}
-
-export interface Role {
-  roleId: string;
-  name: string;
-}
+import { User } from "@/types/user";
 
 interface AuthContextData {
   user: User | null;
   authenticated: boolean;
-  logout: () => Promise<void>;
   loading: boolean;
-  loggingOut: boolean;
   login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextData | null>(null);
@@ -31,79 +19,40 @@ const AuthContext = createContext<AuthContextData | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [loggingOut, setLoggingOut] = useState(false);
-  const router = useRouter()
+
+  const router = useRouter();
 
   async function loadUser() {
     try {
-      await delay(700); // simula backend lento
-      const response = await axios.get('http://localhost:8080/auth/me', { withCredentials: true });
-
-      setUser(response.data);
+      const user = await getMe();
+      setUser(user);
       setAuthenticated(true);
     } catch {
       setUser(null);
       setAuthenticated(false);
     } finally {
-      setLoading(false);
+      setLoading(false); // 🔥 só aqui
     }
   }
 
-  async function login(
-    email: string,
-    password: string
-  ): Promise<void> {
+  async function login(email: string, password: string) {
     try {
       setLoading(true);
+      await signIn(email, password);
+      await loadUser()
 
-      await delay(700); // simula backend lento
-      await axios.post(
-        "http://localhost:8080/auth/sign_in",
-        { username: email, password },
-        { withCredentials: true }
-      );
-
-      await loadUser();
       router.replace("/admin/dashboard");
-    } catch (err) {
-      throw err;
     } finally {
       setLoading(false);
     }
   }
 
-  // async function logout() {
-  //   try {
-  //     setLoading(true)
-  //     await delay(700); // simula backend lento
-  //     const response = await axios.post("http://localhost:8080/auth/sign_out", null, {
-  //       withCredentials: true,
-  //     });
-
-  //     // se chegou aqui, status foi 2xx
-  //     if (response.status === 200) {
-  //       router.replace("/admin/dashboard");
-  //       return;
-  //     }
-
-  //     router.replace("/admin"); // redireciona para login
-  //   } catch (err) {
-  //     console.error("Erro ao deslogar", err);
-  //   }
-  //   finally {
-  //     setLoading(false);
-  //   } 
-  // }
-
   async function logout() {
     try {
       setLoading(true);
-      await delay(700); // simula backend lento
-      const response = await axios.post("http://localhost:8080/auth/sign_out", null, {
-        withCredentials: true,
-      });
+
+      await signOut();
 
       setUser(null);
       setAuthenticated(false);
@@ -112,21 +61,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  } 
+  }
 
   useEffect(() => {
-    loadUser()
-  }, [])
+    loadUser();
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
         authenticated,
-        logout,
         login,
-        loading,
-        loggingOut
+        logout,
+        loading
       }}
     >
       {children}

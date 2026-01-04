@@ -8,8 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function UsersPage() {
-  // Aqui você pode fazer fetch server-side se precisar
-  // Ex: dados iniciais ou verificações via cookies
-
   return <Users />;
 }

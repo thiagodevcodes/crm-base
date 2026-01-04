@@ -1,7 +1,5 @@
 import { Dropdown, DropdownItem } from "../global/dropdown";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { useState } from "react";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 import ButtonMobile from "../global/buttonMobile";
 
@@ -12,12 +10,10 @@ export function Header() {
   return (
     <div
       className="
-         bg-black px-8 py-3 flex items-center justify-between
+         bg-black px-8 py-3 flex items-center justify-end
         z-20
         "
     >
-      <h2 className="text-xl font-semibold text-white">Dashboard</h2>
-
       <Dropdown
         trigger={
           <div className="items-center gap-4 lg:flex hidden">

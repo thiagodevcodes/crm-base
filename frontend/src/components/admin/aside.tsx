@@ -3,12 +3,16 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useMobileMenu } from "@/hooks/useMobileMenu";
 import { Dropdown, DropdownItem } from "../global/dropdown";
+
+import { ROLES } from "@/constants/roles";
+import { canAccess } from "@/utils/canAccess";
 
 export function Aside() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+
+  const roles = user?.roles.map((r) => r.name) ?? [];
 
   return (
     <>
@@ -25,17 +29,19 @@ export function Aside() {
         </div>
 
         <nav className="mt-4">
-          <Link
-            href={"/admin/dashboard"}
-            className={`nav-link ${
-              pathname == "/admin/dashboard" ? "active" : ""
-            }`}
-          >
-            <LayoutDashboard width={20} />
-            Dashboard
-          </Link>
+          {canAccess(roles, [ROLES.BASIC, ROLES.ADMIN]) && (
+            <Link
+              href={"/admin/dashboard"}
+              className={`nav-link ${
+                pathname == "/admin/dashboard" ? "active" : ""
+              }`}
+            >
+              <LayoutDashboard width={20} />
+              Dashboard
+            </Link>
+          )}
 
-          {user?.roles?.some((role) => role.name === "ADMIN") && (
+          {canAccess(roles, [ROLES.ADMIN]) && (
             <Link
               href="/admin/users"
               className={`nav-link ${
@@ -49,7 +55,8 @@ export function Aside() {
         </nav>
 
         <div className="lg:hidden flex justify-center w-full mt-2">
-          <Dropdown align="center"
+          <Dropdown
+            align="center"
             trigger={
               <div className="items-center gap-4justify-center lg:hidden flex gap-2">
                 <span className="text-white/80 text-sm ">
