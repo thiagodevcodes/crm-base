@@ -3,4 +3,4 @@ export const ROLES = {
   BASIC: "BASIC",
 } as const;
 
-export type Role = typeof ROLES[keyof typeof ROLES];
+export type UserRole = typeof ROLES[keyof typeof ROLES];

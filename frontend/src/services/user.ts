@@ -1,4 +1,4 @@
-import { CreateUserResult } from "@/types/user";
+import { CreateUserResult, User } from "@/types/user";
 import { delay } from "@/utils/functions";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
@@ -21,4 +21,20 @@ export async function createUser(
     const error = err as AxiosError;
     return { success: false, response: error };
   }
+}
+
+export async function getUsers(): Promise<User[]> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/users`,
+    { withCredentials: true }
+  );
+
+  return response.data;
+}
+
+export async function deleteUser(userId: string): Promise<void> {
+  await axios.delete(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+    { withCredentials: true }
+  );
 }

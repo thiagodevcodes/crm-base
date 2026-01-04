@@ -3,45 +3,33 @@
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
-import { delay } from "@/utils/functions";
-import { useRouter } from "next/navigation";
-import { createUser } from "@/services/user";
-
-type FormData = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import { UserFormData } from "@/types/user";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: (data: UserFormData) => Promise<void>; // recebe dados do formulário
 };
 
-export function RegisterModal({ isOpen, onClose }: Props) {
+export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<FormData>();
+  } = useForm<UserFormData>();
 
   const password = watch("password");
 
-  async function onSubmit(data: FormData) {
-    const res = await createUser(data.name, data.email, data.password);
-
-    if (res.success) {
-      alert("Usuário criado com sucesso!");
-    } else {
-      alert("Erro ao criar usuário!");
+  async function handleFormSubmit(data: UserFormData) {
+    try {
+      await onSubmit(data); // chama o prop onSubmit do pai
+      reset();              // limpa o formulário
+      onClose();            // fecha o modal
+    } catch (err) {
+      console.error("Erro ao cadastrar usuário:", err);
     }
-
-    reset();
-    onClose();
   }
 
   return (
@@ -81,16 +69,14 @@ export function RegisterModal({ isOpen, onClose }: Props) {
               Cadastrar Usuário
             </h2>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
               {/* Nome */}
               <div>
                 <input
                   type="text"
                   placeholder="Nome"
                   className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("name", {
-                    required: "Nome é obrigatório",
-                  })}
+                  {...register("name", { required: "Nome é obrigatório" })}
                 />
                 {errors.name && (
                   <p className="text-red-400 text-sm">{errors.name.message}</p>
@@ -103,16 +89,13 @@ export function RegisterModal({ isOpen, onClose }: Props) {
                   type="email"
                   placeholder="Email"
                   className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("email", {
+                  {...register("username", {
                     required: "Email é obrigatório",
-                    minLength: {
-                      value: 3,
-                      message: "Mínimo de 3 caracteres",
-                    },
+                    minLength: { value: 3, message: "Mínimo de 3 caracteres" },
                   })}
                 />
-                {errors.email && (
-                  <p className="text-red-400 text-sm">{errors.email.message}</p>
+                {errors.username && (
+                  <p className="text-red-400 text-sm">{errors.username.message}</p>
                 )}
               </div>
 
@@ -124,16 +107,11 @@ export function RegisterModal({ isOpen, onClose }: Props) {
                   className="w-full p-2 rounded bg-slate-800 text-white"
                   {...register("password", {
                     required: "Senha é obrigatória",
-                    minLength: {
-                      value: 6,
-                      message: "Mínimo de 6 caracteres",
-                    },
+                    minLength: { value: 6, message: "Mínimo de 6 caracteres" },
                   })}
                 />
                 {errors.password && (
-                  <p className="text-red-400 text-sm">
-                    {errors.password.message}
-                  </p>
+                  <p className="text-red-400 text-sm">{errors.password.message}</p>
                 )}
               </div>
 

@@ -1,17 +1,24 @@
-import { Role } from "@/constants/roles";
+import { UserRole } from "@/constants/roles";
 import { AxiosError, AxiosResponse } from "axios";
 
-export interface RoleEntity {
+export interface Role {
   roleId: string;
-  name: Role; // 👈 AQUI está o segredo
+  name: UserRole; // 👈 AQUI está o segredo
 }
 
 export interface User {
-  id: string;
+  userId: string;
   name: string;
-  email: string;
-  roles: RoleEntity[];
+  username: string;
+  roles: Role[];
 }
+
+export type UserFormData = {
+  name: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export type CreateUserResult =
   | { success: true; response: AxiosResponse }
