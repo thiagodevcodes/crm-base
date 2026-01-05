@@ -33,8 +33,6 @@ public class AdminUserConfig implements CommandLineRunner {
         
         var userBasic = userRepository.findByUsername("basic@test.com");
         var userAdmin = userRepository.findByUsername("admin@test.com");
-        var userThiago = userRepository.findByUsername("thiago@test.com");
-
 
         if(userAdmin != null) {
             userAdmin.ifPresentOrElse(
@@ -65,21 +63,5 @@ public class AdminUserConfig implements CommandLineRunner {
                     userRepository.save(user);
                 });
         }
-
-        if(userThiago != null) {
-            userThiago.ifPresentOrElse(
-                (user) -> {
-                    System.out.println("Thiago já existe");
-                },
-                () -> {
-                    var user = new User();
-                    user.setUsername("thiago@test.com");
-                    user.setName("Thiago");
-                    user.setPassword(passwordEncoder.encode("12345678"));
-                    user.setRoles(Set.of(roleAdmin, roleBasic));
-                    userRepository.save(user);
-                });
-        }
-
     }
 }

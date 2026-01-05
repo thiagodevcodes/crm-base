@@ -1,9 +1,10 @@
 "use client";
 
-import { User } from "@/types/user";
-import { deleteUser } from "@/services/user";
+import { User, UserFormData } from "@/types/user";
+import { deleteUser, updateUser } from "@/services/user";
 import { useState } from "react";
 import { ConfirmAlert } from "./confirmAlert";
+import { RegisterModal } from "./registerUserModal";
 
 type Props = {
   users: User[];
@@ -13,15 +14,19 @@ type Props = {
 export function UsersTable({ users, setUsers }: Props) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+
+
+  async function handleUpdate(data: UserFormData) {
+    await updateUser(data.name, data.username, data.password);
+  }
 
   async function handleDelete() {
     if (!selectedUser) return;
 
     try {
       await deleteUser(selectedUser.userId);
-      setUsers((prev) =>
-        prev.filter((u) => u.userId !== selectedUser.userId)
-      );
+      setUsers((prev) => prev.filter((u) => u.userId !== selectedUser.userId));
     } catch (err) {
       console.error("Erro ao deletar usuário:", err);
     } finally {
@@ -78,6 +83,16 @@ export function UsersTable({ users, setUsers }: Props) {
                     <button
                       onClick={() => {
                         setSelectedUser(user);
+                        setOpen(true);
+                      }}
+                      className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer"
+                    >
+                      Editar
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedUser(user);
                         setConfirmOpen(true);
                       }}
                       className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
@@ -91,6 +106,12 @@ export function UsersTable({ users, setUsers }: Props) {
           </tbody>
         </table>
       </div>
+
+      <RegisterModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleUpdate}
+      />
 
       <ConfirmAlert
         isOpen={confirmOpen}

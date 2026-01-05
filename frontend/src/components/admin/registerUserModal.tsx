@@ -1,9 +1,11 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { UserFormData } from "@/types/user";
+import { Role, RoleOption, UserFormData } from "@/types/user";
+import Select from "react-select";
+import { ROLES } from "@/constants/roles";
 
 type Props = {
   isOpen: boolean;
@@ -16,6 +18,7 @@ export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<UserFormData>();
@@ -24,13 +27,35 @@ export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
 
   async function handleFormSubmit(data: UserFormData) {
     try {
+      console.log(data)
       await onSubmit(data); // chama o prop onSubmit do pai
-      reset();              // limpa o formulário
-      onClose();            // fecha o modal
+      reset(); // limpa o formulário
+      onClose(); // fecha o modal
     } catch (err) {
       console.error("Erro ao cadastrar usuário:", err);
     }
   }
+
+  const roleOptions: RoleOption[] = [
+    { value: ROLES.ADMIN, label: "Admin" },
+    { value: ROLES.BASIC, label: "Padrão" },
+  ];
+
+  const darkSelectStyles = {
+    control: (base: any, state: any) => ({
+      ...base,
+      backgroundColor: "#1e293b",
+      borderColor: state.isFocused ? "white" : "#1e293b", // verde quando focado
+      boxShadow: "none",
+      "&:hover": {
+        borderColor: "#1e293b",
+      },
+    }),
+    placeholder: (base: any, state: any) => ({
+      ...base,
+      color: state.isFocused ? "#94a3b8" : "#94a3b8",
+    }),
+  };
 
   return (
     <AnimatePresence>
@@ -69,7 +94,10 @@ export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
               Cadastrar Usuário
             </h2>
 
-            <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+            <form
+              onSubmit={handleSubmit(handleFormSubmit)}
+              className="space-y-4"
+            >
               {/* Nome */}
               <div>
                 <input
@@ -95,7 +123,9 @@ export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
                   })}
                 />
                 {errors.username && (
-                  <p className="text-red-400 text-sm">{errors.username.message}</p>
+                  <p className="text-red-400 text-sm">
+                    {errors.username.message}
+                  </p>
                 )}
               </div>
 
@@ -111,7 +141,9 @@ export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
                   })}
                 />
                 {errors.password && (
-                  <p className="text-red-400 text-sm">{errors.password.message}</p>
+                  <p className="text-red-400 text-sm">
+                    {errors.password.message}
+                  </p>
                 )}
               </div>
 
@@ -130,6 +162,34 @@ export function RegisterModal({ isOpen, onClose, onSubmit }: Props) {
                 {errors.confirmPassword && (
                   <p className="text-red-400 text-sm">
                     {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Role */}
+              <div>
+                <Controller
+                  control={control}
+                  name="roles"
+                  rules={{
+                    validate: (value) =>
+                      (value && value.length > 0) ||
+                      "Selecione pelo menos uma role",
+                  }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={roleOptions}
+                      isMulti
+                      placeholder="Selecione as roles"
+                      styles={darkSelectStyles}
+                    />
+                  )}
+                />
+
+                {errors.roles && (
+                  <p className="text-red-400 text-sm">
+                    {errors.roles.message as string}
                   </p>
                 )}
               </div>

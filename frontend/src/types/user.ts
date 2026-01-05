@@ -18,6 +18,12 @@ export type UserFormData = {
   username: string;
   password: string;
   confirmPassword: string;
+  roles: RoleOption[]
+};
+
+export type RoleOption = {
+  value: UserRole;
+  label: string;
 };
 
 export type CreateUserResult =

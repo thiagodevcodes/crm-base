@@ -19,7 +19,7 @@ export function ConfirmAlert({
 }: Props) {
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && (    
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center"
           initial={{ opacity: 0 }}
@@ -28,10 +28,10 @@ export function ConfirmAlert({
         >
           {/* Overlay */}
           <motion.div
-            className="absolute inset-0 bg-black/50"
+            className="absolute inset-0 bg-black/70"
             onClick={onCancel}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
 
