@@ -5,7 +5,6 @@ import { LayoutDashboard, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Dropdown, DropdownItem } from "../global/dropdown";
 
-import { ROLES } from "@/constants/roles";
 import { canAccess } from "@/utils/canAccess";
 
 export function Aside() {
@@ -30,7 +29,7 @@ export function Aside() {
         </div>
 
         <nav className="mt-4">
-          {canAccess(roles, [ROLES.BASIC, ROLES.ADMIN]) && (
+          {canAccess(roles, ["BASIC", "ADMIN"]) && (
             <Link
               href="/admin/dashboard"
               className={`nav-link ${isActive("/admin/dashboard")}`}
@@ -40,7 +39,7 @@ export function Aside() {
             </Link>
           )}
 
-          {canAccess(roles, [ROLES.ADMIN]) && (
+          {canAccess(roles, ["ADMIN"]) && (
             <Link
               href="/admin/users"
               className={`nav-link ${isActive("/admin/users")}`}

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { ROUTE_PERMISSIONS } from "@/constants/permissions";
 import { canAccess } from "@/utils/canAccess";
-import { UserRole } from "@/constants/roles";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export function middleware(req: NextRequest) {
@@ -26,7 +25,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/admin", req.url));
   }
 
-  const userRoles: UserRole[] =
+  const userRoles: string[] =
     payload?.roles ?? payload?.scope?.split(" ") ?? [];
 
   // 3️⃣ Encontra rota protegida

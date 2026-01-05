@@ -1,13 +1,9 @@
 "use client";
 
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, UserFormData } from "@/types/user";
-import Select, { ControlProps, GroupBase, StylesConfig } from "react-select";
-import { ROLES } from "@/constants/roles";
-import { RoleOption } from "@/types/role";
-import { CSSObjectWithLabel } from "react-select";
 import { useEffect } from "react";
 
 type Props = {
@@ -23,7 +19,6 @@ export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }
     register,
     handleSubmit,
     watch,
-    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<UserFormData>();
@@ -56,35 +51,6 @@ export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }
       console.error("Erro ao cadastrar usuário:", err);
     }
   }
-
-  const roleOptions: RoleOption[] = [
-    { value: ROLES.ADMIN, label: ROLES.ADMIN},
-    { value: ROLES.BASIC, label: ROLES.BASIC },
-  ];
-
-  const darkSelectStyles: StylesConfig<
-    RoleOption,
-    true,
-    GroupBase<RoleOption>
-  > = {
-    control: (
-      base: CSSObjectWithLabel,
-      state: ControlProps<RoleOption, true, GroupBase<RoleOption>>
-    ) => ({
-      ...base,
-      backgroundColor: "#1e293b",
-      borderColor: state.isFocused ? "white" : "#1e293b",
-      boxShadow: "none",
-      "&:hover": {
-        borderColor: "#1e293b",
-      },
-    }),
-
-    placeholder: (base: CSSObjectWithLabel) => ({
-      ...base,
-      color: "#94a3b8",
-    }),
-  };
 
   return (
     <AnimatePresence>

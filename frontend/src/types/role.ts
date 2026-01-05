@@ -1,11 +1,9 @@
-import { UserRole } from "@/constants/roles";
-
 export interface Role {
   roleId: string;
-  name: UserRole; // 👈 AQUI está o segredo
+  name: string;
 }
 
 export type RoleOption = {
-  value: UserRole;
-  label: UserRole;
+  value: string;
+  label: string;
 };

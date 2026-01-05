@@ -1,4 +1,3 @@
-import { AxiosError, AxiosResponse } from "axios";
 import { Role, RoleOption } from "./role";
 
 export interface User {
@@ -15,7 +14,3 @@ export type UserFormData = {
   confirmPassword: string;
   roles: RoleOption[]
 };
-
-export type CreateUserResult =
-  | { success: true; response: AxiosResponse }
-  | { success: false; response: AxiosError };

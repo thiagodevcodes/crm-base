@@ -5,20 +5,28 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, UserFormData } from "@/types/user";
 import Select, { ControlProps, GroupBase, StylesConfig } from "react-select";
-import { ROLES } from "@/constants/roles";
-import { RoleOption } from "@/types/role";
+import { Role, RoleOption } from "@/types/role";
 import { CSSObjectWithLabel } from "react-select";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getRoles } from "@/services/user";
 
 type Props = {
   title: string;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>; // recebe dados do formulário
-  selectedUser?: User | null
+  selectedUser?: User | null;
 };
 
-export function UpdateUserModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
+export function UpdateUserModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectedUser,
+  title,
+}: Props) {
+  const [roles, setRoles] = useState<Role[]>([]);
+
   const {
     register,
     handleSubmit,
@@ -28,10 +36,10 @@ export function UpdateUserModal({ isOpen, onClose, onSubmit, selectedUser, title
   } = useForm<UserFormData>({
     defaultValues: {
       username: selectedUser?.username,
-      name: selectedUser?.name
+      name: selectedUser?.name,
     },
   });
-  
+
   useEffect(() => {
     if (selectedUser) {
       reset({
@@ -51,18 +59,30 @@ export function UpdateUserModal({ isOpen, onClose, onSubmit, selectedUser, title
 
   async function handleFormSubmit(data: UserFormData) {
     try {
-      await onSubmit(data); // chama o prop onSubmit do pai
-      reset(); // limpa o formulário
-      onClose(); // fecha o modal
+      await onSubmit(data);
+      reset(); 
+      onClose(); 
     } catch (err) {
       console.error("Erro ao atualizar usuário:", err);
     }
   }
 
-  const roleOptions: RoleOption[] = [
-    { value: ROLES.ADMIN, label: ROLES.ADMIN },
-    { value: ROLES.BASIC, label: ROLES.BASIC },
-  ];
+  async function loadRoles() {
+    const allRoles = await getRoles();
+    setRoles(allRoles);
+  }
+
+  const roleOptions: RoleOption[] = roles.map((role) => ({
+    value: role.name,
+    label: role.name,
+  }));
+
+  useEffect(() => {
+    if (isOpen) {
+      loadRoles();
+    }
+  }, [isOpen, selectedUser]);
+
 
   const darkSelectStyles: StylesConfig<
     RoleOption,
@@ -122,7 +142,7 @@ export function UpdateUserModal({ isOpen, onClose, onSubmit, selectedUser, title
             </button>
 
             <h2 className="text-xl font-bold text-white mb-4 text-center">
-              { title }
+              {title}
             </h2>
 
             <form
@@ -159,8 +179,6 @@ export function UpdateUserModal({ isOpen, onClose, onSubmit, selectedUser, title
                   </p>
                 )}
               </div>
-
-
 
               {/* Role */}
               <div>

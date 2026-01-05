@@ -5,10 +5,10 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, UserFormData } from "@/types/user";
 import Select, { ControlProps, GroupBase, StylesConfig } from "react-select";
-import { ROLES } from "@/constants/roles";
-import { RoleOption } from "@/types/role";
+import { Role, RoleOption } from "@/types/role";
 import { CSSObjectWithLabel } from "react-select";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getRoles } from "@/services/user";
 
 type Props = {
   title: string;
@@ -19,6 +19,8 @@ type Props = {
 };
 
 export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
+  const [roles, setRoles] = useState<Role[]>([])
+
   const {
     register,
     handleSubmit,
@@ -62,10 +64,19 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
     }
   }
 
-  const roleOptions: RoleOption[] = [
-    { value: ROLES.ADMIN, label: ROLES.ADMIN },
-    { value: ROLES.BASIC, label: ROLES.BASIC },
-  ];
+  async function loadRoles() {
+    const res = await getRoles();
+    setRoles(res);
+  }
+
+  const roleOptions: RoleOption[] = roles.map((role) => ({
+    value: role.name,
+    label: role.name,
+  }));
+
+  useEffect(() => {
+    loadRoles()
+  }, [])
 
   const darkSelectStyles: StylesConfig<
     RoleOption,

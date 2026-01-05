@@ -1,4 +1,4 @@
-import { UserRole } from "@/constants/roles";
+import { Role } from "@/types/role";
 import { User } from "@/types/user";
 import { delay } from "@/utils/functions";
 import axios from "axios";
@@ -7,7 +7,7 @@ export async function createUser(
   name: string,
   username: string,
   password: string,
-  roles: UserRole[]
+  roles: string[]
 ): Promise<User> {
   await delay(700);
 
@@ -24,7 +24,7 @@ export async function updateUser(
   id: string,
   name: string,
   username: string,
-  roles: UserRole[]
+  roles: string[]
 ): Promise<User> {
   await delay(700);
 
@@ -54,6 +54,14 @@ export async function updatePassword(
 
 export async function getUsers(): Promise<User[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    withCredentials: true,
+  });
+
+  return response.data;
+}
+
+export async function getRoles(): Promise<Role[]> {
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {
     withCredentials: true,
   });
 
