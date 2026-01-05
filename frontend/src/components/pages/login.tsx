@@ -31,26 +31,31 @@ export default function LoginForm() {
   async function onSubmit(data: LoginData) {
     try {
       await login(data.email, data.password);
-    } catch (err) {
-      const error = err as AxiosError<any>;
+    } catch (err: unknown) {
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          setError("root", {
+            type: "manual",
+            message: "Email ou senha incorretos",
+          });
+          return;
+        }
 
-      if (error.response?.status === 401) {
+        const backendMessage =
+          err.response?.data?.message ?? err.response?.data ?? null;
+
         setError("root", {
           type: "manual",
-          message: "Email ou senha incorretos",
+          message: backendMessage
+            ? String(backendMessage)
+            : "Erro de conexão. Verifique sua rede e tente novamente.",
         });
-        return;
+      } else {
+        setError("root", {
+          type: "manual",
+          message: "Erro inesperado. Tente novamente.",
+        });
       }
-
-      const backendMessage =
-        error.response?.data?.message ?? error.response?.data ?? null;
-
-      setError("root", {
-        type: "manual",
-        message: backendMessage
-          ? String(backendMessage)
-          : "Erro de conexão. Verifique sua rede e tente novamente.",
-      });
     }
   }
 

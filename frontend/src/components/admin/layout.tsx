@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { Header } from "@/components/admin/header";
 import { Footer } from "@/components/admin/footer";
 import { Aside } from "@/components/admin/aside";
@@ -11,7 +11,6 @@ type Props = {
 };
 
 export function Layout({ children }: Props) {
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const { isOpen, closeMenu } = useMobileMenu();
 
   return (

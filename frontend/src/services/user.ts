@@ -1,6 +1,6 @@
 import { CreateUserResult, User } from "@/types/user";
 import { delay } from "@/utils/functions";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 
 export async function createUser(
   name: string,

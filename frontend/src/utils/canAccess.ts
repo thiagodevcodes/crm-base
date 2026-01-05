@@ -1,8 +1,8 @@
-import { Role } from "@/constants/roles"
+import { UserRole } from "@/constants/roles"
 
 export function canAccess(
-  userRoles: Role[],
-  allowedRoles: Role[]
+  userRoles: UserRole[],
+  allowedRoles: UserRole[]
 ): boolean {
   return userRoles.some(role => allowedRoles.includes(role));
 };

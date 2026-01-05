@@ -1,6 +1,6 @@
-export const ROLES = {
-  ADMIN: "ADMIN",
-  BASIC: "BASIC",
-} as const;
+export enum ROLES {
+  ADMIN = "ADMIN",
+  BASIC = "BASIC",
+}
 
-export type UserRole = typeof ROLES[keyof typeof ROLES];
+export type UserRole = ROLES; // o tipo agora é o próprio enum

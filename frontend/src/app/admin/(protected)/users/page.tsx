@@ -1,5 +1,4 @@
-import DashboardClient from "@/pages/dashboard";
-import Users from "@/pages/users";
+import Users from "@/components/pages/users";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

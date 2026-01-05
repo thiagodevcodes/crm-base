@@ -11,6 +11,7 @@ import { canAccess } from "@/utils/canAccess";
 export function Aside() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const isActive = (path: string) => (pathname === path ? "active" : "");
 
   const roles = user?.roles.map((r) => r.name) ?? [];
 
@@ -31,10 +32,8 @@ export function Aside() {
         <nav className="mt-4">
           {canAccess(roles, [ROLES.BASIC, ROLES.ADMIN]) && (
             <Link
-              href={"/admin/dashboard"}
-              className={`nav-link ${
-                pathname == "/admin/dashboard" ? "active" : ""
-              }`}
+              href="/admin/dashboard"
+              className={`nav-link ${isActive("/admin/dashboard")}`}
             >
               <LayoutDashboard width={20} />
               Dashboard
@@ -44,9 +43,7 @@ export function Aside() {
           {canAccess(roles, [ROLES.ADMIN]) && (
             <Link
               href="/admin/users"
-              className={`nav-link ${
-                pathname === "/admin/users" ? "active" : ""
-              }`}
+              className={`nav-link ${isActive("/admin/users")}`}
             >
               <Users width={20} />
               Usuários
@@ -66,10 +63,6 @@ export function Aside() {
                 <div className="w-9 h-9 rounded-full bg-[#0d8cd7] flex items-center justify-center text-white font-bold">
                   {user?.name?.charAt(0).toUpperCase()}
                 </div>
-
-                {/* {user?.roles.map(role => (
-                <span key={role.roleId} className="text-white">{role.name}</span>
-              ))} */}
               </div>
             }
           >

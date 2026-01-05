@@ -1,54 +1,49 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
 import { ROUTE_PERMISSIONS } from "@/constants/permissions";
 import { canAccess } from "@/utils/canAccess";
-import { UserRole } from "./constants/roles";
+import { UserRole } from "@/constants/roles";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-
-const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-
-export async function middleware(req: NextRequest) {
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
 
-  // 🔒 Sem token
-  if (!token) {
-    if (pathname !== "/admin") {
-      return NextResponse.redirect(new URL("/admin", req.url));
-    }
-    return NextResponse.next();
+  // 1️⃣ Página de login
+  if (pathname === "/admin") {
+    if (!token) return NextResponse.next(); // sem token → mostra login
+    return NextResponse.redirect(new URL("/admin/dashboard", req.url)); // com token → vai para dashboard
   }
 
-  let payload: any;
+  // 2️⃣ Rotas protegidas
+  if (!token) return NextResponse.redirect(new URL("/admin", req.url));
 
+  let payload: JwtPayload;
+  
   try {
-    const verified = await jwtVerify(token, secret);
-    payload = verified.payload;
+    payload = jwt.decode(token) as JwtPayload;
   } catch {
     return NextResponse.redirect(new URL("/admin", req.url));
   }
 
   const userRoles: UserRole[] =
-    payload.roles ??
-    payload.scope?.split(" ") ??
-    [];
+    payload?.roles ?? payload?.scope?.split(" ") ?? [];
 
+  // 3️⃣ Encontra rota protegida
   const route = Object.keys(ROUTE_PERMISSIONS).find(r =>
     pathname.startsWith(r)
   );
-
-  if (!route) return NextResponse.next();
+  if (!route) return NextResponse.next(); // rota pública
 
   const allowedRoles = ROUTE_PERMISSIONS[route];
 
-  if (
-    !canAccess(userRoles, allowedRoles) &&
-    pathname !== "/admin/dashboard"
-  ) {
-    return NextResponse.redirect(
-      new URL("/admin/dashboard", req.url)
-    );
+  // 4️⃣ Usuário sem permissão
+  if (!canAccess(userRoles, allowedRoles)) {
+    const dashboardRoles = ROUTE_PERMISSIONS["/admin/dashboard"] ?? [];
+    if (canAccess(userRoles, dashboardRoles) && pathname !== "/admin/dashboard") {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+    }
+    return NextResponse.redirect(new URL("/admin", req.url));
   }
 
   return NextResponse.next();

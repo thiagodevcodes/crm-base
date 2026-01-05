@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-
 interface HeaderTicketProps {
     isActive: boolean;
     color?: string
