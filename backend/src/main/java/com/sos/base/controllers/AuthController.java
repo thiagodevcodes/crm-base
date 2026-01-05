@@ -1,7 +1,9 @@
 package com.sos.base.controllers;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sos.base.controllers.dto.LoginRequest;
 import com.sos.base.controllers.dto.LoginResponse;
+import com.sos.base.entities.Permission;
 import com.sos.base.entities.User;
 import com.sos.base.repositories.UserRepository;
 import com.sos.base.services.AuthService;
@@ -50,19 +53,22 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        System.out.println();
-
         UUID userId = UUID.fromString(authentication.getName());
 
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        System.out.println(user.toString());
+        // Extrai permissões únicas de todas as roles
+        Set<String> permissions = user.getRoles().stream()
+                .flatMap(role -> role.getPermissions().stream())
+                .map(Permission::getName) // ou getPermissionName() dependendo da sua entidade
+                .collect(Collectors.toSet());
 
         return ResponseEntity.ok(Map.of(
                 "authenticated", true,
                 "id", user.getUserId(),
                 "name", user.getName(),
-                "roles", user.getRoles()));
+                "permissions", permissions));
     }
 
     @PostMapping("/sign_out")
@@ -93,8 +99,8 @@ public class AuthController {
                 .build();
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, cookie.toString())
-            .body(Map.of("roles", auth.getAuthorities()));
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(Map.of("roles", auth.getAuthorities()));
     }
 
 }

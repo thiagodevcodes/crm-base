@@ -1,6 +1,10 @@
 export function canAccess(
-  userRoles: string[],
-  allowedRoles: string[]
+  userPermissions: string[],
+  allowedPermissions: string[]
 ): boolean {
-  return userRoles.some(role => allowedRoles.includes(role));
-};
+  // Se o usuário tiver ALL_ACCESS, libera tudo
+  if (userPermissions.includes("ALL_ACCESS")) return true;
+
+  // Verifica permissões normais
+  return userPermissions.some(p => allowedPermissions.includes(p));
+}

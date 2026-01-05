@@ -20,7 +20,7 @@ export default function Users() {
 
   async function handleSubmit(data: UserFormData) {
     try {
-      const roles = data.roles.map(opt => opt.value);
+      const roles = data.roles.map(opt => opt.value); // extrai os values do select
 
       const createdUser = await createUser(
         data.name,
@@ -29,15 +29,14 @@ export default function Users() {
         roles
       );
 
-      setUsers(prev =>
-        prev.map(user =>
-          user.userId === createdUser.userId
-            ? createdUser
-            : user
-        )
-      );
+      // garante que é um usuário válido
+      if ("userId" in createdUser) {
+        setUsers(prev => [...prev, createdUser]); // adiciona o novo usuário à lista
+      } else {
+        console.error("Erro ao criar usuário:", createdUser);
+      }
     } catch (err) {
-      console.error("Erro ao atualizar usuário", err);
+      console.error("Erro ao criar usuário", err);
     }
   }
 

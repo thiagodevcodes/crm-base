@@ -4,10 +4,11 @@ export interface User {
   userId: string;
   name: string;
   username: string;
-  roles: Role[];
+  permissions: string[];
 }
 
 export type UserFormData = {
+  userId: string;
   name: string;
   username: string;
   password: string;

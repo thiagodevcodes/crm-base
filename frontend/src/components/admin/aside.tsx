@@ -12,7 +12,9 @@ export function Aside() {
   const { user, logout } = useAuth();
   const isActive = (path: string) => (pathname === path ? "active" : "");
 
-  const roles = user?.roles.map((r) => r.name) ?? [];
+  const userPermissions = user?.permissions.map((r) => r) ?? [];
+
+  console.log(userPermissions)
 
   return (
     <>
@@ -29,7 +31,7 @@ export function Aside() {
         </div>
 
         <nav className="mt-4">
-          {canAccess(roles, ["BASIC", "ADMIN"]) && (
+          {canAccess(userPermissions, ["VIEW_DASHBOARD"]) && (
             <Link
               href="/admin/dashboard"
               className={`nav-link ${isActive("/admin/dashboard")}`}
@@ -39,7 +41,7 @@ export function Aside() {
             </Link>
           )}
 
-          {canAccess(roles, ["ADMIN"]) && (
+          {canAccess(userPermissions, ["MANAGE_USERS"]) && (
             <Link
               href="/admin/users"
               className={`nav-link ${isActive("/admin/users")}`}
