@@ -1,6 +1,6 @@
 "use client";
 
-import { RegisterModal } from "@/components/admin/registerUserModal";
+import { RegisterUserModal } from "@/components/admin/registerUserModal";
 import { UsersTable } from "@/components/admin/usersTable";
 import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { useAuth } from "@/hooks/useAuth";
@@ -19,8 +19,26 @@ export default function Users() {
   }
 
   async function handleSubmit(data: UserFormData) {
-    await createUser(data.name, data.username, data.password);
-    await loadUsers();
+    try {
+      const roles = data.roles.map(opt => opt.value);
+
+      const createdUser = await createUser(
+        data.name,
+        data.username,
+        data.password,
+        roles
+      );
+
+      setUsers(prev =>
+        prev.map(user =>
+          user.userId === createdUser.userId
+            ? createdUser
+            : user
+        )
+      );
+    } catch (err) {
+      console.error("Erro ao atualizar usuário", err);
+    }
   }
 
   useEffect(() => {
@@ -47,7 +65,8 @@ export default function Users() {
         </button>
       </div>
 
-      <RegisterModal
+      <RegisterUserModal
+        title="Criar Usuário"
         isOpen={open}
         onClose={() => setOpen(false)}
         onSubmit={handleSubmit}

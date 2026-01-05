@@ -18,11 +18,10 @@ type Props = {
   selectedUser?: User | null
 };
 
-export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
+export function UpdateUserModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
   const {
     register,
     handleSubmit,
-    watch,
     control,
     formState: { errors, isSubmitting },
     reset,
@@ -32,8 +31,6 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
       name: selectedUser?.name
     },
   });
-
-  const password = watch("password");
   
   useEffect(() => {
     if (selectedUser) {
@@ -58,7 +55,7 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
       reset(); // limpa o formulário
       onClose(); // fecha o modal
     } catch (err) {
-      console.error("Erro ao cadastrar usuário:", err);
+      console.error("Erro ao atualizar usuário:", err);
     }
   }
 
@@ -163,42 +160,7 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
                 )}
               </div>
 
-              {/* Senha */}
-              <div>
-                <input
-                  type="password"
-                  placeholder="Senha"
-                  className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("password", {
-                    required: "Senha é obrigatória",
-                    minLength: { value: 6, message: "Mínimo de 6 caracteres" },
-                  })}
-                />
-                {errors.password && (
-                  <p className="text-red-400 text-sm">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
 
-              {/* Confirmação */}
-              <div>
-                <input
-                  type="password"
-                  placeholder="Confirmar senha"
-                  className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("confirmPassword", {
-                    required: "Confirme a senha",
-                    validate: (value) =>
-                      value === password || "As senhas não coincidem",
-                  })}
-                />
-                {errors.confirmPassword && (
-                  <p className="text-red-400 text-sm">
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
-              </div>
 
               {/* Role */}
               <div>

@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.sos.base.controllers.dto.CreateUserRequest;
+import com.sos.base.controllers.dto.UpdatePasswordRequest;
 import com.sos.base.controllers.dto.UpdateUserRequest;
 import com.sos.base.entities.User;
 import com.sos.base.services.UserService;
@@ -51,5 +52,15 @@ public class UsersController {
 
         userService.delete(uuid);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/password/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+        public ResponseEntity<User> updatePassword(
+        @PathVariable String id,
+        @RequestBody UpdatePasswordRequest request
+    ) {
+        UUID uuid = UUID.fromString(id);
+        return ResponseEntity.ok(userService.updatePassword(uuid, request));
     }
 }

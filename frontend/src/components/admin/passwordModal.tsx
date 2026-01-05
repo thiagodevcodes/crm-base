@@ -18,7 +18,7 @@ type Props = {
   selectedUser?: User | null
 };
 
-export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
+export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
   const {
     register,
     handleSubmit,
@@ -26,12 +26,7 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
     control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<UserFormData>({
-    defaultValues: {
-      username: selectedUser?.username,
-      name: selectedUser?.name
-    },
-  });
+  } = useForm<UserFormData>();
 
   const password = watch("password");
   
@@ -63,7 +58,7 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
   }
 
   const roleOptions: RoleOption[] = [
-    { value: ROLES.ADMIN, label: ROLES.ADMIN },
+    { value: ROLES.ADMIN, label: ROLES.ADMIN},
     { value: ROLES.BASIC, label: ROLES.BASIC },
   ];
 
@@ -132,37 +127,6 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
               onSubmit={handleSubmit(handleFormSubmit)}
               className="space-y-4"
             >
-              {/* Nome */}
-              <div>
-                <input
-                  type="text"
-                  placeholder="Nome"
-                  className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("name", { required: "Nome é obrigatório" })}
-                />
-                {errors.name && (
-                  <p className="text-red-400 text-sm">{errors.name.message}</p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("username", {
-                    required: "Email é obrigatório",
-                    minLength: { value: 3, message: "Mínimo de 3 caracteres" },
-                  })}
-                />
-                {errors.username && (
-                  <p className="text-red-400 text-sm">
-                    {errors.username.message}
-                  </p>
-                )}
-              </div>
-
               {/* Senha */}
               <div>
                 <input
@@ -196,34 +160,6 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
                 {errors.confirmPassword && (
                   <p className="text-red-400 text-sm">
                     {errors.confirmPassword.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Role */}
-              <div>
-                <Controller
-                  control={control}
-                  name="roles"
-                  rules={{
-                    validate: (value) =>
-                      (value && value.length > 0) ||
-                      "Selecione pelo menos uma role",
-                  }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      options={roleOptions}
-                      isMulti
-                      placeholder="Selecione as roles"
-                      styles={darkSelectStyles}
-                    />
-                  )}
-                />
-
-                {errors.roles && (
-                  <p className="text-red-400 text-sm">
-                    {errors.roles.message as string}
                   </p>
                 )}
               </div>

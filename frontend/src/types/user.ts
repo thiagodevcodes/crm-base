@@ -1,10 +1,5 @@
-import { UserRole } from "@/constants/roles";
 import { AxiosError, AxiosResponse } from "axios";
-
-export interface Role {
-  roleId: string;
-  name: UserRole; // 👈 AQUI está o segredo
-}
+import { Role, RoleOption } from "./role";
 
 export interface User {
   userId: string;
@@ -19,11 +14,6 @@ export type UserFormData = {
   password: string;
   confirmPassword: string;
   roles: RoleOption[]
-};
-
-export type RoleOption = {
-  value: UserRole;
-  label: string;
 };
 
 export type CreateUserResult =

@@ -1,10 +1,11 @@
 "use client";
 
 import { User, UserFormData } from "@/types/user";
-import { deleteUser, updateUser } from "@/services/user";
+import { deleteUser, updatePassword, updateUser } from "@/services/user";
 import { useState } from "react";
 import { ConfirmAlert } from "./confirmAlert";
-import { RegisterModal } from "./registerUserModal";
+import { PasswordModal } from "./passwordModal";
+import { UpdateUserModal } from "./updateUserModal";
 
 type Props = {
   users: User[];
@@ -14,11 +15,55 @@ type Props = {
 export function UsersTable({ users, setUsers }: Props) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [modalPasswordOpen, setModalPasswordOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
-
   async function handleUpdate(data: UserFormData) {
-    await updateUser(data.name, data.username, data.password);
+    if (!selectedUser) return;
+
+    try {
+      const roles = data.roles.map((opt) => opt.value);
+
+      const updatedUser = await updateUser(
+        selectedUser.userId,
+        data.name,
+        data.username,
+        roles
+      );
+
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.userId === updatedUser.userId ? updatedUser : user
+        )
+      );
+
+      setOpen(false);
+      setSelectedUser(null);
+    } catch (err) {
+      console.error("Erro ao atualizar usuário", err);
+    }
+  }
+
+  async function handleUpdatePassword(data: UserFormData) {
+    if (!selectedUser) return;
+
+    try {
+      const updatedUser = await updatePassword(
+        selectedUser.userId,
+        data.password
+      );
+
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.userId === updatedUser.userId ? updatedUser : user
+        )
+      );
+
+      setModalPasswordOpen(false);
+      setSelectedUser(null);
+    } catch (err) {
+      console.error("Erro ao atualizar usuário", err);
+    }
   }
 
   async function handleDelete() {
@@ -83,6 +128,16 @@ export function UsersTable({ users, setUsers }: Props) {
                     <button
                       onClick={() => {
                         setSelectedUser(user);
+                        setModalPasswordOpen(true);
+                      }}
+                      className="rounded-md bg-green-500/20 px-3 py-1 text-xs text-green-400 hover:bg-green-500/30 transition cursor-pointer"
+                    >
+                      Alterar Senha
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedUser(user);
                         setOpen(true);
                       }}
                       className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer"
@@ -107,10 +162,20 @@ export function UsersTable({ users, setUsers }: Props) {
         </table>
       </div>
 
-      <RegisterModal
+      <PasswordModal
+        title={`Senha de ${selectedUser?.name}`}
+        isOpen={modalPasswordOpen}
+        onClose={() => setModalPasswordOpen(false)}
+        onSubmit={handleUpdatePassword}
+        selectedUser={selectedUser}
+      />
+
+      <UpdateUserModal
+        title={`Editar ${selectedUser?.name}`}
         isOpen={open}
         onClose={() => setOpen(false)}
         onSubmit={handleUpdate}
+        selectedUser={selectedUser}
       />
 
       <ConfirmAlert

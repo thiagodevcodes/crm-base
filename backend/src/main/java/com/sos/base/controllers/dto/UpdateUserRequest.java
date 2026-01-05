@@ -1,6 +1,9 @@
 package com.sos.base.controllers.dto;
 
+import java.util.Set;
+
 public record UpdateUserRequest(
     String name,
-    String username
+    String username,
+    Set<String> roles
 ) {}

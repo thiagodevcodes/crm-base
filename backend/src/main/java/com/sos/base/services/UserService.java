@@ -1,7 +1,6 @@
 package com.sos.base.services;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.sos.base.controllers.dto.CreateUserRequest;
 import com.sos.base.controllers.dto.LoginRequest;
+import com.sos.base.controllers.dto.UpdatePasswordRequest;
 import com.sos.base.controllers.dto.UpdateUserRequest;
-import com.sos.base.entities.Role;
 import com.sos.base.entities.User;
 import com.sos.base.repositories.RoleRepository;
 import com.sos.base.repositories.UserRepository;
@@ -31,13 +30,13 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public User create(CreateUserRequest dto) {
-        var roleBasic = roleRepository.findByName(Role.Values.BASIC.name()); 
+        var roles = roleRepository.findByNameIn(dto.roles()); 
 
         User user = new User();
         user.setName(dto.name());
         user.setUsername(dto.email());
         user.setPassword(passwordEncoder.encode(dto.password()));
-        user.setRoles(Set.of(roleBasic));
+        user.setRoles(roles);
 
         return userRepository.save(user);
     }
@@ -50,8 +49,22 @@ public class UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
+        var roles = roleRepository.findByNameIn(dto.roles()); 
+
         user.setName(dto.name());
         user.setUsername(dto.username());
+        user.setRoles(roles);
+
+        return userRepository.save(user);
+    }
+
+    public User updatePassword(UUID id, UpdatePasswordRequest dto) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        user.setPassword(passwordEncoder.encode(dto.password()));
+        userRepository.save(user);
+
         return userRepository.save(user);
     }
 
