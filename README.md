@@ -63,6 +63,12 @@
 
 <img width="700px" src="./frontend//public/img-1.png">
 <img width="700px" src="./frontend//public/img-2.png">
+<img width="700px" src="./frontend//public/img-3.png">
+<img width="700px" src="./frontend//public/img-4.png">
+<img width="700px" src="./frontend//public/img-5.png">
+<img width="700px" src="./frontend//public/img-6.png">
+<img width="700px" src="./frontend//public/img-7.png">
+
 
 
 
