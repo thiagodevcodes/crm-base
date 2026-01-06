@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sos.base.controllers.dto.LoginRequest;
 import com.sos.base.controllers.dto.LoginResponse;
 import com.sos.base.entities.Permission;
+import com.sos.base.entities.Role;
 import com.sos.base.entities.User;
 import com.sos.base.repositories.UserRepository;
 import com.sos.base.services.AuthService;
@@ -64,11 +65,19 @@ public class AuthController {
                 .map(Permission::getName) // ou getPermissionName() dependendo da sua entidade
                 .collect(Collectors.toSet());
 
+                // Extrai permissões únicas de todas as roles
+        Set<String> roles = user.getRoles()
+                .stream()
+                .map(Role::getName) // ou getPermissionName() dependendo da sua entidade
+                .collect(Collectors.toSet());
+
         return ResponseEntity.ok(Map.of(
                 "authenticated", true,
                 "id", user.getUserId(),
                 "name", user.getName(),
+                "roles", roles,
                 "permissions", permissions));
+                
     }
 
     @PostMapping("/sign_out")

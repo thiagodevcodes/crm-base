@@ -14,8 +14,6 @@ export function Aside() {
 
   const userPermissions = user?.permissions.map((r) => r) ?? [];
 
-  console.log(userPermissions)
-
   return (
     <>
       <div className=" z-10 bg-slate-900 h-full px-4">
