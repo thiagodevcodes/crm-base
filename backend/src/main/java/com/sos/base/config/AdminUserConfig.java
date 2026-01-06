@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.sos.base.entities.Role;
@@ -15,6 +16,7 @@ import com.sos.base.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 
 @Configuration
+@DependsOn("rsaKeyInitializer") // 👈 GARANTE ORDEM
 public class AdminUserConfig implements CommandLineRunner {
     @Autowired
     private RoleRepository roleRepository;
@@ -46,6 +48,7 @@ public class AdminUserConfig implements CommandLineRunner {
                     user.setPassword(passwordEncoder.encode("admin123"));
                     user.setRoles(Set.of(roleAdmin));
                     userRepository.save(user);
+                    System.out.println("Admin criado com sucesso");
                 });
         }
 
@@ -61,6 +64,7 @@ public class AdminUserConfig implements CommandLineRunner {
                     user.setPassword(passwordEncoder.encode("basic123"));
                     user.setRoles(Set.of(roleBasic));
                     userRepository.save(user);
+                    System.out.println("Basic criado com sucesso");
                 });
         }
     }

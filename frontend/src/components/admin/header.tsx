@@ -22,10 +22,6 @@ export function Header() {
             <div className="w-9 h-9 rounded-full bg-[#0d8cd7] flex items-center justify-center text-white font-bold">
               {user?.name?.charAt(0).toUpperCase()}
             </div>
-
-            {/* {user?.roles.map(role => (
-              <span key={role.roleId} className="text-white">{role.name}</span>
-            ))} */}
           </div>
         }
       >

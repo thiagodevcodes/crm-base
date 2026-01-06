@@ -20,7 +20,7 @@ export default function Users() {
 
   async function handleSubmit(data: UserFormData) {
     try {
-      const roles = data.roles.map(opt => opt.value); // extrai os values do select
+      const roles = data.roles.map(opt => opt.value);
 
       const createdUser = await createUser(
         data.name,
@@ -29,7 +29,6 @@ export default function Users() {
         roles
       );
 
-      // garante que é um usuário válido
       if ("userId" in createdUser) {
         setUsers(prev => [...prev, createdUser]); // adiciona o novo usuário à lista
       } else {

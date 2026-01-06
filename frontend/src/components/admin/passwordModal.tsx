@@ -134,7 +134,7 @@ export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }
                 disabled={isSubmitting}
                 className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer"
               >
-                {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+                {isSubmitting ? "Salvando..." : "Salvar"}
               </button>
             </form>
           </motion.div>
