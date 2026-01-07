@@ -1,4 +1,4 @@
-package com.sos.base.services;
+package com.sos.base.core.users;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sos.base.controllers.dto.CreateUserRequest;
-import com.sos.base.controllers.dto.LoginRequest;
-import com.sos.base.controllers.dto.UpdatePasswordRequest;
-import com.sos.base.controllers.dto.UpdateUserRequest;
-import com.sos.base.entities.User;
-import com.sos.base.repositories.RoleRepository;
-import com.sos.base.repositories.UserRepository;
+import com.sos.base.auth.dtos.LoginRequest;
+import com.sos.base.core.roles.RoleRepository;
+import com.sos.base.core.users.dtos.CreateUserRequest;
+import com.sos.base.core.users.dtos.UpdatePasswordRequest;
+import com.sos.base.core.users.dtos.UpdateUserRequest;
 
 import lombok.RequiredArgsConstructor;
 

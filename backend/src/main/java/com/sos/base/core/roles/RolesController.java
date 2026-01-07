@@ -1,13 +1,10 @@
-package com.sos.base.controllers;
+package com.sos.base.core.roles;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.sos.base.entities.Role;
-import com.sos.base.services.RoleService;
 
 import lombok.RequiredArgsConstructor;
 

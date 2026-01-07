@@ -1,10 +1,8 @@
-package com.sos.base.services;
+package com.sos.base.core.roles;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.sos.base.entities.Role;
-import com.sos.base.repositories.RoleRepository;
 
 import lombok.RequiredArgsConstructor;
 

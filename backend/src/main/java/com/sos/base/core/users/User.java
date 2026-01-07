@@ -1,11 +1,12 @@
-package com.sos.base.entities;
+package com.sos.base.core.users;
 
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.sos.base.controllers.dto.LoginRequest;
+import com.sos.base.auth.dtos.LoginRequest;
+import com.sos.base.core.roles.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

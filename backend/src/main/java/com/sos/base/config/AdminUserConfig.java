@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.sos.base.entities.Role;
-import com.sos.base.entities.User;
-import com.sos.base.repositories.RoleRepository;
-import com.sos.base.repositories.UserRepository;
+import com.sos.base.core.roles.Role;
+import com.sos.base.core.roles.RoleRepository;
+import com.sos.base.core.users.User;
+import com.sos.base.core.users.UserRepository;
 
 import jakarta.transaction.Transactional;
 

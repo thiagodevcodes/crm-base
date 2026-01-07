@@ -1,7 +1,6 @@
 import { Role, RoleOption } from "./role";
 
 export interface User {
-  userId: string;
   name: string;
   username: string;
   permissions: string[];

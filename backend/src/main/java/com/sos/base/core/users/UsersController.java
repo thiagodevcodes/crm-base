@@ -1,4 +1,4 @@
-package com.sos.base.controllers;
+package com.sos.base.core.users;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,11 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.sos.base.controllers.dto.CreateUserRequest;
-import com.sos.base.controllers.dto.UpdatePasswordRequest;
-import com.sos.base.controllers.dto.UpdateUserRequest;
-import com.sos.base.entities.User;
-import com.sos.base.services.UserService;
+import com.sos.base.core.users.dtos.CreateUserRequest;
+import com.sos.base.core.users.dtos.UpdatePasswordRequest;
+import com.sos.base.core.users.dtos.UpdateUserRequest;
 
 import lombok.RequiredArgsConstructor;
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getMe, signIn, signOut } from "@/services/auth";
 
 import { User } from "@/types/user";
+import axios from "axios";
 
 interface AuthContextData {
   user: User | null;
@@ -21,23 +22,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [permissions, setPermissions] = useState<string[]>([])
+  const [permissions, setPermissions] = useState<string[]>([]);
+
 
   const router = useRouter();
 
-  async function loadUser() {
+  const loadUser = async () => {
     try {
-      const user = await getMe();
-      setUser(user);
-      setPermissions(user?.permissions.map((r) => r) ?? [])
+      const res = await axios.get("http://localhost:8080/auth/me", {
+        withCredentials: true,
+      });
+
+      setUser(res.data);
+      setPermissions(res.data.permissions ?? []);
       setAuthenticated(true);
-    } catch {
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        router.replace("/admin");
+      }
+
       setUser(null);
       setAuthenticated(false);
     } finally {
-      setLoading(false); // 🔥 só aqui
+      setLoading(false);
     }
-  }
+  };
 
   async function login(email: string, password: string) {
     try {
@@ -45,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await signIn(email, password);
       await loadUser()
 
+      setAuthenticated(true);
       router.replace("/admin/dashboard");
     } finally {
       setLoading(false);
@@ -78,7 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         logout,
         loading,
-        permissions
+        permissions,
       }}
     >
       {children}

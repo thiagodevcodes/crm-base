@@ -1,7 +1,9 @@
-package com.sos.base.entities;
+package com.sos.base.core.roles;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.sos.base.core.permissions.Permission;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

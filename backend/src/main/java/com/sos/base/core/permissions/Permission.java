@@ -1,4 +1,4 @@
-package com.sos.base.entities;
+package com.sos.base.core.permissions;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

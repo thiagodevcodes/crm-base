@@ -1,4 +1,4 @@
-package com.sos.base.controllers.dto;
+package com.sos.base.core.users.dtos;
 
 import java.util.Set;
 
