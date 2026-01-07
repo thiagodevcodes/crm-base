@@ -1,4 +1,4 @@
-package com.sos.base.config;
+package com.sos.base.security;
 
 import org.springframework.core.io.Resource;
 

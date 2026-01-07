@@ -24,19 +24,19 @@ public class UsersController {
     private UserService userService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@auth.hasPermission('ADD_USER')")
     public ResponseEntity<User> create(@RequestBody CreateUserRequest request) {
         return ResponseEntity.ok(userService.create(request));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@auth.hasPermission('GET_USERS')")
     public ResponseEntity<List<User>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@auth.hasPermission('UPDATE_USER')")
     public ResponseEntity<User> update(
         @PathVariable String id,
         @RequestBody UpdateUserRequest request
@@ -46,7 +46,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@auth.hasPermission('DELETE_USER')")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         UUID uuid = UUID.fromString(id);
 
@@ -55,7 +55,7 @@ public class UsersController {
     }
 
     @PatchMapping("/password/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("@auth.hasPermission('UPDATE_PASSWORD_USER')")
         public ResponseEntity<User> updatePassword(
         @PathVariable String id,
         @RequestBody UpdatePasswordRequest request

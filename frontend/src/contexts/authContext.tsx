@@ -12,6 +12,7 @@ interface AuthContextData {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  permissions: string[];
 }
 
 const AuthContext = createContext<AuthContextData | null>(null);
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [permissions, setPermissions] = useState<string[]>([])
 
   const router = useRouter();
 
@@ -27,6 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const user = await getMe();
       setUser(user);
+      setPermissions(user?.permissions.map((r) => r) ?? [])
       setAuthenticated(true);
     } catch {
       setUser(null);
@@ -74,7 +77,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         authenticated,
         login,
         logout,
-        loading
+        loading,
+        permissions
       }}
     >
       {children}

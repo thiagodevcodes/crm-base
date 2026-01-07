@@ -9,10 +9,8 @@ import { canAccess } from "@/utils/canAccess";
 
 export function Aside() {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, logout, permissions } = useAuth();
   const isActive = (path: string) => (pathname === path ? "active" : "");
-
-  const userPermissions = user?.permissions.map((r) => r) ?? [];
 
   return (
     <>
@@ -29,7 +27,7 @@ export function Aside() {
         </div>
 
         <nav className="mt-4">
-          {canAccess(userPermissions, ["VIEW_DASHBOARD"]) && (
+          {canAccess(permissions, ["VIEW_DASHBOARD"]) && (
             <Link
               href="/admin/dashboard"
               className={`nav-link ${isActive("/admin/dashboard")}`}
@@ -39,7 +37,7 @@ export function Aside() {
             </Link>
           )}
 
-          {canAccess(userPermissions, ["MANAGE_USERS"]) && (
+          {canAccess(permissions, ["GET_USERS"]) && (
             <Link
               href="/admin/users"
               className={`nav-link ${isActive("/admin/users")}`}

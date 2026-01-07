@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,8 +47,9 @@ public class AuthController {
                         "accessToken", response.accessToken(),
                         "expiresIn", response.expiresIn()));
     }
-
+ 
     @GetMapping("/me")
+    @PreAuthorize("@auth.isSelf(authentication)")
     public ResponseEntity<?> me(Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -81,6 +83,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign_out")
+    @PreAuthorize("@auth.isSelf(authentication)")
     public ResponseEntity<Map<String, Object>> logout() {
         ResponseCookie cookie = ResponseCookie.from("token", "")
                 .httpOnly(true)
@@ -96,6 +99,7 @@ public class AuthController {
     }
 
     @GetMapping("/debug")
+    @PreAuthorize("@auth.isSelf(authentication)")
     public ResponseEntity<Map<String, Object>> debug() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 

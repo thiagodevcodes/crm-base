@@ -6,6 +6,8 @@ import { useState } from "react";
 import { ConfirmAlert } from "./confirmAlert";
 import { PasswordModal } from "./passwordModal";
 import { UpdateUserModal } from "./updateUserModal";
+import { canAccess } from "@/utils/canAccess";
+import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
   users: User[];
@@ -17,6 +19,7 @@ export function UsersTable({ users, setUsers }: Props) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [modalPasswordOpen, setModalPasswordOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const { permissions } = useAuth();
 
   async function handleUpdate(data: UserFormData) {
     if (!selectedUser) return;
@@ -89,7 +92,9 @@ export function UsersTable({ users, setUsers }: Props) {
               <th className="px-4 py-3">Nome</th>
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Permissões</th>
-              <th className="px-4 py-3 text-right">Ações</th>
+              {(canAccess(permissions, ["UPDATE_USER"]) || canAccess(permissions, ["UPDATE_PASSWORD_USER"]) || canAccess(permissions, ["DELETE_USER"])) && (
+                <th className="px-4 py-3 text-right">Ações</th>
+              )}
             </tr>
           </thead>
 
@@ -123,71 +128,87 @@ export function UsersTable({ users, setUsers }: Props) {
                   </div>
                 </td>
 
+              {(canAccess(permissions, ["UPDATE_USER"]) || canAccess(permissions, ["UPDATE_PASSWORD_USER"]) || canAccess(permissions, ["DELETE_USER"])) && (
                 <td className="px-4 py-3 text-right">
                   <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setModalPasswordOpen(true);
-                      }}
-                      className="rounded-md bg-green-500/20 px-3 py-1 text-xs text-green-400 hover:bg-green-500/30 transition cursor-pointer"
-                    >
-                      Alterar Senha
-                    </button>
+                    {canAccess(permissions, ["UPDATE_PASSWORD_USER"]) && (
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setModalPasswordOpen(true);
+                        }}
+                        className="rounded-md bg-green-500/20 px-3 py-1 text-xs text-green-400 hover:bg-green-500/30 transition cursor-pointer"
+                      >
+                        Alterar Senha
+                      </button>
+                    )}
 
-                    <button
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setOpen(true);
-                      }}
-                      className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer"
-                    >
-                      Editar
-                    </button>
+                    {canAccess(permissions, ["UPDATE_USER"]) && (
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setOpen(true);
+                        }}
+                        className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer"
+                      >
+                        Editar
+                      </button>
+                    )}
 
-                    <button
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setConfirmOpen(true);
-                      }}
-                      className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
-                    >
-                      Excluir
-                    </button>
+                    {canAccess(permissions, ["DELETE_USER"]) && (
+                      <button
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setConfirmOpen(true);
+                        }}
+                        className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
+                      >
+                        Excluir
+                      </button>
+                    )}
                   </div>
                 </td>
+              )}
+
+           
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <PasswordModal
-        title={`Senha de ${selectedUser?.name}`}
-        isOpen={modalPasswordOpen}
-        onClose={() => setModalPasswordOpen(false)}
-        onSubmit={handleUpdatePassword}
-        selectedUser={selectedUser}
-      />
+      {canAccess(permissions, ["ADD_USER"]) && (
+        <PasswordModal
+          title={`Senha de ${selectedUser?.name}`}
+          isOpen={modalPasswordOpen}
+          onClose={() => setModalPasswordOpen(false)}
+          onSubmit={handleUpdatePassword}
+          selectedUser={selectedUser}
+        />
+      )}
 
-      <UpdateUserModal
-        title={`Editar ${selectedUser?.name}`}
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onSubmit={handleUpdate}
-        selectedUser={selectedUser}
-      />
+      {canAccess(permissions, ["UPDATE_USER"]) && (
+        <UpdateUserModal
+          title={`Editar ${selectedUser?.name}`}
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          onSubmit={handleUpdate}
+          selectedUser={selectedUser}
+        />
+      )}
 
-      <ConfirmAlert
-        isOpen={confirmOpen}
-        title="Excluir Usuário"
-        message={`Deseja realmente excluir ${selectedUser?.name}?`}
-        onConfirm={handleDelete}
-        onCancel={() => {
-          setConfirmOpen(false);
-          setSelectedUser(null);
-        }}
-      />
+      {canAccess(permissions, ["DELETE_USER"]) && (
+        <ConfirmAlert
+          isOpen={confirmOpen}
+          title="Excluir Usuário"
+          message={`Deseja realmente excluir ${selectedUser?.name}?`}
+          onConfirm={handleDelete}
+          onCancel={() => {
+            setConfirmOpen(false);
+            setSelectedUser(null);
+          }}
+        />
+      )}
     </>
   );
 }

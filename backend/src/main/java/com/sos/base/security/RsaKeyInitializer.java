@@ -1,4 +1,4 @@
-package com.sos.base.config;
+package com.sos.base.security;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;

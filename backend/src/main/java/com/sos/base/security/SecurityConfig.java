@@ -1,7 +1,8 @@
-package com.sos.base.config;
+package com.sos.base.security;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,13 +14,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -45,9 +47,8 @@ public class SecurityConfig {
     private CorsConfigurationSource corsConfigurationSource;
 
     public SecurityConfig(
-        @Value("${jwt.public.key}") Resource publicKeyRes,
-        @Value("${jwt.private.key}") Resource privateKeyRes
-    ) throws Exception {
+            @Value("${jwt.public.key}") Resource publicKeyRes,
+            @Value("${jwt.private.key}") Resource privateKeyRes) throws Exception {
         this.publicKey = KeyLoader.loadPublicKey(publicKeyRes);
         this.privateKey = KeyLoader.loadPrivateKey(privateKeyRes);
     }
@@ -56,22 +57,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource))
-            .oauth2ResourceServer(oauth2 ->
-                oauth2
-                    .bearerTokenResolver(bearerTokenResolver())
-                    .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
-            )
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            );
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().authenticated())
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenResolver(bearerTokenResolver())
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
@@ -85,9 +81,7 @@ public class SecurityConfig {
     // 🔑 ENCODER
     @Bean
     public JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(publicKey)
-            .privateKey(privateKey)
-            .build();
+        JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
 
         var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
         return new NimbusJwtEncoder(jwks);
@@ -102,24 +96,42 @@ public class SecurityConfig {
     // 🛡️ JWT → ROLE_*
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter authoritiesConverter =
-            new JwtGrantedAuthoritiesConverter();
 
-        authoritiesConverter.setAuthoritiesClaimName("scope");
-        authoritiesConverter.setAuthorityPrefix("ROLE_");
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
-        JwtAuthenticationConverter jwtConverter =
-            new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            var authorities = new ArrayList<GrantedAuthority>();
 
-        jwtConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
-        return jwtConverter;
+            // ROLES
+            var roles = jwt.getClaimAsStringList("scope");
+            if (roles != null) {
+                roles.forEach(r -> authorities.add(new SimpleGrantedAuthority("ROLE_" + r)));
+            }
+
+            // PERMISSIONS
+            var permissions = jwt.getClaimAsStringList("permissions");
+            if (permissions != null) {
+
+                if (permissions.contains("ALL_ACCESS")) {
+                    authorities.add(new SimpleGrantedAuthority("ALL_ACCESS"));
+                    return authorities;
+                }
+
+                permissions.forEach(p -> authorities.add(new SimpleGrantedAuthority(p)));
+            }
+
+            return authorities;
+        });
+
+        return converter;
     }
 
     // 🍪 TOKEN NO COOKIE
     @Bean
     public BearerTokenResolver bearerTokenResolver() {
         return request -> {
-            if (request.getCookies() == null) return null;
+            if (request.getCookies() == null)
+                return null;
 
             for (Cookie cookie : request.getCookies()) {
                 if ("token".equals(cookie.getName())) {
