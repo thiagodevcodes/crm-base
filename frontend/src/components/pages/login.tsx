@@ -8,9 +8,6 @@ import Image from "next/image";
 import { AxiosError } from "axios";
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/global/spinner";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { SpinnerLoading } from "../global/spinnerLoading";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -20,8 +17,7 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-  const { login, loading, authenticated } = useAuth();
-  const router = useRouter()
+  const { login } = useAuth();
 
   const {
     register,

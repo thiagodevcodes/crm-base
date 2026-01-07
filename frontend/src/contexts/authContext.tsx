@@ -2,7 +2,7 @@
 
 import { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getMe, signIn, signOut } from "@/services/auth";
+import { signIn, signOut } from "@/services/auth";
 
 import { User } from "@/types/user";
 import axios from "axios";
