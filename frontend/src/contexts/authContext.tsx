@@ -1,11 +1,10 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn, signOut } from "@/services/auth";
+import { getMe, signIn, signOut } from "@/services/auth";
 
 import { User } from "@/types/user";
-import axios from "axios";
 
 interface AuthContextData {
   user: User | null;
@@ -24,35 +23,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [permissions, setPermissions] = useState<string[]>([]);
 
-
   const router = useRouter();
 
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:8080/auth/me", {
-        withCredentials: true,
-      });
-
-      setUser(res.data);
-      setPermissions(res.data.permissions ?? []);
+      const user = await getMe();
+      setUser(user);
+      setPermissions(user?.permissions ?? []);
       setAuthenticated(true);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.status === 401) {
-        router.replace("/admin");
-      }
-
+    } catch {
       setUser(null);
       setAuthenticated(false);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   async function login(email: string, password: string) {
     try {
       setLoading(true);
       await signIn(email, password);
-      await loadUser()
+      await loadUser();
 
       setAuthenticated(true);
       router.replace("/admin/dashboard");
@@ -78,6 +69,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     loadUser();
+  }, [loadUser]);
+
+  // 🔥 RODA UMA ÚNICA VEZ
+  useEffect(() => {
+    async function bootstrap() {
+      try {
+        const me = await getMe();
+        setUser(me);
+        setAuthenticated(true);
+      } catch {
+        setAuthenticated(false);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    bootstrap();
   }, []);
 
   return (

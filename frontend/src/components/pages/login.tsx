@@ -8,6 +8,9 @@ import Image from "next/image";
 import { AxiosError } from "axios";
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/global/spinner";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { SpinnerLoading } from "../global/spinnerLoading";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -17,7 +20,8 @@ const loginSchema = z.object({
 type LoginData = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-  const { login } = useAuth();
+  const { login, authenticated, loading } = useAuth();
+  const router = useRouter();
 
   const {
     register,
@@ -66,6 +70,15 @@ export default function LoginForm() {
       }
     }
   }
+
+    useEffect(() => {
+    if (!loading && authenticated) {
+        router.replace("/admin/dashboard");
+    }
+    }, [loading, authenticated, router]);
+
+  if (authenticated || loading && !isSubmitting) return <SpinnerLoading />;
+
 
   return (
     <div className="grid lg:grid-cols-2 min-h-screen">

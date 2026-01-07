@@ -8,11 +8,13 @@ import { useEffect, useState } from "react";
 import { getUsers, createUser } from "@/services/user";
 import { User, UserFormData } from "@/types/user";
 import { canAccess } from "@/utils/canAccess";
+import { useRouter } from "next/navigation";
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const { authenticated, loading, permissions } = useAuth();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   async function loadUsers() {
     const res = await getUsers();
@@ -41,12 +43,18 @@ export default function Users() {
   }
 
   useEffect(() => {
-    loadUsers();
+    if (authenticated) {
+      loadUsers();
+    }
   }, []);
 
-  if (loading) return <SpinnerLoading />;
+  useEffect(() => {
+    if (!loading && !authenticated) {
+      router.replace("/admin");
+    }
+  }, [loading, authenticated, router]);
 
-  if (!authenticated) return <SpinnerLoading />;
+  if (loading || !authenticated) return <SpinnerLoading />;
 
   return (
     <div className="p-6 gap-4 w-full">
