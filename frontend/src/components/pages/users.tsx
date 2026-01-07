@@ -46,7 +46,7 @@ export default function Users() {
     if (authenticated) {
       loadUsers();
     }
-  }, []);
+  }, [authenticated]);
 
   useEffect(() => {
     if (!loading && !authenticated) {
