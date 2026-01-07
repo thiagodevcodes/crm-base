@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sos.base.auth.dtos.LoginRequest;
 import com.sos.base.core.roles.RoleRepository;
 import com.sos.base.core.users.dtos.CreateUserRequest;
 import com.sos.base.core.users.dtos.UpdatePasswordRequest;
 import com.sos.base.core.users.dtos.UpdateUserRequest;
+import com.sos.base.core.users.exceptions.UserNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,10 +27,10 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public User create(CreateUserRequest dto) {
+    public UserEntity create(CreateUserRequest dto) {
         var roles = roleRepository.findByNameIn(dto.roles()); 
 
-        User user = new User();
+        UserEntity user = new UserEntity();
         user.setName(dto.name());
         user.setUsername(dto.username());
         user.setPassword(passwordEncoder.encode(dto.password()));
@@ -39,13 +39,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> findAll() {
+    public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
 
-    public User update(UUID id, UpdateUserRequest dto) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public UserEntity update(UUID id, UpdateUserRequest dto) {
+        UserEntity user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         var roles = roleRepository.findByNameIn(dto.roles()); 
 
@@ -56,9 +56,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updatePassword(UUID id, UpdatePasswordRequest dto) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
+        UserEntity user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
         user.setPassword(passwordEncoder.encode(dto.password()));
         userRepository.save(user);
@@ -68,16 +68,5 @@ public class UserService {
 
     public void delete(UUID id) {
         userRepository.deleteById(id);
-    }
-
-    public User login(LoginRequest dto) {
-        User user = userRepository.findByUsername(dto.username())
-            .orElseThrow(() -> new RuntimeException("Usuário inválido"));
-
-        if (!user.getPassword().equals(dto.password())) {
-            throw new RuntimeException("Senha inválida");
-        }
-
-        return user;
     }
 }

@@ -13,7 +13,7 @@ public class RoleService {
     private RoleRepository roleRepository;
 
 
-    public List<Role> findAll() {
+    public List<RoleEntity> findAll() {
         return roleRepository.findAll();
     }
 

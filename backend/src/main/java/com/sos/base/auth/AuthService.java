@@ -21,15 +21,14 @@ import com.sos.base.auth.dtos.LoginResponse;
 import com.sos.base.auth.dtos.LogoutResponse;
 import com.sos.base.auth.exceptions.InvalidCredentialsException;
 import com.sos.base.auth.exceptions.TokenInvalidException;
-import com.sos.base.core.permissions.Permission;
-import com.sos.base.core.roles.Role;
-import com.sos.base.core.users.User;
+import com.sos.base.core.permissions.PermissionEntity;
+import com.sos.base.core.roles.RoleEntity;
+import com.sos.base.core.users.UserEntity;
 import com.sos.base.core.users.UserRepository;
 import com.sos.base.core.users.dtos.UserDto;
 import com.sos.base.core.users.exceptions.UserNotFoundException;
 import com.sos.base.shared.web.CookieService;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
@@ -53,7 +52,7 @@ public class AuthService {
         var user = userRepository.findByUsername(loginRequest.username());
 
         if (user.isEmpty() || !user.get().isLoginCorrect(loginRequest, passwordEncoder)) {
-            throw new InvalidCredentialsException("user or password is invalid!");
+            throw new InvalidCredentialsException("Usuário ou senha inválidos");
         }
 
         Instant now = Instant.now();
@@ -81,19 +80,19 @@ public class AuthService {
     }
 
     public LogoutResponse logout() {
-        Cookie cookie = cookieService.clearCookie("token");
+        ResponseCookie cookie = cookieService.createCookie("token", "", 0L);
 
         return new LogoutResponse(cookie, "Loggout success");
     }
 
     public UserDto getMe(String token, HttpServletResponse response) {
-        if (token == null || token.isEmpty()) throw new TokenInvalidException("token invalid or inexistent");
+        if (token == null || token.isEmpty()) throw new TokenInvalidException("Token Inválido ou Inexistente");
 
         Jwt jwt = jwtDecoder.decode(token);
 
         UUID userId = UUID.fromString(jwt.getSubject());
 
-        User user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("user not found"));
 
         List<String> permissions = jwt.getClaimAsStringList("permissions");
@@ -103,17 +102,17 @@ public class AuthService {
         return new UserDto(user, roles, permissions);
     }
 
-    public Set<String> extractPermissions(Set<Role> roles) {
+    public Set<String> extractPermissions(Set<RoleEntity> roles) {
         return roles.stream()
                 .flatMap(role -> role.getPermissions().stream())
-                .map(Permission::getName)
+                .map(PermissionEntity::getName)
                 .collect(Collectors.toSet());
     }
 
-    public Set<String> extractRoles(User user) {
+    public Set<String> extractRoles(UserEntity user) {
         return user.getRoles()
                 .stream()
-                .map(Role::getName)
+                .map(RoleEntity::getName)
                 .collect(Collectors.toSet());
     }
 }

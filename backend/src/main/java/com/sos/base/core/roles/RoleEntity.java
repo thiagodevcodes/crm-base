@@ -3,7 +3,7 @@ package com.sos.base.core.roles;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.sos.base.core.permissions.Permission;
+import com.sos.base.core.permissions.PermissionEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "tb_roles")
-public class Role {
+public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -37,7 +37,7 @@ public class Role {
         joinColumns = @JoinColumn(name = "role_id"),
         inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Permission> permissions = new HashSet<>();
+    private Set<PermissionEntity> permissions = new HashSet<>();
 
     public enum Values {
         ADMIN(1L),

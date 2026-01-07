@@ -40,7 +40,15 @@ export default function LoginForm() {
         if (err.response?.status === 401) {
           setError("root", {
             type: "manual",
-            message: "Email ou senha incorretos",
+            message: err.response?.data?.message,
+          });
+          return;
+        }
+
+        if (err.response?.status === 500) {
+          setError("root", {
+            type: "manual",
+            message: err.response?.data?.message,
           });
           return;
         }

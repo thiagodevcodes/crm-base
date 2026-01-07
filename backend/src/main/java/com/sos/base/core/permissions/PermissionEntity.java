@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "tb_permissions")
-public class Permission {
+public class PermissionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

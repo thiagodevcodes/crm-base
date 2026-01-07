@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.sos.base.core.roles.Role;
+import com.sos.base.core.roles.RoleEntity;
 import com.sos.base.core.roles.RoleRepository;
-import com.sos.base.core.users.User;
+import com.sos.base.core.users.UserEntity;
 import com.sos.base.core.users.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -30,8 +30,8 @@ public class AdminUserConfig implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        var roleAdmin = roleRepository.findByName(Role.Values.ADMIN.name()); 
-        var roleBasic = roleRepository.findByName(Role.Values.BASIC.name()); 
+        var roleAdmin = roleRepository.findByName(RoleEntity.Values.ADMIN.name()); 
+        var roleBasic = roleRepository.findByName(RoleEntity.Values.BASIC.name()); 
         
         var userBasic = userRepository.findByUsername("basic@test.com");
         var userAdmin = userRepository.findByUsername("admin@test.com");
@@ -42,7 +42,7 @@ public class AdminUserConfig implements CommandLineRunner {
                     System.out.println("Admin já existe");
                 },
                 () -> {
-                    var user = new User();
+                    var user = new UserEntity();
                     user.setUsername("admin@test.com");
                     user.setName("Admin");
                     user.setPassword(passwordEncoder.encode("admin123"));
@@ -58,7 +58,7 @@ public class AdminUserConfig implements CommandLineRunner {
                     System.out.println("Basic já existe");
                 },
                 () -> {
-                    var user = new User();
+                    var user = new UserEntity();
                     user.setUsername("basic@test.com");
                     user.setName("Basic");
                     user.setPassword(passwordEncoder.encode("basic123"));

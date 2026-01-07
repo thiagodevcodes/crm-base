@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.sos.base.auth.dtos.LoginRequest;
-import com.sos.base.core.roles.Role;
+import com.sos.base.core.roles.RoleEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name= "tb_users")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
@@ -45,7 +45,7 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     
-    private Set<Role> roles;
+    private Set<RoleEntity> roles;
 
     public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(loginRequest.password(), this.password);

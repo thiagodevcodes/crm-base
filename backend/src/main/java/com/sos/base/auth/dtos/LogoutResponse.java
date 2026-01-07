@@ -1,8 +1,8 @@
 package com.sos.base.auth.dtos;
 
-import jakarta.servlet.http.Cookie;
+import org.springframework.http.ResponseCookie;
 
 
-public record LogoutResponse(Cookie token, String message) {
+public record LogoutResponse(ResponseCookie token, String message) {
     
 }

@@ -23,19 +23,19 @@ public class UsersController {
 
     @PostMapping
     @PreAuthorize("@auth.hasPermission('ADD_USER')")
-    public ResponseEntity<User> create(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserEntity> create(@RequestBody CreateUserRequest request) {
         return ResponseEntity.ok(userService.create(request));
     }
 
     @GetMapping
     @PreAuthorize("@auth.hasPermission('GET_USERS')")
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserEntity>> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("@auth.hasPermission('UPDATE_USER')")
-    public ResponseEntity<User> update(
+    public ResponseEntity<UserEntity> update(
         @PathVariable String id,
         @RequestBody UpdateUserRequest request
     ) {
@@ -54,7 +54,7 @@ public class UsersController {
 
     @PatchMapping("/password/{id}")
     @PreAuthorize("@auth.hasPermission('UPDATE_PASSWORD_USER')")
-        public ResponseEntity<User> updatePassword(
+        public ResponseEntity<UserEntity> updatePassword(
         @PathVariable String id,
         @RequestBody UpdatePasswordRequest request
     ) {

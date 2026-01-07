@@ -2,10 +2,10 @@ package com.sos.base.core.users.dtos;
 
 import java.util.List;
 
-import com.sos.base.core.users.User;
+import com.sos.base.core.users.UserEntity;
 
 public record UserDto(
-    User user,
+    UserEntity user,
     List<String> roles,
     List<String> permissions
 ) {}
