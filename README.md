@@ -21,19 +21,6 @@
 ### Back-end: 
 
 - Versões desejadas para bom funcionamento do projeto: Maven 3.9.9, Java 21, NodeJS 22.18.0
-- Para conseguir rodar o projeto corret é preciso ter chaves RSA públicas e privadas dentro da pasta "\backend\src\main\resources"
-
-- GERAR CHAVE PRIVADA
-
-```bash
-  openssl genrsa > private_key.pem
-```
-
-- GERAR CHAVE PÚBLICA COM BASE NA CHAVE PRIVADA
-
-```bash
-  openssl rsa -in private_key.pem -pubout -out public_key.pem
-```
 
 - RODAR O PROJETO
   
