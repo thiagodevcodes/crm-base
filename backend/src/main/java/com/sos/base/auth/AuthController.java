@@ -50,7 +50,7 @@ public class AuthController {
         UserDto userDto = authService.getMe(token, response);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new GetMeResponse(userDto.user().getName(), userDto.user().getUsername(), userDto.roles(), userDto.permissions()));
+                .body(new GetMeResponse(userDto.user().getUserId(), userDto.user().getName(), userDto.user().getUsername(), userDto.roles(), userDto.permissions()));
     }
 
     @PostMapping("/sign_out")
