@@ -36,3 +36,4 @@ build/
 /src/main/resources/private_key.pem
 /src/main/resources/public_key.pem
 /keys
+\src\main\resources\application-develop.properties
