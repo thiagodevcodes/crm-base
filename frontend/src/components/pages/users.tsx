@@ -1,7 +1,7 @@
 "use client";
 
-import { RegisterUserModal } from "@/components/admin/registerUserModal";
-import { UsersTable } from "@/components/admin/usersTable";
+import { RegisterUserModal } from "@/components/admin/user/registerUserModal";
+import { UsersTable } from "@/components/admin/user/usersTable";
 import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
