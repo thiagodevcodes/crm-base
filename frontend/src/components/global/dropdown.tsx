@@ -9,7 +9,11 @@ interface DropdownProps {
   children: React.ReactNode;
 }
 
-export function Dropdown({ trigger, children, align="right" }: DropdownProps) {
+export function Dropdown({
+  trigger,
+  children,
+  align = "right",
+}: DropdownProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 

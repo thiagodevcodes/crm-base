@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/roles")
 @RequiredArgsConstructor
 public class RolesController {
-    @Autowired
-    private RoleService roleService;
+   @Autowired
+   private RoleService roleService;
 
-    @GetMapping
-    public ResponseEntity<List<RoleEntity>> findAll() {
-        return ResponseEntity.ok(roleService.findAll());
-    }
+   @GetMapping
+   public ResponseEntity<List<RoleEntity>> findAll() {
+      return ResponseEntity.ok(roleService.findAll());
+   }
 }

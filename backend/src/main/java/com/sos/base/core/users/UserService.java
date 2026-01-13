@@ -18,55 +18,55 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private RoleRepository roleRepository;
+   @Autowired
+   private RoleRepository roleRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+   @Autowired
+   private UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+   @Autowired
+   private BCryptPasswordEncoder passwordEncoder;
 
-    public UserEntity create(CreateUserRequest dto) {
-        var roles = roleRepository.findByNameIn(dto.roles()); 
+   public UserEntity create(CreateUserRequest dto) {
+      var roles = roleRepository.findByNameIn(dto.roles());
 
-        UserEntity user = new UserEntity();
-        user.setName(dto.name());
-        user.setUsername(dto.username());
-        user.setPassword(passwordEncoder.encode(dto.password()));
-        user.setRoles(roles);
+      UserEntity user = new UserEntity();
+      user.setName(dto.name());
+      user.setUsername(dto.username());
+      user.setPassword(passwordEncoder.encode(dto.password()));
+      user.setRoles(roles);
 
-        return userRepository.save(user);
-    }
+      return userRepository.save(user);
+   }
 
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
-    }
+   public List<UserEntity> findAll() {
+      return userRepository.findAll();
+   }
 
-    public UserEntity update(UUID id, UpdateUserRequest dto) {
-        UserEntity user = userRepository.findById(id)
+   public UserEntity update(UUID id, UpdateUserRequest dto) {
+      UserEntity user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
-        var roles = roleRepository.findByNameIn(dto.roles()); 
+      var roles = roleRepository.findByNameIn(dto.roles());
 
-        user.setName(dto.name());
-        user.setUsername(dto.username());
-        user.setRoles(roles);
+      user.setName(dto.name());
+      user.setUsername(dto.username());
+      user.setRoles(roles);
 
-        return userRepository.save(user);
-    }
+      return userRepository.save(user);
+   }
 
-    public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
-        UserEntity user = userRepository.findById(id)
+   public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
+      UserEntity user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
 
-        user.setPassword(passwordEncoder.encode(dto.password()));
-        userRepository.save(user);
+      user.setPassword(passwordEncoder.encode(dto.password()));
+      userRepository.save(user);
 
-        return userRepository.save(user);
-    }
+      return userRepository.save(user);
+   }
 
-    public void delete(UUID id) {
-        userRepository.deleteById(id);
-    }
+   public void delete(UUID id) {
+      userRepository.deleteById(id);
+   }
 }

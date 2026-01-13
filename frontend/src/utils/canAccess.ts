@@ -6,5 +6,5 @@ export function canAccess(
   if (userPermissions.includes("ALL_ACCESS")) return true;
 
   // Verifica permissões normais
-  return userPermissions.some(p => allowedPermissions.includes(p));
+  return userPermissions.some((p) => allowedPermissions.includes(p));
 }

@@ -39,7 +39,7 @@ export async function updateUser(
 
 export async function updatePassword(
   id: string,
-  password: string,
+  password: string
 ): Promise<User> {
   await delay(700);
 

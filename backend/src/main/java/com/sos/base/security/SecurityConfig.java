@@ -41,108 +41,109 @@ import org.springframework.core.io.Resource;
 @DependsOn("rsaKeyInitializer") // 👈 GARANTE ORDEM
 public class SecurityConfig {
 
-    private final RSAPublicKey publicKey;
-    private final RSAPrivateKey privateKey;
+   private final RSAPublicKey publicKey;
+   private final RSAPrivateKey privateKey;
 
-    @Autowired
-    private CorsConfigurationSource corsConfigurationSource;
+   @Autowired
+   private CorsConfigurationSource corsConfigurationSource;
 
-    public SecurityConfig(
-            @Value("${jwt.public.key}") Resource publicKeyRes,
-            @Value("${jwt.private.key}") Resource privateKeyRes) throws Exception {
-        this.publicKey = KeyLoader.loadPublicKey(publicKeyRes);
-        this.privateKey = KeyLoader.loadPrivateKey(privateKeyRes);
-    }
+   public SecurityConfig(
+         @Value("${jwt.public.key}") Resource publicKeyRes,
+         @Value("${jwt.private.key}") Resource privateKeyRes) throws Exception {
+      this.publicKey = KeyLoader.loadPublicKey(publicKeyRes);
+      this.privateKey = KeyLoader.loadPrivateKey(privateKeyRes);
+   }
 
-    // 🔐 FILTER CHAIN
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, ApplicationContext context) throws Exception {
-        ClearInvalidJwtFilter clearInvalidJwtFilter = context.getBean(ClearInvalidJwtFilter.class);
+   // 🔐 FILTER CHAIN
+   @Bean
+   public SecurityFilterChain securityFilterChain(HttpSecurity http, ApplicationContext context) throws Exception {
+      ClearInvalidJwtFilter clearInvalidJwtFilter = context.getBean(ClearInvalidJwtFilter.class);
 
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource))
-                .addFilterBefore(clearInvalidJwtFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .bearerTokenResolver(bearerTokenResolver())
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+      http
+            .authorizeHttpRequests(authorize -> authorize
+                  .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
+                  .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
+                  .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                  .anyRequest().authenticated())
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(corsConfigurationSource))
+            .addFilterBefore(clearInvalidJwtFilter,
+                  org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+            .oauth2ResourceServer(oauth2 -> oauth2
+                  .bearerTokenResolver(bearerTokenResolver())
+                  .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        return http.build();
-    }
+      return http.build();
+   }
 
-    // 🔓 DECODER
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(publicKey).build();
-    }
+   // 🔓 DECODER
+   @Bean
+   public JwtDecoder jwtDecoder() {
+      return NimbusJwtDecoder.withPublicKey(publicKey).build();
+   }
 
-    // 🔑 ENCODER
-    @Bean
-    public JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
+   // 🔑 ENCODER
+   @Bean
+   public JwtEncoder jwtEncoder() {
+      JWK jwk = new RSAKey.Builder(publicKey).privateKey(privateKey).build();
 
-        var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwks);
-    }
+      var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+      return new NimbusJwtEncoder(jwks);
+   }
 
-    // 🔐 PASSWORD
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+   // 🔐 PASSWORD
+   @Bean
+   public BCryptPasswordEncoder passwordEncoder() {
+      return new BCryptPasswordEncoder();
+   }
 
-    // 🛡️ JWT → ROLE_*
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+   // 🛡️ JWT → ROLE_*
+   @Bean
+   public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+      JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
 
-        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            var authorities = new ArrayList<GrantedAuthority>();
+      converter.setJwtGrantedAuthoritiesConverter(jwt -> {
+         var authorities = new ArrayList<GrantedAuthority>();
 
-            // ROLES
-            var roles = jwt.getClaimAsStringList("scope");
-            if (roles != null) {
-                roles.forEach(r -> authorities.add(new SimpleGrantedAuthority("ROLE_" + r)));
+         // ROLES
+         var roles = jwt.getClaimAsStringList("scope");
+         if (roles != null) {
+            roles.forEach(r -> authorities.add(new SimpleGrantedAuthority("ROLE_" + r)));
+         }
+
+         // PERMISSIONS
+         var permissions = jwt.getClaimAsStringList("permissions");
+         if (permissions != null) {
+
+            if (permissions.contains("ALL_ACCESS")) {
+               authorities.add(new SimpleGrantedAuthority("ALL_ACCESS"));
+               return authorities;
             }
 
-            // PERMISSIONS
-            var permissions = jwt.getClaimAsStringList("permissions");
-            if (permissions != null) {
+            permissions.forEach(p -> authorities.add(new SimpleGrantedAuthority(p)));
+         }
 
-                if (permissions.contains("ALL_ACCESS")) {
-                    authorities.add(new SimpleGrantedAuthority("ALL_ACCESS"));
-                    return authorities;
-                }
+         return authorities;
+      });
 
-                permissions.forEach(p -> authorities.add(new SimpleGrantedAuthority(p)));
-            }
+      return converter;
+   }
 
-            return authorities;
-        });
-
-        return converter;
-    }
-
-    // 🍪 TOKEN NO COOKIE
-    @Bean
-    public BearerTokenResolver bearerTokenResolver() {
-        return request -> {
-            if (request.getCookies() == null)
-                return null;
-
-            for (Cookie cookie : request.getCookies()) {
-                if ("token".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
+   // 🍪 TOKEN NO COOKIE
+   @Bean
+   public BearerTokenResolver bearerTokenResolver() {
+      return request -> {
+         if (request.getCookies() == null)
             return null;
-        };
-    }
+
+         for (Cookie cookie : request.getCookies()) {
+            if ("token".equals(cookie.getName())) {
+               return cookie.getValue();
+            }
+         }
+         return null;
+      };
+   }
 }

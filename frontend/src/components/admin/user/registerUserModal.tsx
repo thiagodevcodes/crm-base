@@ -15,11 +15,17 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>; // recebe dados do formulário
-  selectedUser?: User | null
+  selectedUser?: User | null;
 };
 
-export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
-  const [roles, setRoles] = useState<Role[]>([])
+export function RegisterUserModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectedUser,
+  title,
+}: Props) {
+  const [roles, setRoles] = useState<Role[]>([]);
 
   const {
     register,
@@ -31,12 +37,12 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
   } = useForm<UserFormData>({
     defaultValues: {
       username: selectedUser?.username,
-      name: selectedUser?.name
+      name: selectedUser?.name,
     },
   });
 
   const password = watch("password");
-  
+
   useEffect(() => {
     if (selectedUser) {
       reset({
@@ -75,8 +81,8 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
   }));
 
   useEffect(() => {
-    loadRoles()
-  }, [])
+    loadRoles();
+  }, []);
 
   const darkSelectStyles: StylesConfig<
     RoleOption,
@@ -136,7 +142,7 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
             </button>
 
             <h2 className="text-xl font-bold text-white mb-4 text-center">
-              { title }
+              {title}
             </h2>
 
             <form
@@ -149,7 +155,9 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
                   type="text"
                   placeholder="Nome"
                   className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("name", { required: "Nome é obrigatório" })}
+                  {...register("name", {
+                    required: "Nome é obrigatório",
+                  })}
                 />
                 {errors.name && (
                   <p className="text-red-400 text-sm">{errors.name.message}</p>
@@ -164,7 +172,10 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
                   className="w-full p-2 rounded bg-slate-800 text-white"
                   {...register("username", {
                     required: "Email é obrigatório",
-                    minLength: { value: 3, message: "Mínimo de 3 caracteres" },
+                    minLength: {
+                      value: 3,
+                      message: "Mínimo de 3 caracteres",
+                    },
                   })}
                 />
                 {errors.username && (
@@ -182,7 +193,10 @@ export function RegisterUserModal({ isOpen, onClose, onSubmit, selectedUser, tit
                   className="w-full p-2 rounded bg-slate-800 text-white"
                   {...register("password", {
                     required: "Senha é obrigatória",
-                    minLength: { value: 6, message: "Mínimo de 6 caracteres" },
+                    minLength: {
+                      value: 6,
+                      message: "Mínimo de 6 caracteres",
+                    },
                   })}
                 />
                 {errors.password && (

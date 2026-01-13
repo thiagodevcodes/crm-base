@@ -71,14 +71,13 @@ export default function LoginForm() {
     }
   }
 
-    useEffect(() => {
+  useEffect(() => {
     if (!loading && authenticated) {
-        router.replace("/admin/dashboard");
+      router.replace("/admin/dashboard");
     }
-    }, [loading, authenticated, router]);
+  }, [loading, authenticated, router]);
 
-  if (authenticated || loading && !isSubmitting) return <SpinnerLoading />;
-
+  if (authenticated || (loading && !isSubmitting)) return <SpinnerLoading />;
 
   return (
     <div className="grid lg:grid-cols-2 min-h-screen">

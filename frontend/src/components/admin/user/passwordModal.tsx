@@ -11,10 +11,16 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>; // recebe dados do formulário
-  selectedUser?: User | null
+  selectedUser?: User | null;
 };
 
-export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }: Props) {
+export function PasswordModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectedUser,
+  title,
+}: Props) {
   const {
     register,
     handleSubmit,
@@ -24,7 +30,7 @@ export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }
   } = useForm<UserFormData>();
 
   const password = watch("password");
-  
+
   useEffect(() => {
     if (selectedUser) {
       reset({
@@ -86,7 +92,7 @@ export function PasswordModal({ isOpen, onClose, onSubmit, selectedUser, title }
             </button>
 
             <h2 className="text-xl font-bold text-white mb-4 text-center">
-              { title }
+              {title}
             </h2>
 
             <form

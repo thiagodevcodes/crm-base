@@ -9,12 +9,11 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class RoleService {
-    @Autowired
-    private RoleRepository roleRepository;
+   @Autowired
+   private RoleRepository roleRepository;
 
-
-    public List<RoleEntity> findAll() {
-        return roleRepository.findAll();
-    }
+   public List<RoleEntity> findAll() {
+      return roleRepository.findAll();
+   }
 
 }

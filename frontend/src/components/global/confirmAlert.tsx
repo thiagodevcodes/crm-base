@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 
 type Props = {
   isOpen: boolean;
@@ -18,20 +17,9 @@ export function ConfirmAlert({
   onConfirm,
   onCancel,
 }: Props) {
-  const [confirmOpen, setConfirmOpen] = useState(false);
-  function onClose() {
-   
-  }
-
-  type UserForm = {
-    name: string;
-    username: string;
-    password: string;
-  };
-
   return (
     <AnimatePresence>
-      {isOpen && (    
+      {isOpen && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center"
           initial={{ opacity: 0 }}

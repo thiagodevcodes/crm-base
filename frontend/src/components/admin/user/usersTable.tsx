@@ -47,12 +47,6 @@ export function UsersTable({ users, setUsers }: Props) {
     }
   }
 
-  type UserForm = {
-    name: string;
-    username: string;
-    password: string;
-  };
-
   async function handleUpdatePassword(data: UserFormData) {
     if (!selectedUser) return;
 

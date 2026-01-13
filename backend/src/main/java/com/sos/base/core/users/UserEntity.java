@@ -24,30 +24,26 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name= "tb_users")
+@Table(name = "tb_users")
 public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "user_id")
-    private UUID userId;
+   @Id
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(name = "user_id")
+   private UUID userId;
 
-    private String name;
-    
-    @Column(unique = true)
-    private String username;
+   private String name;
 
-    private String password;
+   @Column(unique = true)
+   private String username;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "tb_users_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    
-    private Set<RoleEntity> roles;
+   private String password;
 
-    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
-        return passwordEncoder.matches(loginRequest.password(), this.password);
-    }
+   @ManyToMany(fetch = FetchType.EAGER)
+   @JoinTable(name = "tb_users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+
+   private Set<RoleEntity> roles;
+
+   public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+      return passwordEncoder.matches(loginRequest.password(), this.password);
+   }
 }

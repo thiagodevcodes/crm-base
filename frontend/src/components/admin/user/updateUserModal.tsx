@@ -58,8 +58,8 @@ export function UpdateUserModal({
   async function handleFormSubmit(data: UserFormData) {
     try {
       await onSubmit(data);
-      reset(); 
-      onClose(); 
+      reset();
+      onClose();
     } catch (err) {
       console.error("Erro ao atualizar usuário:", err);
     }
@@ -80,7 +80,6 @@ export function UpdateUserModal({
       loadRoles();
     }
   }, [isOpen, selectedUser]);
-
 
   const darkSelectStyles: StylesConfig<
     RoleOption,
@@ -153,7 +152,9 @@ export function UpdateUserModal({
                   type="text"
                   placeholder="Nome"
                   className="w-full p-2 rounded bg-slate-800 text-white"
-                  {...register("name", { required: "Nome é obrigatório" })}
+                  {...register("name", {
+                    required: "Nome é obrigatório",
+                  })}
                 />
                 {errors.name && (
                   <p className="text-red-400 text-sm">{errors.name.message}</p>
@@ -168,7 +169,10 @@ export function UpdateUserModal({
                   className="w-full p-2 rounded bg-slate-800 text-white"
                   {...register("username", {
                     required: "Email é obrigatório",
-                    minLength: { value: 3, message: "Mínimo de 3 caracteres" },
+                    minLength: {
+                      value: 3,
+                      message: "Mínimo de 3 caracteres",
+                    },
                   })}
                 />
                 {errors.username && (

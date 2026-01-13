@@ -15,11 +15,11 @@ import lombok.Setter;
 @Table(name = "tb_permissions")
 public class PermissionEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "permission_id")
-    private Long permissionId;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "permission_id")
+   private Long permissionId;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+   @Column(unique = true, nullable = false)
+   private String name;
 }

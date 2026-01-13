@@ -21,27 +21,3 @@ export async function checkAuth() {
     return false;
   }
 }
-
-// import { cookies } from "next/headers";
-
-// export async function checkAuth() {
-//   const cookieStore = cookies();
-//   const token = (await cookieStore).get("token")?.value;
-
-//   if (!token) return false; // não logado
-
-//   try {
-//     // chamada ao backend para validar token
-//     const res = await fetch(
-//         `${process.env.NEXT_PUBLIC_API_URL}/auth/me`,
-//         {
-//         credentials: "include",
-//         }
-//     );
-//     console.log(res)
-
-//     return res.status === 200;
-//   } catch {
-//     return false;
-//   }
-// }

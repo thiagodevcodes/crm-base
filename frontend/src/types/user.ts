@@ -5,7 +5,7 @@ export interface User {
   name: string;
   username: string;
   permissions: string[];
-  roles: Role[]
+  roles: Role[];
 }
 
 export type UserFormData = {
@@ -14,5 +14,5 @@ export type UserFormData = {
   username: string;
   password: string;
   confirmPassword: string;
-  roles: RoleOption[]
+  roles: RoleOption[];
 };

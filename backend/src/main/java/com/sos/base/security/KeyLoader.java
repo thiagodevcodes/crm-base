@@ -12,30 +12,30 @@ import java.util.Base64;
 
 public final class KeyLoader {
 
-    private KeyLoader() {
-    }
+   private KeyLoader() {
+   }
 
-    public static RSAPublicKey loadPublicKey(Resource resource) throws Exception {
-        String key = Files.readString(resource.getFile().toPath())
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
+   public static RSAPublicKey loadPublicKey(Resource resource) throws Exception {
+      String key = Files.readString(resource.getFile().toPath())
+            .replace("-----BEGIN PUBLIC KEY-----", "")
+            .replace("-----END PUBLIC KEY-----", "")
+            .replaceAll("\\s", "");
 
-        byte[] decoded = Base64.getDecoder().decode(key);
+      byte[] decoded = Base64.getDecoder().decode(key);
 
-        return (RSAPublicKey) KeyFactory.getInstance("RSA")
-                .generatePublic(new X509EncodedKeySpec(decoded));
-    }
+      return (RSAPublicKey) KeyFactory.getInstance("RSA")
+            .generatePublic(new X509EncodedKeySpec(decoded));
+   }
 
-    public static RSAPrivateKey loadPrivateKey(Resource resource) throws Exception {
-        String key = Files.readString(resource.getFile().toPath())
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
+   public static RSAPrivateKey loadPrivateKey(Resource resource) throws Exception {
+      String key = Files.readString(resource.getFile().toPath())
+            .replace("-----BEGIN PRIVATE KEY-----", "")
+            .replace("-----END PRIVATE KEY-----", "")
+            .replaceAll("\\s", "");
 
-        byte[] decoded = Base64.getDecoder().decode(key);
+      byte[] decoded = Base64.getDecoder().decode(key);
 
-        return (RSAPrivateKey) KeyFactory.getInstance("RSA")
-                .generatePrivate(new PKCS8EncodedKeySpec(decoded));
-    }
+      return (RSAPrivateKey) KeyFactory.getInstance("RSA")
+            .generatePrivate(new PKCS8EncodedKeySpec(decoded));
+   }
 }

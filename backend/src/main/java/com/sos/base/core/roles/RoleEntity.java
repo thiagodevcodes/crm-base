@@ -23,34 +23,29 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_roles")
 public class RoleEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Long roleId;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "role_id")
+   private Long roleId;
 
-    private String name;
+   private String name;
 
+   @ManyToMany(fetch = FetchType.EAGER)
+   @JoinTable(name = "tb_role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+   private Set<PermissionEntity> permissions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "tb_role_permissions",
-        joinColumns = @JoinColumn(name = "role_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private Set<PermissionEntity> permissions = new HashSet<>();
+   public enum Values {
+      ADMIN(1L),
+      BASIC(2L);
 
-    public enum Values {
-        ADMIN(1L),
-        BASIC(2L);
-       
-        long roleId;
+      long roleId;
 
-        Values(long roleId) {
-            this.roleId = roleId;
-        }
+      Values(long roleId) {
+         this.roleId = roleId;
+      }
 
-        public long getRoleId() {
-            return roleId;
-        }
-    }
+      public long getRoleId() {
+         return roleId;
+      }
+   }
 }
