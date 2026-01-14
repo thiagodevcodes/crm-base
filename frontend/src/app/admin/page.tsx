@@ -1,4 +1,4 @@
-import LoginForm from "@/components/pages/login";
+import LoginForm from "@/components/admin/pages/login";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-//   const isAuth = await checkAuth();
+  //   const isAuth = await checkAuth();
 
-//   if (isAuth) redirect("/admin/dashboard");
+  //   if (isAuth) redirect("/admin/dashboard");
 
   return <LoginForm />;
 }

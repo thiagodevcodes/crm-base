@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/global/spinner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SpinnerLoading } from "../global/spinnerLoading";
+import { SpinnerLoading } from "../../global/spinnerLoading";
 
 const loginSchema = z.object({
   email: z.string(),

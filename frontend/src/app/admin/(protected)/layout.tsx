@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Layout } from "@/components/admin/layout";
+import { Layout } from "@/components/admin/ui/layout";
 import { MobileMenuProvider } from "@/contexts/mobileMenuContext";
 
 type AdminLayoutProps = {

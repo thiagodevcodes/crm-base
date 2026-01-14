@@ -1,4 +1,4 @@
-import Users from "@/components/admin/pages/users";
+import Roles from "@/components/admin/pages/roles";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,10 +6,10 @@ export const metadata: Metadata = {
   description: "Página de visualização de dados",
 };
 
-export default async function UsersPage() {
+export default async function RolesPage() {
   //   const isAuth = await checkAuth();
 
   //   if (!isAuth) redirect("/admin");
 
-  return <Users />;
+  return <Roles />;
 }

@@ -1,4 +1,4 @@
-import DashboardClient from "@/components/pages/dashboard";
+import DashboardClient from "@/components/admin/pages/dashboard";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,9 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
-//   const isAuth = await checkAuth();
+  //   const isAuth = await checkAuth();
 
-//   if (!isAuth) redirect("/admin");
+  //   if (!isAuth) redirect("/admin");
 
   return <DashboardClient />;
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { RegisterUserModal } from "@/components/admin/user/registerUserModal";
-import { UsersTable } from "@/components/admin/user/usersTable";
+import { RegisterUserModal } from "@/components/admin/ui/user/registerUserForm";
+import { UsersTable } from "@/components/admin/ui/user/usersTable";
 import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import { getUsers, createUser } from "@/services/user";
 import { User, UserFormData } from "@/types/user";
 import { canAccess } from "@/utils/canAccess";
 import { useRouter } from "next/navigation";
+import { Modal } from "../../global/modal";
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
@@ -34,6 +35,7 @@ export default function Users() {
 
       if ("userId" in createdUser) {
         setUsers((prev) => [...prev, createdUser]); // adiciona o novo usuário à lista
+        setOpen(false); // fecha o modal
       } else {
         console.error("Erro ao criar usuário:", createdUser);
       }
@@ -43,18 +45,23 @@ export default function Users() {
   }
 
   useEffect(() => {
-    if (authenticated) {
+    if (authenticated && canAccess(permissions, ["GET_USERS"])) {
       loadUsers();
     }
-  }, [authenticated]);
+  }, [authenticated, permissions]);
 
   useEffect(() => {
     if (!loading && !authenticated) {
       router.replace("/admin");
     }
-  }, [loading, authenticated, router]);
 
-  if (loading || !authenticated) return <SpinnerLoading />;
+    if (!canAccess(permissions, ["GET_ROLES"])) {
+      router.replace("/admin/dashboard");
+    }
+  }, [loading, authenticated, router, permissions]);
+
+  if (loading || !authenticated || !canAccess(permissions, ["GET_ROLES"]))
+    return <SpinnerLoading />;
 
   return (
     <div className="p-6 gap-4 w-full">
@@ -75,12 +82,14 @@ export default function Users() {
       </div>
 
       {canAccess(permissions, ["ADD_USER"]) && (
-        <RegisterUserModal
-          title="Criar Usuário"
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          onSubmit={handleSubmit}
-        />
+        <Modal isOpen={open} onClose={() => setOpen(false)}>
+          <RegisterUserModal
+            title="Criar Usuário"
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            onSubmit={handleSubmit}
+          />
+        </Modal>
       )}
 
       <UsersTable users={users} setUsers={setUsers}></UsersTable>

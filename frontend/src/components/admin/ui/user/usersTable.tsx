@@ -3,11 +3,12 @@
 import { User, UserFormData } from "@/types/user";
 import { deleteUser, updatePassword, updateUser } from "@/services/user";
 import { useState } from "react";
-import { ConfirmAlert } from "../../global/confirmAlert";
-import { PasswordModal } from "./passwordModal";
-import { UpdateUserModal } from "./updateUserModal";
+import { ConfirmAlert } from "../../../global/confirmAlert";
+import { PasswordForm } from "./passwordForm";
+import { UpdateUserModal } from "./updateUserForm";
 import { canAccess } from "@/utils/canAccess";
 import { useAuth } from "@/hooks/useAuth";
+import { Modal } from "@/components/global/modal";
 
 type Props = {
   users: User[];
@@ -180,23 +181,33 @@ export function UsersTable({ users, setUsers }: Props) {
       </div>
 
       {canAccess(permissions, ["ADD_USER"]) && (
-        <PasswordModal
-          title={`Senha de ${selectedUser?.name}`}
+        <Modal
           isOpen={passwordModalOpen}
           onClose={() => setPasswordModalOpen(false)}
-          onSubmit={handleUpdatePassword}
-          selectedUser={selectedUser}
-        />
+        >
+          <PasswordForm
+            title={`Senha de ${selectedUser?.name}`}
+            isOpen={passwordModalOpen}
+            onClose={() => setPasswordModalOpen(false)}
+            onSubmit={handleUpdatePassword}
+            selectedUser={selectedUser}
+          />
+        </Modal>
       )}
 
       {canAccess(permissions, ["UPDATE_USER"]) && (
-        <UpdateUserModal
-          title={`Editar ${selectedUser?.name}`}
+        <Modal
           isOpen={updateModalOpen}
           onClose={() => setUpdateModalOpen(false)}
-          onSubmit={handleUpdate}
-          selectedUser={selectedUser}
-        />
+        >
+          <UpdateUserModal
+            title={`Editar ${selectedUser?.name}`}
+            isOpen={updateModalOpen}
+            onClose={() => setUpdateModalOpen(false)}
+            onSubmit={handleUpdate}
+            selectedUser={selectedUser}
+          />
+        </Modal>
       )}
 
       {canAccess(permissions, ["DELETE_USER"]) && (

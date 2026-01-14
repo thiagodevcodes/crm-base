@@ -10,7 +10,8 @@ VALUES
 (4, 'DELETE_USER'), 
 (5, 'ADD_USER'), 
 (6, 'GET_USERS'), 
-(7, 'UPDATE_PASSWORD_USER')
+(7, 'UPDATE_PASSWORD_USER'),
+(8, 'GET_ROLES')
 ON CONFLICT (permission_id) DO NOTHING;
 
 INSERT INTO tb_role_permissions (role_id, permission_id)

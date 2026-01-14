@@ -1,7 +1,7 @@
-import { Dropdown, DropdownItem } from "../global/dropdown";
+import { Dropdown, DropdownItem } from "../../global/dropdown";
 import { useAuth } from "@/hooks/useAuth";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
-import ButtonMobile from "../global/buttonMobile";
+import ButtonMobile from "../../global/buttonMobile";
 
 export function Header() {
   const { user, logout } = useAuth();

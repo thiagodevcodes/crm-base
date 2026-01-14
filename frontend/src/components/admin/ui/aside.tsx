@@ -3,7 +3,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Dropdown, DropdownItem } from "../global/dropdown";
+import { Dropdown, DropdownItem } from "../../global/dropdown";
 
 import { canAccess } from "@/utils/canAccess";
 
@@ -44,6 +44,15 @@ export function Aside() {
             >
               <Users width={20} />
               Usuários
+            </Link>
+          )}
+          {canAccess(permissions, ["GET_ROLES"]) && (
+            <Link
+              href="/admin/roles"
+              className={`nav-link ${isActive("/admin/roles")}`}
+            >
+              <Users width={20} />
+              Grupos de Permissões
             </Link>
           )}
         </nav>
