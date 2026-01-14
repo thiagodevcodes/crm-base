@@ -64,6 +64,10 @@ public class SecurityConfig {
                   .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
                   .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
                   .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                  .requestMatchers(
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**")
+                  .permitAll()
                   .anyRequest().authenticated())
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource))

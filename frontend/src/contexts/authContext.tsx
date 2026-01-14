@@ -71,9 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loadUser();
   }, [loadUser]);
 
-  // 🔥 RODA UMA ÚNICA VEZ
   useEffect(() => {
-    async function bootstrap() {
+    async function fetchUserData() {
       try {
         const me = await getMe();
         setUser(me);
@@ -86,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    bootstrap();
+    fetchUserData();
   }, []);
 
   return (
