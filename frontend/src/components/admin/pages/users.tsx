@@ -55,12 +55,12 @@ export default function Users() {
       router.replace("/admin");
     }
 
-    if (!canAccess(permissions, ["GET_ROLES"])) {
+    if (!canAccess(permissions, ["GET_USERS"])) {
       router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router, permissions]);
 
-  if (loading || !authenticated || !canAccess(permissions, ["GET_ROLES"]))
+  if (loading || !authenticated || !canAccess(permissions, ["GET_USERS"]))
     return <SpinnerLoading />;
 
   return (
