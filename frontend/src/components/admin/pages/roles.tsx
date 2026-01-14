@@ -42,8 +42,8 @@ export default function Roles() {
     <div className="p-6 gap-4 w-full">
       <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-2xl font-bold">Grupo de Usuários</h1>
-          <p>Bem-vindo ao painel de Grupos de Usuário!</p>
+          <h1 className="text-2xl font-bold">Perfis de Usuários</h1>
+          <p>Bem-vindo ao painel de Perfis de Usuários!</p>
         </div>
       </div>
 

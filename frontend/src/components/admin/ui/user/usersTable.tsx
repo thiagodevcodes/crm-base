@@ -92,7 +92,7 @@ export function UsersTable({ users, setUsers }: Props) {
             <tr>
               <th className="px-4 py-3">Nome</th>
               <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Permissões</th>
+              <th className="px-4 py-3">Perfis do Usuário</th>
               {(canAccess(permissions, ["UPDATE_USER"]) ||
                 canAccess(permissions, ["UPDATE_PASSWORD_USER"]) ||
                 canAccess(permissions, ["DELETE_USER"])) && (

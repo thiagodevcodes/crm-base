@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Users } from "lucide-react";
+import { ContactRound, LayoutDashboard, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Dropdown, DropdownItem } from "../../global/dropdown";
 
@@ -51,8 +51,8 @@ export function Aside() {
               href="/admin/roles"
               className={`nav-link ${isActive("/admin/roles")}`}
             >
-              <Users width={20} />
-              Grupos de Permissões
+              <ContactRound width={20} />
+              Perfis de Usuários
             </Link>
           )}
         </nav>
