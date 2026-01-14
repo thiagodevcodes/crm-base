@@ -1,7 +1,7 @@
 export interface Role {
   roleId: string;
   name: string;
-  permissions: { name: string }[];
+  permissions: { permissionId: string; name: string }[];
 }
 
 export type RoleOption = {

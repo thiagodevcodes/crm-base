@@ -36,8 +36,18 @@ export function RolesTable({ roles }: Props) {
               >
                 <td className="px-4 py-3 font-medium">{role.roleId}</td>
                 <td className="px-4 py-3 text-white/80">{role.name}</td>
+
                 <td className="px-4 py-3 text-white/80">
-                  {role.permissions?.map((p) => p.name).join(", ")}
+                  <div className="flex flex-wrap gap-2">
+                    {role.permissions?.map((p) => (
+                      <span
+                        key={p.permissionId}
+                        className="rounded-md bg-blue-500/20 px-2 py-0.5 text-xs text-blue-400"
+                      >
+                        {p.name}
+                      </span>
+                    ))}
+                  </div>
                 </td>
               </tr>
             ))}
