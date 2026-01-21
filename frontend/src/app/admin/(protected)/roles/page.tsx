@@ -2,7 +2,7 @@ import Roles from "@/components/admin/pages/roles";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Usuários",
+  title: "CRM - Perfis de Usuários",
   description: "Página de visualização de dados",
 };
 

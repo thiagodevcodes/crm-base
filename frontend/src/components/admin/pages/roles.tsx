@@ -30,7 +30,7 @@ export default function Roles() {
       router.replace("/admin");
     }
 
-    if (!canAccess(permissions, ["GET_ROLES"])) {
+    if (authenticated && !canAccess(permissions, ["GET_ROLES"])) {
       router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router, permissions]);

@@ -30,7 +30,7 @@ export default function Users() {
         data.name,
         data.username,
         data.password,
-        roles
+        roles,
       );
 
       if ("userId" in createdUser) {
@@ -55,7 +55,7 @@ export default function Users() {
       router.replace("/admin");
     }
 
-    if (!canAccess(permissions, ["GET_USERS"])) {
+    if (authenticated && !canAccess(permissions, ["GET_USERS"])) {
       router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router, permissions]);
