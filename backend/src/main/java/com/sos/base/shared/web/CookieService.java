@@ -27,8 +27,8 @@ public class CookieService {
       cookie.setHttpOnly(true);
       cookie.setPath("/");
       cookie.setMaxAge(0);
-      cookie.setSecure(false);
-      cookie.setAttribute("sameSite", "Lax");
+      cookie.setSecure(true);
+      cookie.setAttribute("sameSite", "None");
 
       return cookie;
    }
