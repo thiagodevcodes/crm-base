@@ -34,8 +34,8 @@ export default function Users() {
       );
 
       if ("userId" in createdUser) {
-        setUsers((prev) => [...prev, createdUser]); // adiciona o novo usuário à lista
-        setOpen(false); // fecha o modal
+        setUsers((prev) => [...prev, createdUser]);
+        setOpen(false);
       } else {
         console.error("Erro ao criar usuário:", createdUser);
       }
@@ -45,18 +45,14 @@ export default function Users() {
   }
 
   useEffect(() => {
+    if (!loading && !authenticated) router.replace("/admin");
+
+    if (!loading && authenticated && !canAccess(permissions, ["GET_USERS"])) {
+      router.replace("/admin/dashboard");
+    }
+
     if (authenticated && canAccess(permissions, ["GET_USERS"])) {
       loadUsers();
-    }
-  }, [authenticated, permissions]);
-
-  useEffect(() => {
-    if (!loading && !authenticated) {
-      router.replace("/admin");
-    }
-
-    if (authenticated && !canAccess(permissions, ["GET_USERS"])) {
-      router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router, permissions]);
 

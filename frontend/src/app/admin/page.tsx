@@ -7,9 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  //   const isAuth = await checkAuth();
-
-  //   if (isAuth) redirect("/admin/dashboard");
-
   return <LoginForm />;
 }

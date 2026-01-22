@@ -20,18 +20,14 @@ export default function Roles() {
   }
 
   useEffect(() => {
+    if (!loading && !authenticated) router.replace("/admin");
+
+    if (!loading && authenticated && !canAccess(permissions, ["GET_ROLES"])) {
+      router.replace("/admin/dashboard");
+    }
+
     if (authenticated && canAccess(permissions, ["GET_ROLES"])) {
       loadRoles();
-    }
-  }, [authenticated, permissions]);
-
-  useEffect(() => {
-    if (!loading && !authenticated) {
-      router.replace("/admin");
-    }
-
-    if (authenticated && !canAccess(permissions, ["GET_ROLES"])) {
-      router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router, permissions]);
 
