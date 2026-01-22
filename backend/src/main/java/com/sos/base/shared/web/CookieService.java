@@ -11,8 +11,8 @@ public class CookieService {
       // 🔹 Criar cookie HTTP-only
       ResponseCookie cookie = ResponseCookie.from(key, value)
             .httpOnly(true)
-            .secure(false) // DEV = false, produção = true
-            .sameSite("Lax")
+            .secure(true) // DEV = false, produção = true
+            .sameSite("None")
             .path("/")
             .maxAge(expiresIn)
             .build();
