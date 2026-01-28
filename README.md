@@ -26,13 +26,14 @@ Certifique-se de ter instalados:
 
 Clone o repositório do projeto para sua máquina local:
 
-bash
+```bash
 git clone https://github.com/thiagodevcodes/crm-base.git
 cd crm-base
+```
 
-### 3. Gerando as chaves RSA
+### 3. Chaves RSA
 
-O projeto utiliza chaves RSA para autenticação/criptografia. Que será gerada automaticamente no primeiro build:
+O projeto utiliza chaves RSA para autenticação/criptografia que será gerada automaticamente no primeiro build:
 
 ⚠️ Mantenha a chave privada segura e nunca a compartilhe publicamente.
 
