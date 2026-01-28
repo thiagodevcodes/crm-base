@@ -40,18 +40,16 @@ O projeto utiliza chaves RSA para autenticação/criptografia. Que será gerada 
 
 O projeto está configurado para rodar via Docker Compose. Execute:
 
-bash
+```bash
+docker compose up --build
+```
 
-# Baixa as imagens necessárias
-
-# Cria os containers e inicia o projeto
-
-docker-compose up --build
+Para baixar as imagens necessárias, criar os containers e iniciar o projeto.
 
 ### 5. Acessando o projeto
 
 Depois que os containers estiverem rodando, você pode acessar o projeto localmente em:
-bash
+
 http://localhost:3000
 
 ### 🛠 Tecnologias Utilizadas :
