@@ -66,10 +66,9 @@ http://localhost:3000
 
 ### Fotos do Projeto
 
-<img width="700px" src="./frontend//public/img-1.png">
-<img width="700px" src="./frontend//public/img-2.png">
-<img width="700px" src="./frontend//public/img-3.png">
-<img width="700px" src="./frontend//public/img-4.png">
-<img width="700px" src="./frontend//public/img-5.png">
-<img width="700px" src="./frontend//public/img-6.png">
-<img width="700px" src="./frontend//public/img-7.png">
+<img width="700px" src="./frontend//public/gif-login.gif">
+<img width="700px" src="./frontend//public/gif-create-user.gif">
+<img width="700px" src="./frontend//public/gif-edit-user.gif">
+<img width="700px" src="./frontend//public/gif-alter-pass.gif">
+<img width="700px" src="./frontend//public/gif-delete-user.gif">
+<img width="700px" src="./frontend//public/gif-logout.gif">
