@@ -16,7 +16,6 @@ public class CookieService {
             .path("/")
             .maxAge(expiresIn)
             .build();
-
       return cookie;
    }
 

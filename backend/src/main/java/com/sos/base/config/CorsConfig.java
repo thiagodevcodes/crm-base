@@ -15,16 +15,9 @@ public class CorsConfig {
    public CorsConfigurationSource corsConfigurationSource() {
       CorsConfiguration config = new CorsConfiguration();
 
-      config.setAllowCredentials(true);
-
-      // 👇 ESSENCIAL para Fly.io / proxies
-      config.setAllowedOriginPatterns(List.of(
-            "http://localhost:3000",
-            "https://*.fly.dev"));
-
-      config.setAllowedMethods(List.of(
-            "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-
+      config.setAllowCredentials(true); // necessário para enviar HttpOnly cookies
+      config.setAllowedOrigins(List.of("http://localhost:3000")); // seu front
+      config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
       config.setAllowedHeaders(List.of("*"));
       config.setExposedHeaders(List.of("Authorization"));
 

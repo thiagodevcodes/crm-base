@@ -46,7 +46,7 @@ services:
       - ./keys:/app/resources/keys
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE_ACTIVE}
-      DB_HOST: postgres
+      DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}

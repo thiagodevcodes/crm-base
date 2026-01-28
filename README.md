@@ -1,50 +1,69 @@
-<h1>CRM</h1>
+<h1>Gerenciamento de Relacionamento com Cliente</h1>
 
-<img height="28" src="https://img.shields.io/badge/-Em_Desenvolvimento...-83B81A?style=fot-the-badge">
+## 1. 🚀 Descrição do Projeto
 
-### Tecnologias :
+O CRM Base é um sistema de gerenciamento de relacionamento com clientes desenvolvido para servir como uma fundação robusta para aplicações corporativas. Ele oferece funcionalidades essenciais de gerenciamento de usuários, permitindo criar, ler, atualizar e deletar registros de forma eficiente.
 
-- <img height="28" src="https://img.shields.io/badge/Java-FF9E0F.svg?style=flat&https://img.shields.io/badge/Spring%20Boot-64a43a.svg?style=flat&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCwwLDI1NiwyNTYiPgo8ZyBmaWxsPSIjRkZGRkZGIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIgc3Ryb2tlLW1pdGVybGltaXQ9IjEwIiBzdHJva2UtZGFzaGFycmF5PSIiIHN0cm9rZS1kYXNob2Zmc2V0PSIwIiBmb250LWZhbWlseT0ibm9uZSIgZm9udC13ZWlnaHQ9Im5vbmUiIGZvbnQtc2l6ZT0ibm9uZSIgdGV4dC1hbmNob3I9Im5vbmUiIHN0eWxlPSJtaXgtYmxlbmQtbW9kZTogbm9ybWFsIj48ZyB0cmFuc2Zvcm09InNjYWxlKDUuMTIsNS4xMikiPjxwYXRoIGQ9Ik0yOC4xODc1LDBjMi43NSw2LjM2MzI4IC05Ljg1OTM3LDEwLjI5Mjk3IC0xMS4wMzEyNSwxNS41OTM3NWMtMS4wNzQyMiw0Ljg3MTA5IDcuNDkyMTksMTAuNTMxMjUgNy41LDEwLjUzMTI1Yy0xLjMwMDc4LC0yLjAxNTYyIC0yLjI1NzgxLC0zLjY3NTc4IC0zLjU2MjUsLTYuODEyNWMtMi4yMDcwMywtNS4zMDQ2OSAxMy40NDE0MSwtMTAuMTA1NDcgNy4wOTM3NSwtMTkuMzEyNXpNMzYuNTYyNSw4LjgxMjVjMCwwIC0xMS4wNjI1LDAuNzEwOTQgLTExLjYyNSw3Ljc4MTI1Yy0wLjI1LDMuMTQ4NDQgMi45MTAxNiw0LjgwNDY5IDMsNy4wOTM3NWMwLjA3NDIyLDEuODcxMDkgLTEuODc1LDMuNDM3NSAtMS44NzUsMy40Mzc1YzAsMCAzLjU0Njg4LC0wLjY3NTc4IDQuNjU2MjUsLTMuNTMxMjVjMS4yMzA0NywtMy4xNjc5NyAtMi4zOTg0NCwtNS4zMDg1OSAtMi4wMzEyNSwtNy44NDM3NWMwLjM1MTU2LC0yLjQyNTc4IDcuODc1LC02LjkzNzUgNy44NzUsLTYuOTM3NXpNMTkuMTg3NSwyNS4xNTYyNWMwLDAgLTEwLjEyNSwtMC4xNDQ1MyAtMTAuMTI1LDIuNzE4NzVjMCwyLjk5MjE5IDEzLjI1MzkxLDMuMjE0ODQgMjIuNzE4NzUsMS4zNzVjMCwwIDIuNTE1NjMsLTEuNzMwNDcgMy4xODc1LC0yLjM3NWMtNi4yMDMxMiwxLjI2NTYzIC0yMC4zNDM3NSwxLjQwNjI1IC0yMC4zNDM3NSwwLjMxMjVjMCwtMS4wMDc4MSA0LjU2MjUsLTIuMDMxMjUgNC41NjI1LC0yLjAzMTI1ek0zOC42NTYyNSwyNS4xNTYyNWMtMC45OTIxOSwwLjA3ODEzIC0yLjA2MjUsMC40NjA5NCAtMy4wMzEyNSwxLjE1NjI1YzIuMjgxMjUsLTAuNDkyMTkgNC4yMTg3NSwwLjkyMTg4IDQuMjE4NzUsMi41MzEyNWMwLDMuNjI1IC01LjI1LDcuMDMxMjUgLTUuMjUsNy4wMzEyNWMwLDAgOC4xMjUsLTAuOTIxODcgOC4xMjUsLTYuODc1YzAsLTIuNzAzMTIgLTEuODc4OTEsLTQuMDE1NjIgLTQuMDYyNSwtMy44NDM3NXpNMTYuNzUsMzAuNzE4NzVjLTEuNTU0NjksMCAtMy44NzUsMS4yMTg3NSAtMy44NzUsMi4zNzVjMCwyLjMyNDIyIDExLjY4NzUsNC4xMTMyOCAyMC4zNDM3NSwwLjcxODc1bC0zLC0xLjg0Mzc1Yy01Ljg2NzE5LDEuODc4OTEgLTE2LjY3MTg3LDEuMjY1NjMgLTEzLjQ2ODc1LC0xLjI1ek0xOC4xODc1LDM1LjkzNzVjLTIuMTI4OTEsMCAtMy41MzEyNSwxLjI4NTE2IC0zLjUzMTI1LDIuMjVjMCwyLjk4NDM4IDEyLjcxNDg0LDMuMjg1MTYgMTcuNzUsMC4yNWwtMy4xODc1LC0yLjAzMTI1Yy0zLjc2MTcyLDEuNTg5ODQgLTEzLjIwMzEyLDEuODMyMDMgLTExLjAzMTI1LC0wLjQ2ODc1ek0xMS4wOTM3NSwzOC42MjVjLTMuNDY4NzUsLTAuMDcwMzEgLTUuNzE4NzUsMS40ODgyOCAtNS43MTg3NSwyLjc4MTI1YzAsNi44NzUgMzUuNSw2LjU1ODU5IDM1LjUsLTAuNDY4NzVjMCwtMS4xNjc5NyAtMS4zNDc2NiwtMS43MzQzNyAtMS44NDM3NSwtMmMyLjkwMjM0LDYuNzE4NzUgLTI5LjA2MjUsNi4xODM1OSAtMjkuMDYyNSwyLjIxODc1YzAsLTAuOTAyMzQgMi4zNTE1NiwtMS43NjU2MiA0LjUzMTI1LC0xLjM0Mzc1bC0xLjg0Mzc1LC0xLjA2MjVjLTAuNTQyOTcsLTAuMDgyMDMgLTEuMDY2NDEsLTAuMTEzMjggLTEuNTYyNSwtMC4xMjV6TTQ0LjYyNSw0My4yNWMtNS4zOTg0NCw1LjExNzE5IC0xOS4wNzgxMiw2Ljk3MjY2IC0zMi44NDM3NSwzLjgxMjVjMTMuNzYxNzIsNS42MzI4MSAzMi43NzczNCwyLjQ3MjY2IDMyLjg0Mzc1LC0zLjgxMjV6Ij48L3BhdGg+PC9nPjwvZz4KPC9zdmc+">
+Construído com uma arquitetura moderna, o sistema é totalmente _containerizado, com uma **interface web responsiva, **API escalável_ e \*armazenamento de dados confiável\*\*, garantindo alta performance, confiabilidade e facilidade de manutenção.
 
-- <img height="28" src="https://img.shields.io/badge/-SpringBoot-6DB33F?logo=springboot&logoColor=white&style=fot-the-badge">
+O projeto foi pensado para _facilitar a expansão futura_, servindo como base para módulos adicionais de CRM, automações de vendas, e dashboards analíticos.
 
-- <img height="28" src="https://img.shields.io/badge/-Hibernate-59666C?logo=hibernate&logoColor=white&style=fot-the-badge">
+## 2. 🏃 Como Rodar o Projeto
 
-- <img height="28" src="https://img.shields.io/badge/postgresql-4169e1?logo=postgresql&logoColor=white&style=fot-the-badge">
+Este projeto depende do _Docker_ e do _Docker Compose_ para rodar. Siga os passos abaixo para configurar e executar o projeto localmente.
 
-- <img height="28" src="https://img.shields.io/badge/-React-1ac5ff?logo=react&logoColor=white&style=fot-the-badge">
+### 1. Pré-requisitos
 
-- <img height="28" src="https://img.shields.io/badge/-NextJS-000000?logo=next.js&logoColor=white&style=fot-the-badge">
+Certifique-se de ter instalados:
 
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- [Git](https://git-scm.com/install)
 
+---
 
-### Back-end: 
+### 2. Clonando o repositório
 
-- Versões desejadas para bom funcionamento do projeto: Maven 3.9.9, Java 21, NodeJS 22.18.0
+Clone o repositório do projeto para sua máquina local:
 
-- RODAR O PROJETO
-  
-```bash
-  mvn spring-boot:run
-```
+bash
+git clone https://github.com/thiagodevcodes/crm-base.git
+cd crm-base
 
-- URL: http://localhost:8080 (Servidor local)
+### 3. Gerando as chaves RSA
 
-### Front-end:
+O projeto utiliza chaves RSA para autenticação/criptografia. Que será gerada automaticamente no primeiro build:
 
-- INSTALAR DEPENDÊNCIAS NA PASTA "/frontend"
-  
-```bash
-  npm install
-```
+⚠️ Mantenha a chave privada segura e nunca a compartilhe publicamente.
 
-- R0DAR O PROJETO
+### 4. Rodando com Docker
 
-```bash
-  npm run dev
-```
+O projeto está configurado para rodar via Docker Compose. Execute:
 
-- URL: http://localhost:3000 (Servidor local)
+bash
+
+# Baixa as imagens necessárias
+
+# Cria os containers e inicia o projeto
+
+docker-compose up --build
+
+### 5. Acessando o projeto
+
+Depois que os containers estiverem rodando, você pode acessar o projeto localmente em:
+bash
+http://localhost:3000
+
+### 🛠 Tecnologias Utilizadas :
+
+| Tecnologia         | Badge                                                                                                                                                                                        | Descrição                              |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| React + NextJS     | <img height="28" src="https://img.shields.io/badge/React-1ac5ff?logo=react&logoColor=white"> <img height="28" src="https://img.shields.io/badge/NextJS-000000?logo=next.js&logoColor=white"> | Front-end moderno e responsivo         |
+| Java + Spring Boot | <img height="28" src="https://img.shields.io/badge/Java-FF9E0F.svg?style=flat"> <img height="28" src="https://img.shields.io/badge/SpringBoot-6DB33F?logo=springboot&logoColor=white">       | Back-end robusto e escalável           |
+| Hibernate          | <img height="28" src="https://img.shields.io/badge/Hibernate-59666C?logo=hibernate&logoColor=white">                                                                                         | ORM do Java para persistência de dados |
+| PostgreSQL         | <img height="28" src="https://img.shields.io/badge/PostgreSQL-4169e1?logo=postgresql&logoColor=white">                                                                                       | Banco de dados relacional              |
+| Docker             | <img height="28" src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white">                                                                                               | Containerização de aplicações          |
+| Docker Compose     | <img height="28" src="https://img.shields.io/badge/Docker Compose-2496ED?logo=docker&logoColor=white">                                                                                       | Orquestração de múltiplos containers   |
 
 ### Fotos do Projeto
 
@@ -55,7 +74,3 @@
 <img width="700px" src="./frontend//public/img-5.png">
 <img width="700px" src="./frontend//public/img-6.png">
 <img width="700px" src="./frontend//public/img-7.png">
-
-
-
-

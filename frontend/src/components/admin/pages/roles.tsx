@@ -8,15 +8,19 @@ import { RolesTable } from "../ui/role/rolesTable";
 import { getRoles } from "@/services/role";
 import { Role } from "@/types/role";
 import { canAccess } from "@/utils/canAccess";
+import { Spinner } from "@/components/global/spinner";
 
 export default function Roles() {
   const [roles, setRoles] = useState<Role[]>([]);
   const { authenticated, loading, permissions } = useAuth();
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const router = useRouter();
 
   async function loadRoles() {
+    setDataLoading(true);
     const res = await getRoles();
     setRoles(res);
+    setDataLoading(false);
   }
 
   useEffect(() => {
@@ -43,7 +47,11 @@ export default function Roles() {
         </div>
       </div>
 
-      <RolesTable roles={roles} setRoles={setRoles}></RolesTable>
+      {dataLoading ? (
+        <Spinner width="2.5rem" height="2.5rem" />
+      ) : (
+        roles && <RolesTable roles={roles} setRoles={setRoles}></RolesTable>
+      )}
     </div>
   );
 }

@@ -32,13 +32,13 @@ export function UsersTable({ users, setUsers }: Props) {
         selectedUser.userId,
         data.name,
         data.username,
-        roles
+        roles,
       );
 
       setUsers((prev) =>
         prev.map((user) =>
-          user.userId === updatedUser.userId ? updatedUser : user
-        )
+          user.userId === updatedUser.userId ? updatedUser : user,
+        ),
       );
 
       setUpdateModalOpen(false);
@@ -54,13 +54,13 @@ export function UsersTable({ users, setUsers }: Props) {
     try {
       const updatedUser = await updatePassword(
         selectedUser.userId,
-        data.password
+        data.password,
       );
 
       setUsers((prev) =>
         prev.map((user) =>
-          user.userId === updatedUser.userId ? updatedUser : user
-        )
+          user.userId === updatedUser.userId ? updatedUser : user,
+        ),
       );
 
       setPasswordModalOpen(false);

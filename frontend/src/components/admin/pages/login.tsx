@@ -112,7 +112,11 @@ export default function LoginForm() {
             disabled={isSubmitting}
             className="w-full bg-blue-900 text-white py-2 rounded-md font-medium hover:bg-blue-950 transition disabled:opacity-60 cursor-pointer"
           >
-            {isSubmitting ? <Spinner /> : "Entrar"}
+            {isSubmitting ? (
+              <Spinner width="1.5rem" height="1.5rem" />
+            ) : (
+              "Entrar"
+            )}
           </button>
 
           {errors.root && (

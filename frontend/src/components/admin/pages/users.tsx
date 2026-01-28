@@ -10,16 +10,20 @@ import { User, UserFormData } from "@/types/user";
 import { canAccess } from "@/utils/canAccess";
 import { useRouter } from "next/navigation";
 import { Modal } from "../../global/modal";
+import { Spinner } from "@/components/global/spinner";
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const { authenticated, loading, permissions } = useAuth();
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
   async function loadUsers() {
+    setDataLoading(true);
     const res = await getUsers();
     setUsers(res);
+    setDataLoading(false);
   }
 
   async function handleSubmit(data: UserFormData) {
@@ -88,7 +92,11 @@ export default function Users() {
         </Modal>
       )}
 
-      <UsersTable users={users} setUsers={setUsers}></UsersTable>
+      {dataLoading ? (
+        <Spinner width="2.5rem" height="2.5rem" />
+      ) : (
+        users && <UsersTable users={users} setUsers={setUsers} />
+      )}
     </div>
   );
 }
