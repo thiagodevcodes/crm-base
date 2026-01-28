@@ -51,7 +51,7 @@ Para baixar as imagens necessárias, criar os containers e iniciar o projeto.
 
 Depois que os containers estiverem rodando, você pode acessar o projeto localmente em:
 
-http://localhost:3000
+http://localhost:3000/admin
 
 ### 🛠 Tecnologias Utilizadas :
 
