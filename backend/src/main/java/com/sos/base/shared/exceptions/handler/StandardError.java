@@ -1,4 +1,4 @@
-package com.sos.base.shared.exceptions;
+package com.sos.base.shared.exceptions.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -4,8 +4,8 @@ import { User, UserFormData } from "@/types/user";
 import { deleteUser, updatePassword, updateUser } from "@/services/user";
 import { useState } from "react";
 import { ConfirmAlert } from "../../../global/confirmAlert";
-import { PasswordForm } from "./passwordForm";
-import { UpdateUserModal } from "./updateUserForm";
+import { PasswordForm } from "./passwordUserModal";
+import { UpdateUserModal } from "./updateUserModal";
 import { canAccess } from "@/utils/canAccess";
 import { useAuth } from "@/hooks/useAuth";
 import { Modal } from "@/components/global/modal";
@@ -96,7 +96,7 @@ export function UsersTable({ users, setUsers }: Props) {
               {(canAccess(permissions, ["UPDATE_USER"]) ||
                 canAccess(permissions, ["UPDATE_PASSWORD_USER"]) ||
                 canAccess(permissions, ["DELETE_USER"])) && (
-                <th className="px-4 py-3 text-right">Ações</th>
+                <th className="px-4 py-3 text-center">Ações</th>
               )}
             </tr>
           </thead>
@@ -134,7 +134,7 @@ export function UsersTable({ users, setUsers }: Props) {
                 {(canAccess(permissions, ["UPDATE_USER"]) ||
                   canAccess(permissions, ["UPDATE_PASSWORD_USER"]) ||
                   canAccess(permissions, ["DELETE_USER"])) && (
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-right flex justify-center">
                     <div className="flex justify-end gap-2">
                       {canAccess(permissions, ["UPDATE_PASSWORD_USER"]) && (
                         <button

@@ -10,7 +10,7 @@ import com.sos.base.core.roles.RoleEntity;
 import com.sos.base.core.users.UserEntity;
 import com.sos.base.core.users.UserRepository;
 import com.sos.base.core.users.dtos.UserDto;
-import com.sos.base.core.users.exceptions.UserNotFoundException;
+import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.web.CookieService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Instant;
@@ -98,7 +98,7 @@ public class AuthService {
 
       UserEntity user = userRepository
             .findById(userId)
-            .orElseThrow(() -> new UserNotFoundException("user not found"));
+            .orElseThrow(() -> new NotFoundException("user not found"));
 
       List<String> permissions = jwt.getClaimAsStringList("permissions");
       List<String> roles = jwt.getClaimAsStringList("scope");

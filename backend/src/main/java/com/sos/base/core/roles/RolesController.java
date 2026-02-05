@@ -40,4 +40,13 @@ public class RolesController {
       UUID uuid = UUID.fromString(id);
       return ResponseEntity.ok(roleService.update(uuid, request));
    }
+
+   @DeleteMapping("/{id}")
+   @PreAuthorize("@auth.hasPermission('DELETE_ROLE')")
+   public ResponseEntity<Void> delete(@PathVariable String id) {
+      UUID uuid = UUID.fromString(id);
+
+      roleService.delete(uuid);
+      return ResponseEntity.noContent().build();
+   }
 }

@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import com.sos.base.core.permissions.PermissionRepository;
 import com.sos.base.core.roles.dtos.CreateRoleRequest;
 import com.sos.base.core.roles.dtos.UpdateRoleRequest;
-import com.sos.base.core.roles.exceptions.RoleNotFoundException;
+import com.sos.base.shared.exceptions.NotFoundException;
+import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,12 +42,24 @@ public class RoleService {
       var permissions = permissionRepository.findByNameIn(dto.permissions());
 
       RoleEntity role = roleRepository.findById(id)
-            .orElseThrow(() -> new RoleNotFoundException("Role não encontrada"));
+            .orElseThrow(() -> new NotFoundException("Role não encontrada"));
 
       role.setName(dto.name());
       role.setPermissions(permissions);
 
       return roleRepository.save(role);
+   }
+
+   public void delete(UUID id) {
+      RoleEntity role = roleRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Role não encontrada"));
+
+      try {
+         roleRepository.delete(role);
+      } catch (RuntimeException ex) {
+         throw new ViolatedForeignKeyException(
+               "Não é possível deletar porque existem recursos associadas.", ex);
+      }
    }
 
 }

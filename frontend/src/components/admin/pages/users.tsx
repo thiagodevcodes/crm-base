@@ -1,6 +1,6 @@
 "use client";
 
-import { RegisterUserModal } from "@/components/admin/ui/user/registerUserForm";
+import { RegisterUserModal } from "@/components/admin/ui/user/registerUserModal";
 import { UsersTable } from "@/components/admin/ui/user/usersTable";
 import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { useAuth } from "@/hooks/useAuth";

@@ -11,7 +11,8 @@ import com.sos.base.core.roles.RoleRepository;
 import com.sos.base.core.users.dtos.CreateUserRequest;
 import com.sos.base.core.users.dtos.UpdatePasswordRequest;
 import com.sos.base.core.users.dtos.UpdateUserRequest;
-import com.sos.base.core.users.exceptions.UserNotFoundException;
+import com.sos.base.shared.exceptions.NotFoundException;
+import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,7 +46,7 @@ public class UserService {
 
    public UserEntity update(UUID id, UpdateUserRequest dto) {
       UserEntity user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
       var roles = roleRepository.findByNameIn(dto.roles());
 
@@ -58,7 +59,7 @@ public class UserService {
 
    public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
       UserEntity user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado"));
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
       user.setPassword(passwordEncoder.encode(dto.password()));
       userRepository.save(user);
@@ -67,6 +68,14 @@ public class UserService {
    }
 
    public void delete(UUID id) {
-      userRepository.deleteById(id);
+      UserEntity user = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+      try {
+         userRepository.delete(user);
+      } catch (RuntimeException ex) {
+         throw new ViolatedForeignKeyException(
+               "Não é possível deletar porque existem recursos associados.", ex);
+      }
    }
 }
