@@ -1,5 +1,7 @@
 package com.sos.base.config;
 
+import com.sos.base.core.permissions.PermissionEntity;
+import com.sos.base.core.permissions.PermissionRepository;
 import com.sos.base.core.roles.RoleEntity;
 import com.sos.base.core.roles.RoleRepository;
 import com.sos.base.core.users.UserEntity;
@@ -19,6 +21,9 @@ public class AdminUserConfig implements CommandLineRunner {
    private RoleRepository roleRepository;
 
    @Autowired
+   private PermissionRepository permissionRepository;
+
+   @Autowired
    private UserRepository userRepository;
 
    @Autowired
@@ -27,42 +32,69 @@ public class AdminUserConfig implements CommandLineRunner {
    @Override
    @Transactional
    public void run(String... args) throws Exception {
-      var roleAdmin = roleRepository.findByName(RoleEntity.Values.ADMIN.name());
-      var roleBasic = roleRepository.findByName(RoleEntity.Values.BASIC.name());
+      // ROLES
+      var roleAdmin = getOrCreateRole("ADMIN");
+      var roleBasic = getOrCreateRole("BASIC");
 
-      var userBasic = userRepository.findByUsername("basic@test.com");
-      var userAdmin = userRepository.findByUsername("admin@test.com");
+      // PERMISSIONS
+      var allAccess = getOrCreatePermission("ALL_ACCESS");
+      var viewDashboard = getOrCreatePermission("VIEW_DASHBOARD");
+      var getUsers = getOrCreatePermission("GET_USERS");
 
-      if (userAdmin != null) {
-         userAdmin.ifPresentOrElse(
-               (user) -> {
-                  System.out.println("Admin já existe");
-               },
-               () -> {
-                  var user = new UserEntity();
-                  user.setUsername("admin@test.com");
-                  user.setName("Admin");
-                  user.setPassword(passwordEncoder.encode("admin123"));
-                  user.setRoles(Set.of(roleAdmin));
-                  userRepository.save(user);
-                  System.out.println("Admin criado com sucesso");
-               });
-      }
+      // ROLE → PERMISSIONS
+      roleAdmin.getPermissions().add(allAccess);
 
-      if (userBasic != null) {
-         userBasic.ifPresentOrElse(
-               (user) -> {
-                  System.out.println("Basic já existe");
-               },
-               () -> {
-                  var user = new UserEntity();
-                  user.setUsername("basic@test.com");
-                  user.setName("Basic");
-                  user.setPassword(passwordEncoder.encode("basic123"));
-                  user.setRoles(Set.of(roleBasic));
-                  userRepository.save(user);
-                  System.out.println("Basic criado com sucesso");
-               });
-      }
+      roleBasic.getPermissions().addAll(Set.of(
+            viewDashboard,
+            getUsers));
+
+      roleRepository.save(roleAdmin);
+      roleRepository.save(roleBasic);
+
+      // USERS
+      userRepository.findByUsername("admin@test.com")
+            .ifPresentOrElse(
+                  user -> System.out.println("Admin já existe"),
+                  () -> {
+                     var user = new UserEntity();
+                     user.setUsername("admin@test.com");
+                     user.setName("Admin");
+                     user.setPassword(passwordEncoder.encode("admin123"));
+                     user.setRoles(Set.of(roleAdmin));
+                     userRepository.save(user);
+                     System.out.println("Admin criado com sucesso");
+                  });
+
+      userRepository.findByUsername("basic@test.com")
+            .ifPresentOrElse(
+                  user -> System.out.println("Basic já existe"),
+                  () -> {
+                     var user = new UserEntity();
+                     user.setUsername("basic@test.com");
+                     user.setName("Basic");
+                     user.setPassword(passwordEncoder.encode("basic123"));
+                     user.setRoles(Set.of(roleBasic));
+                     userRepository.save(user);
+                     System.out.println("Basic criado com sucesso");
+                  });
+
+   }
+
+   private PermissionEntity getOrCreatePermission(String name) {
+      return permissionRepository.findByName(name)
+            .orElseGet(() -> {
+               var permission = new PermissionEntity();
+               permission.setName(name);
+               return permissionRepository.save(permission);
+            });
+   }
+
+   private RoleEntity getOrCreateRole(String name) {
+      return roleRepository.findByName(name)
+            .orElseGet(() -> {
+               var role = new RoleEntity();
+               role.setName(name);
+               return roleRepository.save(role);
+            });
    }
 }

@@ -2,6 +2,7 @@ package com.sos.base.core.roles;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import com.sos.base.core.permissions.PermissionEntity;
 
@@ -24,9 +25,9 @@ import lombok.Setter;
 @Table(name = "tb_roles")
 public class RoleEntity {
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "role_id")
-   private Long roleId;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(name = "role_id", updatable = false, nullable = false)
+   private UUID roleId;
 
    private String name;
 
@@ -34,18 +35,18 @@ public class RoleEntity {
    @JoinTable(name = "tb_role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
    private Set<PermissionEntity> permissions = new HashSet<>();
 
-   public enum Values {
-      ADMIN(1L),
-      BASIC(2L);
+   // public enum Values {
+   // ADMIN(1L),
+   // BASIC(2L);
 
-      long roleId;
+   // long roleId;
 
-      Values(long roleId) {
-         this.roleId = roleId;
-      }
+   // Values(long roleId) {
+   // this.roleId = roleId;
+   // }
 
-      public long getRoleId() {
-         return roleId;
-      }
-   }
+   // public long getRoleId() {
+   // return roleId;
+   // }
+   // }
 }

@@ -1,5 +1,7 @@
 package com.sos.base.core.permissions;
 
+import java.util.UUID;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,9 +18,9 @@ import lombok.Setter;
 public class PermissionEntity {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "permission_id")
-   private Long permissionId;
+   @GeneratedValue(strategy = GenerationType.UUID)
+   @Column(name = "permission_id", updatable = false, nullable = false)
+   private UUID permissionId;
 
    @Column(unique = true, nullable = false)
    private String name;
