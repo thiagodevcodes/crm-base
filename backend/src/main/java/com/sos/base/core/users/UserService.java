@@ -11,6 +11,7 @@ import com.sos.base.core.roles.RoleRepository;
 import com.sos.base.core.users.dtos.CreateUserRequest;
 import com.sos.base.core.users.dtos.UpdatePasswordRequest;
 import com.sos.base.core.users.dtos.UpdateUserRequest;
+import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
@@ -30,6 +31,10 @@ public class UserService {
 
    public UserEntity create(CreateUserRequest dto) {
       var roles = roleRepository.findByNameIn(dto.roles());
+
+      if (userRepository.findByUsername(dto.username()).isPresent()) {
+         throw new DataIntegrityException("Usuário já cadastrado");
+      }
 
       UserEntity user = new UserEntity();
       user.setName(dto.name());
@@ -75,7 +80,7 @@ public class UserService {
          userRepository.delete(user);
       } catch (RuntimeException ex) {
          throw new ViolatedForeignKeyException(
-               "Não é possível deletar porque existem recursos associados.", ex);
+               "Não é possível deletar porque existem recursos associados a esse usuário.", ex);
       }
    }
 }

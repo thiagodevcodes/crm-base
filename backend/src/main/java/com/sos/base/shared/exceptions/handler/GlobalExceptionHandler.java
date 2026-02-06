@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.sos.base.auth.exceptions.InvalidCredentialsException;
 import com.sos.base.auth.exceptions.TokenInvalidException;
 import com.sos.base.auth.exceptions.UserForbiddenException;
+import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
@@ -51,5 +52,13 @@ public class GlobalExceptionHandler {
       StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(),
             "resource not found", e.getMessage(), request.getRequestURI());
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+   }
+
+   @ExceptionHandler(DataIntegrityException.class)
+   public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e,
+         HttpServletRequest request) {
+      StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(),
+            "data integrity violation", e.getMessage(), request.getRequestURI());
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
    }
 }

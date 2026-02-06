@@ -67,7 +67,10 @@ export function RolesTable({ roles, setRoles }: Props) {
             <tr>
               <th className="px-4 py-3 text-start">Nome</th>
               <th className="px-4 py-3 text-start">Permissões</th>
-              <th className="px-4 py-3 text-center">Ações</th>
+              {(canAccess(permissions, ["UPDATE_ROLE"]) ||
+                canAccess(permissions, ["DELETE_ROLE"])) && (
+                <th className="px-4 py-3 text-center">Ações</th>
+              )}
             </tr>
           </thead>
 
@@ -100,12 +103,11 @@ export function RolesTable({ roles, setRoles }: Props) {
                   </div>
                 </td>
 
-                {(canAccess(permissions, ["UPDATE_USER"]) ||
-                  canAccess(permissions, ["UPDATE_PASSWORD_USER"]) ||
-                  canAccess(permissions, ["DELETE_USER"])) && (
+                {(canAccess(permissions, ["UPDATE_ROLE"]) ||
+                  canAccess(permissions, ["DELETE_ROLE"])) && (
                   <td className="px-4 py-3 text-right flex justify-center">
                     <div className="flex justify-end gap-2">
-                      {canAccess(permissions, ["UPDATE_USER"]) && (
+                      {canAccess(permissions, ["UPDATE_ROLE"]) && (
                         <button
                           onClick={() => {
                             setSelectedRole(role);
@@ -117,7 +119,7 @@ export function RolesTable({ roles, setRoles }: Props) {
                         </button>
                       )}
 
-                      {canAccess(permissions, ["DELETE_USER"]) && (
+                      {canAccess(permissions, ["DELETE_ROLE"]) && (
                         <button
                           onClick={() => {
                             setSelectedRole(role);
