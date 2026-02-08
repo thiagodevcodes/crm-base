@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.sos.base.auth.exceptions.InvalidCredentialsException;
 import com.sos.base.auth.exceptions.TokenInvalidException;
 import com.sos.base.auth.exceptions.UserForbiddenException;
+import com.sos.base.shared.exceptions.BusinessRuleException;
 import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
@@ -60,5 +61,13 @@ public class GlobalExceptionHandler {
       StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.CONFLICT.value(),
             "data integrity violation", e.getMessage(), request.getRequestURI());
       return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
+   }
+
+   @ExceptionHandler(BusinessRuleException.class)
+   public ResponseEntity<StandardError> business(BusinessRuleException e,
+         HttpServletRequest request) {
+      StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+            "business exception", e.getMessage(), request.getRequestURI());
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
    }
 }

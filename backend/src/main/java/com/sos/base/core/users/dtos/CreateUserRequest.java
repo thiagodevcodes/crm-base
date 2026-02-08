@@ -2,9 +2,12 @@ package com.sos.base.core.users.dtos;
 
 import java.util.Set;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 public record CreateUserRequest(
-      String name,
-      String username,
+      @NotBlank String name,
+      @NotBlank String username,
       String password,
-      Set<String> roles) {
+      @NotEmpty Set<String> roles) {
 }

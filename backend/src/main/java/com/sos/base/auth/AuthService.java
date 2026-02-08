@@ -1,15 +1,15 @@
 package com.sos.base.auth;
 
+import com.sos.base.auth.dtos.GetMeResponse;
+import com.sos.base.auth.dtos.LoginAuth;
 import com.sos.base.auth.dtos.LoginRequest;
-import com.sos.base.auth.dtos.LoginResponse;
-import com.sos.base.auth.dtos.LogoutResponse;
+import com.sos.base.auth.dtos.LogoutAuth;
 import com.sos.base.auth.exceptions.InvalidCredentialsException;
 import com.sos.base.auth.exceptions.TokenInvalidException;
 import com.sos.base.core.permissions.PermissionEntity;
 import com.sos.base.core.roles.RoleEntity;
 import com.sos.base.core.users.UserEntity;
 import com.sos.base.core.users.UserRepository;
-import com.sos.base.core.users.dtos.UserDto;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.web.CookieService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +45,7 @@ public class AuthService {
    @Autowired
    private JwtEncoder jwtEncoder;
 
-   public LoginResponse login(LoginRequest loginRequest) {
+   public LoginAuth login(LoginRequest loginRequest) {
       var user = userRepository.findByUsername(loginRequest.username());
 
       if (user.isEmpty() || !user.get().isLoginCorrect(loginRequest, passwordEncoder)) {
@@ -69,10 +69,9 @@ public class AuthService {
 
       var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-      // 🔹 Criar cookie HTTP-only
       ResponseCookie cookie = cookieService.createCookie("token", jwtValue, expiresIn);
 
-      return new LoginResponse(
+      return new LoginAuth(
             jwtValue,
             cookie,
             expiresIn,
@@ -82,13 +81,13 @@ public class AuthService {
             permissions);
    }
 
-   public LogoutResponse logout() {
+   public LogoutAuth logout() {
       ResponseCookie cookie = cookieService.createCookie("token", "", 0L);
 
-      return new LogoutResponse(cookie, "Loggout success");
+      return new LogoutAuth(cookie, "Logout success");
    }
 
-   public UserDto getMe(String token, HttpServletResponse response) {
+   public GetMeResponse getMe(String token, HttpServletResponse response) {
       if (token == null || token.isEmpty())
          throw new TokenInvalidException("Token Inválido ou Inexistente");
 
@@ -103,7 +102,12 @@ public class AuthService {
       List<String> permissions = jwt.getClaimAsStringList("permissions");
       List<String> roles = jwt.getClaimAsStringList("scope");
 
-      return new UserDto(user, roles, permissions);
+      return new GetMeResponse(
+            user.getUserId(),
+            user.getName(),
+            user.getUsername(),
+            roles,
+            permissions);
    }
 
    public Set<String> extractPermissions(Set<RoleEntity> roles) {

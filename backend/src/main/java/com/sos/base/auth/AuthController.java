@@ -1,10 +1,12 @@
 package com.sos.base.auth;
 
 import com.sos.base.auth.dtos.GetMeResponse;
+import com.sos.base.auth.dtos.LoginAuth;
 import com.sos.base.auth.dtos.LoginRequest;
 import com.sos.base.auth.dtos.LoginResponse;
+import com.sos.base.auth.dtos.LogoutAuth;
 import com.sos.base.auth.dtos.LogoutResponse;
-import com.sos.base.core.users.dtos.UserDto;
+
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -28,18 +30,12 @@ public class AuthController {
    public ResponseEntity<LoginResponse> login(
          @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
-      LoginResponse login = authService.login(loginRequest);
+      LoginAuth authResponse = authService.login(loginRequest);
+      LoginResponse login = new LoginResponse(authResponse.accessToken(), authResponse.expiresIn(),
+            authResponse.username(),
+            authResponse.name());
 
-      LoginResponse dto = new LoginResponse(
-            login.accessToken(),
-            login.cookie(),
-            login.expiresIn(),
-            login.username(),
-            login.name(),
-            login.roles(),
-            login.permissions());
-
-      return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, login.cookie().toString()).body(dto);
+      return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, authResponse.cookie().toString()).body(login);
    }
 
    @GetMapping("/me")
@@ -47,26 +43,20 @@ public class AuthController {
    public ResponseEntity<GetMeResponse> me(
          @CookieValue(name = "token", required = false) String token, HttpServletResponse response) {
 
-      UserDto userDto = authService.getMe(token, response);
+      GetMeResponse getMeResponse = authService.getMe(token, response);
 
-      return ResponseEntity.status(HttpStatus.OK)
-            .body(
-                  new GetMeResponse(
-                        userDto.user().getUserId(),
-                        userDto.user().getName(),
-                        userDto.user().getUsername(),
-                        userDto.roles(),
-                        userDto.permissions()));
+      return ResponseEntity.status(HttpStatus.OK).body(getMeResponse);
    }
 
    @PostMapping("/sign_out")
    @PreAuthorize("@auth.isSelf(authentication)")
    public ResponseEntity<LogoutResponse> logout() {
 
-      LogoutResponse logoutResponse = authService.logout();
+      LogoutAuth logoutAuth = authService.logout();
+      LogoutResponse logoutResponse = new LogoutResponse(logoutAuth.message());
 
       return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, logoutResponse.token().toString())
+            .header(HttpHeaders.SET_COOKIE, logoutAuth.cookie().toString())
             .body(logoutResponse);
    }
 }
