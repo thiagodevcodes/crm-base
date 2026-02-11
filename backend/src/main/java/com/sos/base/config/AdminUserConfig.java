@@ -41,6 +41,17 @@ public class AdminUserConfig implements CommandLineRunner {
       var viewDashboard = getOrCreatePermission("VIEW_DASHBOARD");
       var getUsers = getOrCreatePermission("GET_USERS");
 
+      getOrCreatePermission("ADD_USER");
+      getOrCreatePermission("DELETE_USER");
+      getOrCreatePermission("UPDATE_USER");
+      getOrCreatePermission("UPDATE_PASSWORD_USER");
+      getOrCreatePermission("GET_ROLES");
+      getOrCreatePermission("ADD_ROLE");
+      getOrCreatePermission("UPDATE_ROLE");
+      getOrCreatePermission("DELETE_ROLE");
+      getOrCreatePermission("ADD_PERMISSION");
+      getOrCreatePermission("GET_PERMISSIONS");
+
       // ROLE → PERMISSIONS
       roleAdmin.getPermissions().add(allAccess);
 

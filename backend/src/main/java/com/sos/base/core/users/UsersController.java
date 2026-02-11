@@ -12,6 +12,7 @@ import com.sos.base.core.users.dtos.CreateUserRequest;
 import com.sos.base.core.users.dtos.UpdatePasswordRequest;
 import com.sos.base.core.users.dtos.UpdateUserRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,7 +24,7 @@ public class UsersController {
 
    @PostMapping
    @PreAuthorize("@auth.hasPermission('ADD_USER')")
-   public ResponseEntity<UserEntity> create(@RequestBody CreateUserRequest request) {
+   public ResponseEntity<UserEntity> create(@Valid @RequestBody CreateUserRequest request) {
       return ResponseEntity.ok(userService.create(request));
    }
 
@@ -37,7 +38,7 @@ public class UsersController {
    @PreAuthorize("@auth.hasPermission('UPDATE_USER')")
    public ResponseEntity<UserEntity> update(
          @PathVariable String id,
-         @RequestBody UpdateUserRequest request) {
+         @Valid @RequestBody UpdateUserRequest request) {
       UUID uuid = UUID.fromString(id);
       return ResponseEntity.ok(userService.update(uuid, request));
    }
@@ -55,7 +56,7 @@ public class UsersController {
    @PreAuthorize("@auth.hasPermission('UPDATE_PASSWORD_USER')")
    public ResponseEntity<UserEntity> updatePassword(
          @PathVariable String id,
-         @RequestBody UpdatePasswordRequest request) {
+         @Valid @RequestBody UpdatePasswordRequest request) {
       UUID uuid = UUID.fromString(id);
       return ResponseEntity.ok(userService.updatePassword(uuid, request));
    }

@@ -2,8 +2,11 @@ package com.sos.base.core.users.dtos;
 
 import java.util.Set;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 public record UpdateUserRequest(
-      String name,
-      String username,
-      Set<String> roles) {
+      @NotBlank String name,
+      @NotBlank String username,
+      @NotEmpty Set<String> roles) {
 }

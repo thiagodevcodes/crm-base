@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.sos.base.core.roles.dtos.CreateRoleRequest;
 import com.sos.base.core.roles.dtos.UpdateRoleRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,7 +29,7 @@ public class RolesController {
 
    @PostMapping
    @PreAuthorize("@auth.hasPermission('ADD_ROLE')")
-   public ResponseEntity<RoleEntity> create(@RequestBody CreateRoleRequest request) {
+   public ResponseEntity<RoleEntity> create(@Valid @RequestBody CreateRoleRequest request) {
       return ResponseEntity.ok(roleService.create(request));
    }
 
@@ -36,7 +37,7 @@ public class RolesController {
    @PreAuthorize("@auth.hasPermission('UPDATE_ROLE')")
    public ResponseEntity<RoleEntity> update(
          @PathVariable String id,
-         @RequestBody UpdateRoleRequest request) {
+         @Valid @RequestBody UpdateRoleRequest request) {
       UUID uuid = UUID.fromString(id);
       return ResponseEntity.ok(roleService.update(uuid, request));
    }

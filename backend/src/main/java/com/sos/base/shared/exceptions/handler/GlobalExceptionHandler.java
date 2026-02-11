@@ -1,7 +1,10 @@
 package com.sos.base.shared.exceptions.handler;
 
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -69,5 +72,25 @@ public class GlobalExceptionHandler {
       StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
             "business exception", e.getMessage(), request.getRequestURI());
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+   }
+
+   @ExceptionHandler(MethodArgumentNotValidException.class)
+   public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e,
+         HttpServletRequest request) {
+
+      String message = e.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(err -> err.getDefaultMessage())
+            .collect(Collectors.joining(", "));
+
+      StandardError err = new StandardError(
+            System.currentTimeMillis(),
+            HttpStatus.BAD_REQUEST.value(),
+            "validation error",
+            message,
+            request.getRequestURI());
+
+      return ResponseEntity.badRequest().body(err);
    }
 }

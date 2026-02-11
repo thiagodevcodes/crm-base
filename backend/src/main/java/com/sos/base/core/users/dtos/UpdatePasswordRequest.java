@@ -1,5 +1,7 @@
 package com.sos.base.core.users.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record UpdatePasswordRequest(
-      String password) {
+      @NotBlank String password) {
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.sos.base.core.permissions.dtos.CreatePermissionRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,7 +27,7 @@ public class PermissionController {
 
    @PostMapping
    @PreAuthorize("@auth.hasPermission('ADD_PERMISSION')")
-   public ResponseEntity<PermissionEntity> create(@RequestBody CreatePermissionRequest request) {
+   public ResponseEntity<PermissionEntity> create(@Valid @RequestBody CreatePermissionRequest request) {
       return ResponseEntity.ok(permissionService.create(request));
    }
 }

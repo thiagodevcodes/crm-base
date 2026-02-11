@@ -3,12 +3,16 @@ package com.sos.base.core.roles;
 import java.util.List;
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.sos.base.core.permissions.PermissionRepository;
 import com.sos.base.core.roles.dtos.CreateRoleRequest;
 import com.sos.base.core.roles.dtos.UpdateRoleRequest;
+import com.sos.base.shared.exceptions.BusinessRuleException;
+import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
@@ -21,6 +25,9 @@ public class RoleService {
    private RoleRepository roleRepository;
 
    @Autowired
+   private ModelMapper modelMapper;
+
+   @Autowired
    private PermissionRepository permissionRepository;
 
    public List<RoleEntity> findAll() {
@@ -28,37 +35,55 @@ public class RoleService {
    }
 
    public RoleEntity create(CreateRoleRequest dto) {
-      var permissions = permissionRepository.findByNameIn(dto.permissions());
+      try {
+         var permissions = permissionRepository.findByNameIn(dto.permissions());
 
-      RoleEntity role = new RoleEntity();
+         if (roleRepository.findByName(dto.name()).isPresent()) {
+            throw new DataIntegrityException("Role já cadastrada");
+         }
 
-      role.setName(dto.name());
-      role.setPermissions(permissions);
+         RoleEntity role = modelMapper.map(dto, RoleEntity.class);
 
-      return roleRepository.save(role);
+         role.setPermissions(permissions);
+
+         return roleRepository.save(role);
+      } catch (DataIntegrityViolationException ex) {
+         throw new DataIntegrityException("Erro ao cadastrar role");
+      }
+
    }
 
    public RoleEntity update(UUID id, UpdateRoleRequest dto) {
-      var permissions = permissionRepository.findByNameIn(dto.permissions());
+      try {
+         var permissions = permissionRepository.findByNameIn(dto.permissions());
 
-      RoleEntity role = roleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Role não encontrada"));
+         RoleEntity role = roleRepository.findById(id)
+               .orElseThrow(() -> new NotFoundException("Role não encontrada"));
 
-      role.setName(dto.name());
-      role.setPermissions(permissions);
+         if (!permissions.isEmpty() && permissions.size() != dto.permissions().size())
+            throw new BusinessRuleException("Uma ou mais permissões informadas não existem");
 
-      return roleRepository.save(role);
+         if (!permissions.isEmpty())
+            role.setPermissions(permissions);
+
+         modelMapper.map(dto, role);
+
+         return roleRepository.save(role);
+      } catch (DataIntegrityViolationException ex) {
+         throw new DataIntegrityException("Erro ao atualizar role");
+      }
+
    }
 
    public void delete(UUID id) {
-      RoleEntity role = roleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Role não encontrada"));
-
       try {
+         RoleEntity role = roleRepository.findById(id)
+               .orElseThrow(() -> new NotFoundException("Role não encontrada"));
+
          roleRepository.delete(role);
-      } catch (RuntimeException ex) {
+      } catch (DataIntegrityViolationException ex) {
          throw new ViolatedForeignKeyException(
-               "Não é possível deletar porque existem recursos associadas.", ex);
+               "Erro ao deletar role");
       }
    }
 
