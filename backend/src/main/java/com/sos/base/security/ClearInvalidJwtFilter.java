@@ -34,6 +34,15 @@ public class ClearInvalidJwtFilter extends OncePerRequestFilter {
          FilterChain filterChain)
          throws ServletException, IOException {
 
+      String path = request.getRequestURI();
+      String method = request.getMethod();
+
+      // Pula validação de JWT apenas para GET de imagens
+      if ("GET".equalsIgnoreCase(method) && path.startsWith("/images/")) {
+         filterChain.doFilter(request, response);
+         return;
+      }
+
       Cookie[] cookies = request.getCookies();
       String token = null;
 
@@ -46,9 +55,9 @@ public class ClearInvalidJwtFilter extends OncePerRequestFilter {
          }
       }
 
-      Boolean tokenInvalido = false;
+      boolean tokenInvalido = false;
 
-      if (token != null && !request.getRequestURI().equals("/auth/sign_in")) {
+      if (token != null && !path.equals("/auth/sign_in")) {
          try {
             jwtDecoder.decode(token);
          } catch (JwtException e) {
@@ -58,10 +67,10 @@ public class ClearInvalidJwtFilter extends OncePerRequestFilter {
 
       if (tokenInvalido) {
          Cookie cookie = cookieService.clearCookie("token");
-
          response.addCookie(cookie);
       }
 
       filterChain.doFilter(request, response);
    }
+
 }

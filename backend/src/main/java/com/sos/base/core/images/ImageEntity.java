@@ -14,9 +14,9 @@ public class ImageEntity {
 
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   private UUID id;
+   private UUID imageId;
 
-   private String nome;
+   private String name;
 
    private String type;
 

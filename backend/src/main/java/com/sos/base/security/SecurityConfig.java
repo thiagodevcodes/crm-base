@@ -61,6 +61,7 @@ public class SecurityConfig {
 
       http
             .authorizeHttpRequests(authorize -> authorize
+                  .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
                   .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
                   .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
                   .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
