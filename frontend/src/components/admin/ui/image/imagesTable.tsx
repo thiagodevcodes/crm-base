@@ -24,7 +24,7 @@ export function ImageTable({ images, setImages }: Props) {
     try {
       await deleteImage(selectedImage.imageId);
       setImages((prev) =>
-        prev.filter((u) => u.imageId !== selectedImage.imageId),
+        prev.filter((img) => img.imageId !== selectedImage.imageId),
       );
     } catch (err) {
       console.error("Erro ao deletar imagem:", err);
