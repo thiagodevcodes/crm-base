@@ -1,13 +1,10 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "http",
-        hostname: "localhost",
-        port: "8080",
-        pathname: "/images/**",
-      },
+    domains: [
+      "crm-base-storage.5b1082ca8d9def07cf0a0cb57b422d2f.r2.cloudflarestorage.com",
     ],
   },
 };
+
+module.exports = nextConfig;

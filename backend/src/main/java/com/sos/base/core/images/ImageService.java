@@ -3,13 +3,15 @@ package com.sos.base.core.images;
 import java.util.List;
 import java.util.UUID;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.sos.base.core.images.dtos.ImageDto;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
+import com.sos.base.shared.web.uploads.UploadDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,29 +20,35 @@ import lombok.RequiredArgsConstructor;
 public class ImageService {
 
    @Autowired
-   private ImageRepository repository;
+   private ModelMapper modelMapper;
 
-   public ImageEntity save(MultipartFile file) throws Exception {
+   @Autowired
+   private ImageRepository imageRepository;
+
+   public ImageDto save(UploadDto file) throws Exception {
 
       ImageEntity img = new ImageEntity();
 
-      img.setName(file.getOriginalFilename());
-      img.setType(file.getContentType());
-      img.setData(file.getBytes());
+      img.setName(file.getName());
+      img.setType(file.getType());
+      img.setUrl(file.getUrl());
 
-      return repository.save(img);
+      img = imageRepository.save(img);
+      ImageDto imageDto = modelMapper.map(img, ImageDto.class);
+
+      return imageDto;
    }
 
    public List<ImageEntity> findAll() {
-      return repository.findAll();
+      return imageRepository.findAll();
    }
 
    public void delete(UUID id) {
       try {
-         if (!repository.existsById(id))
+         if (!imageRepository.existsById(id))
             throw new NotFoundException("Imagem não encontrada");
 
-         repository.deleteById(id);
+         imageRepository.deleteById(id);
       } catch (DataIntegrityViolationException ex) {
          throw new ViolatedForeignKeyException(
                "Não foi possível deletar essa imagem.");

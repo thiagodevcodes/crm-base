@@ -11,17 +11,16 @@ import lombok.Setter;
 @Entity
 @Table(name = "tb_images")
 public class ImageEntity {
-
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   private UUID imageId;
+   private UUID uploadId;
 
    private String name;
 
    private String type;
 
-   @Lob
-   private byte[] data;
+   @Column(length = 2000)
+   private String url;
 
    // getters e setters
 }

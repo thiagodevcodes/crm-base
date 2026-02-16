@@ -7,7 +7,7 @@ import { canAccess } from "@/utils/canAccess";
 import { useRouter } from "next/navigation";
 import { Modal } from "../../global/modal";
 import { Spinner } from "@/components/global/spinner";
-import { getImages, uploadImage } from "@/services/images";
+import { getFiles, uploadFile } from "@/services/images";
 import { RegisterImageModal } from "../ui/image/registerImageModal";
 import { ImageFile, ImageFormData } from "@/types/image";
 import { ImageTable } from "../ui/image/imagesTable";
@@ -21,7 +21,7 @@ export default function Images() {
 
   async function loadImages() {
     setDataLoading(true);
-    const res = await getImages();
+    const res = await getFiles();
     setImages(res);
     setDataLoading(false);
   }
@@ -34,7 +34,7 @@ export default function Images() {
       }
 
       const file = data.image[0]; // pega o primeiro arquivo
-      const uploadedFileName = await uploadImage(file); // await aqui!
+      const uploadedFileName = await uploadFile(file); // await aqui!
 
       setOpen(false); // fecha o modal após upload
       console.log("Imagem enviada com sucesso:", uploadedFileName);

@@ -6,7 +6,7 @@ import { canAccess } from "@/utils/canAccess";
 import { useAuth } from "@/hooks/useAuth";
 import { ImageFile } from "@/types/image";
 import Image from "next/image";
-import { deleteImage } from "@/services/images";
+import { deleteFile } from "@/services/images";
 
 type Props = {
   images: ImageFile[];
@@ -22,7 +22,7 @@ export function ImageTable({ images, setImages }: Props) {
     if (!selectedImage) return;
 
     try {
-      await deleteImage(selectedImage.imageId);
+      await deleteFile(selectedImage.imageId);
       setImages((prev) =>
         prev.filter((img) => img.imageId !== selectedImage.imageId),
       );
@@ -68,7 +68,7 @@ export function ImageTable({ images, setImages }: Props) {
 
                 <td className="px-4 py-3">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}/images/${image.imageId}`}
+                    src={`${image.url}`}
                     alt={image.name}
                     width={100}
                     height={100}
