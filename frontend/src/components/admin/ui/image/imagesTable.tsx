@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ImageFile } from "@/types/image";
 import Image from "next/image";
 import { deleteFile } from "@/services/images";
+import r2Loader from "@/utils/r2loader";
 
 type Props = {
   images: ImageFile[];
@@ -68,6 +69,7 @@ export function ImageTable({ images, setImages }: Props) {
 
                 <td className="px-4 py-3">
                   <Image
+                    loader={r2Loader}
                     src={`${image.url}`}
                     alt={image.name}
                     width={100}
