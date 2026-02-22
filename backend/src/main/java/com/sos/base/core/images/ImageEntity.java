@@ -13,14 +13,13 @@ import lombok.Setter;
 public class ImageEntity {
    @Id
    @GeneratedValue(strategy = GenerationType.UUID)
-   private UUID uploadId;
+   private UUID imageId;
+
+   private String key;
 
    private String name;
 
+   private Long size;
+
    private String type;
-
-   @Column(length = 2000)
-   private String url;
-
-   // getters e setters
 }

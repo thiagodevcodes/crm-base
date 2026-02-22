@@ -14,6 +14,7 @@ import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,6 +30,7 @@ public class PermissionService {
       return permissionRepository.findAll();
    }
 
+   @Transactional
    public PermissionEntity create(CreatePermissionRequest dto) {
       PermissionEntity permission = new PermissionEntity();
 
@@ -37,6 +39,7 @@ public class PermissionService {
       return permissionRepository.save(permission);
    }
 
+   @Transactional
    public PermissionEntity update(UUID id, UpdatePermissionRequest dto) {
       try {
 
@@ -55,6 +58,7 @@ public class PermissionService {
 
    }
 
+   @Transactional
    public void delete(UUID id) {
       try {
          PermissionEntity permission = permissionRepository.findById(id)

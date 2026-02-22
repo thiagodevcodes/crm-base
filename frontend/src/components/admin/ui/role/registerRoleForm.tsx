@@ -16,7 +16,7 @@ type Props = {
   selectedRole?: Role | null;
 };
 
-export function RegisterRoleModal({ onSubmit, selectedRole, title }: Props) {
+export function RegisterRoleForm({ onSubmit, selectedRole, title }: Props) {
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
   const {

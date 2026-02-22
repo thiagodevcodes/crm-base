@@ -11,7 +11,7 @@ type Props = {
   selectedImage?: ImageFormData | null;
 };
 
-export function RegisterImageModal({ onSubmit, title }: Props) {
+export function RegisterImageForm({ onSubmit, title }: Props) {
   const {
     register,
     handleSubmit,

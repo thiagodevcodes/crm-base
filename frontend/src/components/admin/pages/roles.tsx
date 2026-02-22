@@ -9,7 +9,7 @@ import { createRole, getRoles } from "@/services/role";
 import { Role, RoleFormData } from "@/types/role";
 import { canAccess } from "@/utils/canAccess";
 import { Spinner } from "@/components/global/spinner";
-import { RegisterRoleModal } from "../ui/role/registerRoleModal";
+import { RegisterRoleForm } from "../ui/role/registerRoleForm";
 import { Modal } from "@/components/global/modal";
 
 export default function Roles() {
@@ -77,7 +77,7 @@ export default function Roles() {
 
         {canAccess(permissions, ["ADD_ROLE"]) && (
           <Modal isOpen={open} onClose={() => setOpen(false)}>
-            <RegisterRoleModal
+            <RegisterRoleForm
               title="Criar Perfil"
               isOpen={open}
               onClose={() => setOpen(false)}

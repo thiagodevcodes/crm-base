@@ -16,7 +16,7 @@ type Props = {
   selectedUser?: User | null;
 };
 
-export function RegisterUserModal({ onSubmit, selectedUser, title }: Props) {
+export function RegisterUserForm({ onSubmit, selectedUser, title }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
 
   const {
@@ -82,7 +82,7 @@ export function RegisterUserModal({ onSubmit, selectedUser, title }: Props) {
   > = {
     control: (
       base: CSSObjectWithLabel,
-      state: ControlProps<RoleOption, true, GroupBase<RoleOption>>
+      state: ControlProps<RoleOption, true, GroupBase<RoleOption>>,
     ) => ({
       ...base,
       backgroundColor: "#1e293b",

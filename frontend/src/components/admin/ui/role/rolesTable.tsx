@@ -7,7 +7,7 @@ import { canAccess } from "@/utils/canAccess";
 import { ConfirmAlert } from "@/components/global/confirmAlert";
 import { deleteRole, updateRole } from "@/services/role";
 import { useState } from "react";
-import { UpdateRoleModal } from "./updateRoleModal";
+import { UpdateRoleForm } from "./updateRoleForm";
 
 type Props = {
   roles: Role[];
@@ -144,7 +144,7 @@ export function RolesTable({ roles, setRoles }: Props) {
           isOpen={updateModalOpen}
           onClose={() => setUpdateModalOpen(false)}
         >
-          <UpdateRoleModal
+          <UpdateRoleForm
             title={`Editar ${selectedRole?.name}`}
             isOpen={updateModalOpen}
             onClose={() => setUpdateModalOpen(false)}

@@ -18,6 +18,7 @@ import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,6 +36,11 @@ public class UserService {
    @Autowired
    private BCryptPasswordEncoder passwordEncoder;
 
+   public List<UserEntity> findAll() {
+      return userRepository.findAll();
+   }
+
+   @Transactional
    public UserEntity create(CreateUserRequest dto) {
       try {
          var roles = roleRepository.findByNameIn(dto.roles());
@@ -62,10 +68,7 @@ public class UserService {
       }
    }
 
-   public List<UserEntity> findAll() {
-      return userRepository.findAll();
-   }
-
+   @Transactional
    public UserEntity update(UUID id, UpdateUserRequest dto) {
       try {
          UserEntity user = userRepository.findById(id)
@@ -89,6 +92,7 @@ public class UserService {
 
    }
 
+   @Transactional
    public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
       try {
          UserEntity user = userRepository.findById(id)
@@ -105,6 +109,7 @@ public class UserService {
 
    }
 
+   @Transactional
    public void delete(UUID id) {
       try {
          if (!userRepository.existsById(id))

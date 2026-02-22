@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { Modal } from "../../global/modal";
 import { Spinner } from "@/components/global/spinner";
 import { getFiles, uploadFile } from "@/services/images";
-import { RegisterImageModal } from "../ui/image/registerImageModal";
+import { RegisterImageForm } from "../ui/image/registerImageForm";
 import { ImageFile, ImageFormData } from "@/types/image";
 import { ImageTable } from "../ui/image/imagesTable";
 
@@ -35,6 +35,13 @@ export default function Images() {
 
       const file = data.image[0]; // pega o primeiro arquivo
       const uploadedFileName = await uploadFile(file); // await aqui!
+
+      if (!uploadedFileName) {
+        console.error("Erro ao enviar imagem");
+        return;
+      }
+
+      loadImages(); // recarrega a lista de imagens após upload
 
       setOpen(false); // fecha o modal após upload
       console.log("Imagem enviada com sucesso:", uploadedFileName);
@@ -78,7 +85,7 @@ export default function Images() {
 
       {canAccess(permissions, ["ADD_IMAGE"]) && (
         <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <RegisterImageModal
+          <RegisterImageForm
             title="Criar Imagem"
             isOpen={open}
             onClose={() => setOpen(false)}

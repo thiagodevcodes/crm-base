@@ -47,7 +47,7 @@ public class ImageController {
    }
 
    @GetMapping
-   public ResponseEntity<List<ImageEntity>> findAll() {
+   public ResponseEntity<List<ImageDto>> findAll() {
       return ResponseEntity.ok(imageService.findAll());
    }
 
@@ -63,5 +63,18 @@ public class ImageController {
 
       return ResponseEntity.ok(uploadDto);
 
+   }
+
+   @DeleteMapping("/{id}")
+   public ResponseEntity<Void> delete(@PathVariable String id) {
+
+      UUID uuid = UUID.fromString(id.toString());
+
+      uploadRepository.findById(uuid)
+            .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
+
+      imageService.delete(uuid);
+
+      return ResponseEntity.noContent().build();
    }
 }

@@ -16,6 +16,7 @@ import com.sos.base.shared.exceptions.DataIntegrityException;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -34,6 +35,7 @@ public class RoleService {
       return roleRepository.findAll();
    }
 
+   @Transactional
    public RoleEntity create(CreateRoleRequest dto) {
       try {
          var permissions = permissionRepository.findByNameIn(dto.permissions());
@@ -53,6 +55,7 @@ public class RoleService {
 
    }
 
+   @Transactional
    public RoleEntity update(UUID id, UpdateRoleRequest dto) {
       try {
          var permissions = permissionRepository.findByNameIn(dto.permissions());
@@ -75,6 +78,7 @@ public class RoleService {
 
    }
 
+   @Transactional
    public void delete(UUID id) {
       try {
          RoleEntity role = roleRepository.findById(id)

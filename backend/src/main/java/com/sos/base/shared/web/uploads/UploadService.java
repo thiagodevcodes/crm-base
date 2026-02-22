@@ -11,10 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -39,30 +39,47 @@ public class UploadService {
    private String endpoint;
 
    public UploadDto save(MultipartFile file) throws Exception {
-      String fileName = "uploads/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+      String key = UUID.randomUUID() + "-" + file.getOriginalFilename();
 
       PutObjectRequest request = PutObjectRequest.builder()
             .bucket(bucketName)
-            .key(fileName)
+            .key(key)
             .contentType(file.getContentType())
             .build();
 
       s3Client.putObject(request, RequestBody.fromBytes(file.getBytes()));
 
-      // Gerar URL assinada
-      GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-            .getObjectRequest(b -> b.bucket(bucketName).key(fileName))
-            .signatureDuration(Duration.ofMinutes(15))
-            .build();
-
-      PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(presignRequest);
-
       UploadDto uploadDto = new UploadDto();
 
       uploadDto.setName(file.getOriginalFilename());
       uploadDto.setType(file.getContentType());
-      uploadDto.setUrl(presignedRequest.url().toString());
+      uploadDto.setKey(key);
+      uploadDto.setSize(file.getSize());
 
       return uploadDto;
+   }
+
+   public String generateSignedUrl(String key) {
+      GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+            .getObjectRequest(b -> b.bucket(bucketName).key(key))
+            .signatureDuration(Duration.ofMinutes(15))
+            .build();
+
+      return presigner.presignGetObject(presignRequest)
+            .url()
+            .toString();
+   }
+
+   public String generatePublicUrl(String key) {
+      return endpoint + "/" + key;
+   }
+
+   public void delete(String key) {
+      DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+            .bucket(bucketName)
+            .key(key)
+            .build();
+
+      s3Client.deleteObject(deleteRequest);
    }
 }

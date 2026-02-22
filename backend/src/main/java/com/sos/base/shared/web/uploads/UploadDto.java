@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UploadDto {
    private String name;
+   private String key;
+   private Long size;
    private String type;
    private String url;
 }

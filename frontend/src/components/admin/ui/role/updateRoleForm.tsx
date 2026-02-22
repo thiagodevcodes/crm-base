@@ -16,7 +16,7 @@ type Props = {
   selectedRole?: Role | null;
 };
 
-export function UpdateRoleModal({
+export function UpdateRoleForm({
   isOpen,
   onClose,
   onSubmit,

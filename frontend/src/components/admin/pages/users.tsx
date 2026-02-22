@@ -1,6 +1,6 @@
 "use client";
 
-import { RegisterUserModal } from "@/components/admin/ui/user/registerUserModal";
+import { RegisterUserForm } from "@/components/admin/ui/user/registerUserForm";
 import { UsersTable } from "@/components/admin/ui/user/usersTable";
 import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { useAuth } from "@/hooks/useAuth";
@@ -83,7 +83,7 @@ export default function Users() {
 
       {canAccess(permissions, ["ADD_USER"]) && (
         <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <RegisterUserModal
+          <RegisterUserForm
             title="Criar Usuário"
             isOpen={open}
             onClose={() => setOpen(false)}
