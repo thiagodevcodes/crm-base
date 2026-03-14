@@ -7,6 +7,5 @@ import jakarta.validation.constraints.NotEmpty;
 
 public record UpdateRoleRequest(
       @NotBlank String name,
-      @NotBlank String username,
       @NotEmpty Set<String> permissions) {
 }

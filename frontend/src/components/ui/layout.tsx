@@ -1,9 +1,9 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Header } from "@/components/admin/ui/header";
-import { Footer } from "@/components/admin/ui/footer";
-import { Aside } from "@/components/admin/ui/aside";
+import { Header } from "@/components/ui/header";
+import { Footer } from "@/components/ui/footer";
+import { Aside } from "@/components/ui/aside";
 import { useMobileMenu } from "@/hooks/useMobileMenu";
 
 type Props = {

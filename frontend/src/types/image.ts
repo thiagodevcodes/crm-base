@@ -2,8 +2,8 @@ export type ImageFormData = {
   image: FileList;
 };
 
-export type ImageFile = {
-  imageId: string;
+export type BannerFile = {
+  bannerId: string;
   name: string;
   type: string;
   url: string;

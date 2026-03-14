@@ -3,7 +3,7 @@
 import { User, UserFormData } from "@/types/user";
 import { deleteUser, updatePassword, updateUser } from "@/services/user";
 import { useState } from "react";
-import { ConfirmAlert } from "../../../global/confirmAlert";
+import { ConfirmAlert } from "../../global/confirmAlert";
 import { PasswordForm } from "./passwordUserForm";
 import { UpdateUserModal } from "./updateUserForm";
 import { canAccess } from "@/utils/canAccess";

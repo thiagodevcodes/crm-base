@@ -1,7 +1,7 @@
 "use client";
 
-import { RegisterUserForm } from "@/components/admin/ui/user/registerUserForm";
-import { UsersTable } from "@/components/admin/ui/user/usersTable";
+import { RegisterUserForm } from "@/components/ui/user/registerUserForm";
+import { UsersTable } from "@/components/ui/user/usersTable";
 import { SpinnerLoading } from "@/components/global/spinnerLoading";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
@@ -9,7 +9,7 @@ import { getUsers, createUser } from "@/services/user";
 import { User, UserFormData } from "@/types/user";
 import { canAccess } from "@/utils/canAccess";
 import { useRouter } from "next/navigation";
-import { Modal } from "../../global/modal";
+import { Modal } from "../../components/global/modal";
 import { Spinner } from "@/components/global/spinner";
 
 export default function Users() {

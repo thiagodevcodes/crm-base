@@ -3,7 +3,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ContactRound, Images, LayoutDashboard, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Dropdown, DropdownItem } from "../../global/dropdown";
+import { Dropdown, DropdownItem } from "../global/dropdown";
 
 import { canAccess } from "@/utils/canAccess";
 
@@ -56,13 +56,13 @@ export function Aside() {
             </Link>
           )}
 
-          {canAccess(permissions, ["GET_IMAGES"]) && (
+          {canAccess(permissions, ["GET_BANNERS"]) && (
             <Link
-              href="/admin/images"
-              className={`nav-link ${isActive("/admin/images")}`}
+              href="/admin/banners"
+              className={`nav-link ${isActive("/admin/banners")}`}
             >
               <Images width={20} />
-              Imagens
+              Banners
             </Link>
           )}
         </nav>

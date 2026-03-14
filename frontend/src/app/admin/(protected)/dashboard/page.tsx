@@ -1,4 +1,4 @@
-import DashboardClient from "@/components/admin/pages/dashboard";
+import DashboardClient from "@/views/admin/dashboard";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

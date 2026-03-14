@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { ConfirmAlert } from "../../../global/confirmAlert";
+import { ConfirmAlert } from "../../global/confirmAlert";
 import { canAccess } from "@/utils/canAccess";
 import { useAuth } from "@/hooks/useAuth";
-import { ImageFile } from "@/types/image";
+import { BannerFile } from "@/types/image";
 import Image from "next/image";
 import { deleteFile } from "@/services/images";
 import r2Loader from "@/utils/r2loader";
 
 type Props = {
-  images: ImageFile[];
-  setImages: React.Dispatch<React.SetStateAction<ImageFile[]>>; // adiciona para atualizar lista
+  banners: BannerFile[];
+  setBanners: React.Dispatch<React.SetStateAction<BannerFile[]>>; // adiciona para atualizar lista
 };
 
-export function ImageTable({ images, setImages }: Props) {
-  const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null);
+export function BannerTable({ banners, setBanners }: Props) {
+  const [selectedImage, setSelectedImage] = useState<BannerFile | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
 
@@ -23,9 +23,9 @@ export function ImageTable({ images, setImages }: Props) {
     if (!selectedImage) return;
 
     try {
-      await deleteFile(selectedImage.imageId);
-      setImages((prev) =>
-        prev.filter((img) => img.imageId !== selectedImage.imageId),
+      await deleteFile(selectedImage.bannerId);
+      setBanners((prev) =>
+        prev.filter((img) => img.bannerId !== selectedImage.bannerId),
       );
     } catch (err) {
       console.error("Erro ao deletar imagem:", err);
@@ -51,7 +51,7 @@ export function ImageTable({ images, setImages }: Props) {
           </thead>
 
           <tbody>
-            {images.length === 0 && (
+            {banners.length === 0 && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   Nenhuma imagem encontrada
@@ -59,9 +59,9 @@ export function ImageTable({ images, setImages }: Props) {
               </tr>
             )}
 
-            {images.map((image) => (
+            {banners.map((image) => (
               <tr
-                key={image.imageId}
+                key={image.bannerId}
                 className="border-t border-white/10 hover:bg-white/5 transition"
               >
                 <td className="px-4 py-3 font-medium">{image.name}</td>

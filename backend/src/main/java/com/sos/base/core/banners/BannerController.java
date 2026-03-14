@@ -1,4 +1,4 @@
-package com.sos.base.core.images;
+package com.sos.base.core.banners;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sos.base.core.images.dtos.ImageDto;
+import com.sos.base.core.banners.dtos.BannerDto;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.web.uploads.UploadDto;
 import com.sos.base.shared.web.uploads.UploadService;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/images")
 @RequiredArgsConstructor
-public class ImageController {
+public class BannerController {
 
    @Autowired
    private ModelMapper modelMapper;
@@ -28,40 +28,40 @@ public class ImageController {
    private UploadService uploadService;
 
    @Autowired
-   private ImageService imageService;
+   private BannerService bannerService;
 
    @Autowired
-   private ImageRepository uploadRepository;
+   private BannerRepository bannerRepository;
 
    @PostMapping("/upload")
-   public ResponseEntity<ImageDto> upload(@RequestParam("file") MultipartFile file)
+   public ResponseEntity<BannerDto> upload(@RequestParam("file") MultipartFile file)
          throws Exception {
 
       UploadDto upload = uploadService.save(file);
 
-      imageService.save(upload);
+      bannerService.save(upload);
 
-      ImageDto imageDto = modelMapper.map(upload, ImageDto.class);
+      BannerDto bannerDto = modelMapper.map(upload, BannerDto.class);
 
-      return ResponseEntity.ok(imageDto);
+      return ResponseEntity.ok(bannerDto);
    }
 
    @GetMapping
-   public ResponseEntity<List<ImageDto>> findAll() {
-      return ResponseEntity.ok(imageService.findAll());
+   public ResponseEntity<List<BannerDto>> findAll() {
+      return ResponseEntity.ok(bannerService.findAll());
    }
 
    @GetMapping("/{id}")
-   public ResponseEntity<ImageDto> find(@PathVariable String id) {
+   public ResponseEntity<BannerDto> find(@PathVariable String id) {
 
       UUID uuid = UUID.fromString(id.toString());
 
-      ImageEntity img = uploadRepository.findById(uuid)
+      BannerEntity img = bannerRepository.findById(uuid)
             .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
 
-      ImageDto uploadDto = modelMapper.map(img, ImageDto.class);
+      BannerDto bannerDto = modelMapper.map(img, BannerDto.class);
 
-      return ResponseEntity.ok(uploadDto);
+      return ResponseEntity.ok(bannerDto);
 
    }
 
@@ -70,10 +70,10 @@ public class ImageController {
 
       UUID uuid = UUID.fromString(id.toString());
 
-      uploadRepository.findById(uuid)
+      bannerRepository.findById(uuid)
             .orElseThrow(() -> new NotFoundException("Imagem não encontrada"));
 
-      imageService.delete(uuid);
+      bannerService.delete(uuid);
 
       return ResponseEntity.noContent().build();
    }

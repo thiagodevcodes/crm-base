@@ -5,15 +5,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { canAccess } from "@/utils/canAccess";
 import { useRouter } from "next/navigation";
-import { Modal } from "../../global/modal";
+import { Modal } from "../../components/global/modal";
 import { Spinner } from "@/components/global/spinner";
 import { getFiles, uploadFile } from "@/services/images";
-import { RegisterImageForm } from "../ui/image/registerImageForm";
-import { ImageFile, ImageFormData } from "@/types/image";
-import { ImageTable } from "../ui/image/imagesTable";
+import { RegisterImageForm } from "../../components/ui/image/registerImageForm";
+import { BannerFile, ImageFormData } from "@/types/image";
+import { BannerTable } from "../../components/ui/image/imagesTable";
 
-export default function Images() {
-  const [images, setImages] = useState<ImageFile[]>([]);
+export default function Banners() {
+  const [banners, setBanners] = useState<BannerFile[]>([]);
   const { authenticated, loading, permissions } = useAuth();
   const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
@@ -22,7 +22,7 @@ export default function Images() {
   async function loadImages() {
     setDataLoading(true);
     const res = await getFiles();
-    setImages(res);
+    setBanners(res);
     setDataLoading(false);
   }
 
@@ -57,36 +57,36 @@ export default function Images() {
       router.replace("/admin/dashboard");
     }
 
-    if (authenticated && canAccess(permissions, ["GET_IMAGES"])) {
+    if (authenticated && canAccess(permissions, ["GET_BANNERS"])) {
       loadImages();
     }
   }, [loading, authenticated, router, permissions]);
 
-  if (loading || !authenticated || !canAccess(permissions, ["GET_IMAGES"]))
+  if (loading || !authenticated || !canAccess(permissions, ["GET_BANNERS"]))
     return <SpinnerLoading />;
 
   return (
     <div className="p-6 gap-4 w-full">
       <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="text-2xl font-bold">Imagens</h1>
-          <p>Bem-vindo ao painel de Imagens!</p>
+          <h1 className="text-2xl font-bold">Banners</h1>
+          <p>Bem-vindo ao painel de Banners!</p>
         </div>
 
-        {canAccess(permissions, ["ADD_IMAGE"]) && (
+        {canAccess(permissions, ["ADD_BANNER"]) && (
           <button
             onClick={() => setOpen(true)}
             className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
           >
-            Adicionar Imagem
+            Adicionar Banner
           </button>
         )}
       </div>
 
-      {canAccess(permissions, ["ADD_IMAGE"]) && (
+      {canAccess(permissions, ["ADD_BANNER"]) && (
         <Modal isOpen={open} onClose={() => setOpen(false)}>
           <RegisterImageForm
-            title="Criar Imagem"
+            title="Criar Banner"
             isOpen={open}
             onClose={() => setOpen(false)}
             onSubmit={handleSubmit}
@@ -97,7 +97,7 @@ export default function Images() {
       {dataLoading ? (
         <Spinner width="2.5rem" height="2.5rem" />
       ) : (
-        images && <ImageTable images={images} setImages={setImages} />
+        banners && <BannerTable banners={banners} setBanners={setBanners} />
       )}
     </div>
   );

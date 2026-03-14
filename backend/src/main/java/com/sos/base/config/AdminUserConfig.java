@@ -50,7 +50,10 @@ public class AdminUserConfig implements CommandLineRunner {
       getOrCreatePermission("UPDATE_ROLE");
       getOrCreatePermission("DELETE_ROLE");
       getOrCreatePermission("ADD_PERMISSION");
-      getOrCreatePermission("GET_PERMISSIONS");
+      getOrCreatePermission("GET_BANNERS");
+      getOrCreatePermission("ADD_BANNER");
+      getOrCreatePermission("DELETE_BANNER");
+      getOrCreatePermission("UPDATE_BANNER");
 
       // ROLE → PERMISSIONS
       roleAdmin.getPermissions().add(allAccess);

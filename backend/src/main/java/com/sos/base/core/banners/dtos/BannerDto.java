@@ -1,4 +1,4 @@
-package com.sos.base.core.images.dtos;
+package com.sos.base.core.banners.dtos;
 
 import java.util.UUID;
 
@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageDto {
-   private UUID imageId;
+public class BannerDto {
+   private UUID bannerId;
    private String name;
    private String key;
    private String type;

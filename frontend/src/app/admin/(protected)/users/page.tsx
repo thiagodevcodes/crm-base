@@ -1,4 +1,4 @@
-import Users from "@/components/admin/pages/users";
+import Users from "@/views/admin/users";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
