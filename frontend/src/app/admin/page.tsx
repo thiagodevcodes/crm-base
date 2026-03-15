@@ -1,4 +1,4 @@
-import LoginForm from "@/views/admin/login";
+import Login from "@/views/admin/login";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default async function LoginPage() {
-  return <LoginForm />;
+  return <Login />;
 }

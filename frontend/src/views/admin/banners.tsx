@@ -7,7 +7,7 @@ import { canAccess } from "@/utils/canAccess";
 import { useRouter } from "next/navigation";
 import { Modal } from "../../components/global/modal";
 import { Spinner } from "@/components/global/spinner";
-import { getFiles, uploadFile } from "@/services/images";
+import { getBanners, uploadFile } from "@/services/images";
 import { RegisterImageForm } from "../../components/ui/image/registerImageForm";
 import { BannerFile, ImageFormData } from "@/types/image";
 import { BannerTable } from "../../components/ui/image/imagesTable";
@@ -21,7 +21,7 @@ export default function Banners() {
 
   async function loadImages() {
     setDataLoading(true);
-    const res = await getFiles();
+    const res = await getBanners();
     setBanners(res);
     setDataLoading(false);
   }

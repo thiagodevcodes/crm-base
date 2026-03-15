@@ -17,7 +17,7 @@ import com.sos.base.shared.web.uploads.UploadService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/banners")
 @RequiredArgsConstructor
 public class BannerController {
 

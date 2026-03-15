@@ -19,7 +19,7 @@ const loginSchema = z.object({
 
 type LoginData = z.infer<typeof loginSchema>;
 
-export default function LoginForm() {
+export default function Login() {
   const { login, authenticated, loading } = useAuth();
   const router = useRouter();
 
