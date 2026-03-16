@@ -2,7 +2,7 @@ import Home from "@/views/website/home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Home",
+  title: "Home",
   description: "Página inicial do sistema",
 };
 
