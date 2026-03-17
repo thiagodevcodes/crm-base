@@ -13,24 +13,13 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import { A11y, Navigation } from "swiper/modules";
-import { Timeline } from "@/components/ui/timeline";
-import { CardEducation } from "@/components/ui/cardEducation";
+import { Timeline } from "@/shared/components/ui/timeline";
+import { CardEducation } from "@/shared/components/ui/cardEducation";
+import { useExperiences } from "@/modules/experiences/hooks/useExperiences";
 
 export default function Home() {
-  const experiences = [
-    {
-      period: "2024 - Atual",
-      title: "Desenvolvedor Web Full Stack - Agência Acerte Publicidade e Tech",
-      description: "Desenvolvimento Frontend/Backend, APIs",
-      tech: "Ruby, Rails, Jquery, JavaScript, Bootstrap, PostgreSQL",
-    },
-    {
-      period: "2025 - Atual",
-      title: "Desenvolvedor Web - Freelancer",
-      description: "Desenvolvimento Frontend/Backend & APIs",
-      tech: "React, Java, Spring Boot, TypeScript, Tailwind CSS, Next.js",
-    },
-  ];
+  const { experiences } = useExperiences();
+
 
   const education = [
     {
@@ -51,7 +40,7 @@ export default function Home() {
 
         <nav className="flex gap-5 font-light text-white items-center">
           <Link href={""}>Início</Link>
-          <Link href={""}>Experiência Profissional</Link>
+          <Link href={""}>Experiência</Link>
           <Link href={""}>Formação</Link>
           <Link href={""}>Projetos</Link>
           <Link href={""}>Contato</Link>

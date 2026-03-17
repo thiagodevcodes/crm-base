@@ -1,11 +1,13 @@
 package com.sos.base.core.permissions.dtos;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.sos.base.core.users.UserEntity;
-
-public record PermissionDto(
-      UserEntity user,
-      List<String> roles,
-      List<String> permissions) {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class PermissionDto {
+   private String permissionId;
+   private String name;
 }

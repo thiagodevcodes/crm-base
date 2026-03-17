@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.sos.base.core.roles.dtos.CreateRoleRequest;
+import com.sos.base.core.roles.dtos.RoleDto;
 import com.sos.base.core.roles.dtos.UpdateRoleRequest;
 
 import jakarta.validation.Valid;
@@ -18,36 +19,36 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/roles")
 @RequiredArgsConstructor
 public class RolesController {
-   @Autowired
-   private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-   @GetMapping
-   @PreAuthorize("@auth.hasPermission('GET_ROLES')")
-   public ResponseEntity<List<RoleEntity>> findAll() {
-      return ResponseEntity.ok(roleService.findAll());
-   }
+    @GetMapping
+    @PreAuthorize("@auth.hasPermission('GET_ROLES')")
+    public ResponseEntity<List<RoleDto>> findAll() {
+        return ResponseEntity.ok(roleService.findAll());
+    }
 
-   @PostMapping
-   @PreAuthorize("@auth.hasPermission('ADD_ROLE')")
-   public ResponseEntity<RoleEntity> create(@Valid @RequestBody CreateRoleRequest request) {
-      return ResponseEntity.ok(roleService.create(request));
-   }
+    @PostMapping
+    @PreAuthorize("@auth.hasPermission('ADD_ROLE')")
+    public ResponseEntity<RoleDto> create(@Valid @RequestBody CreateRoleRequest request) {
+        return ResponseEntity.ok(roleService.create(request));
+    }
 
-   @PutMapping("/{id}")
-   @PreAuthorize("@auth.hasPermission('UPDATE_ROLE')")
-   public ResponseEntity<RoleEntity> update(
-         @PathVariable String id,
-         @Valid @RequestBody UpdateRoleRequest request) {
-      UUID uuid = UUID.fromString(id);
-      return ResponseEntity.ok(roleService.update(uuid, request));
-   }
+    @PutMapping("/{id}")
+    @PreAuthorize("@auth.hasPermission('UPDATE_ROLE')")
+    public ResponseEntity<RoleDto> update(
+            @PathVariable String id,
+            @Valid @RequestBody UpdateRoleRequest request) {
+        UUID uuid = UUID.fromString(id);
+        return ResponseEntity.ok(roleService.update(uuid, request));
+    }
 
-   @DeleteMapping("/{id}")
-   @PreAuthorize("@auth.hasPermission('DELETE_ROLE')")
-   public ResponseEntity<Void> delete(@PathVariable String id) {
-      UUID uuid = UUID.fromString(id);
+    @DeleteMapping("/{id}")
+    @PreAuthorize("@auth.hasPermission('DELETE_ROLE')")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
 
-      roleService.delete(uuid);
-      return ResponseEntity.noContent().build();
-   }
+        roleService.delete(uuid);
+        return ResponseEntity.noContent().build();
+    }
 }

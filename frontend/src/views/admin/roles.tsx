@@ -1,16 +1,16 @@
 "use client";
 
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
-import { useAuth } from "@/hooks/useAuth";
+import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RolesTable } from "../../components/ui/role/rolesTable";
-import { createRole, getRoles } from "@/services/role";
-import { Role, RoleFormData } from "@/types/role";
-import { canAccess } from "@/utils/canAccess";
-import { Spinner } from "@/components/global/spinner";
-import { RegisterRoleForm } from "../../components/ui/role/registerRoleForm";
-import { Modal } from "@/components/global/modal";
+import { RolesTable } from "../../modules/roles/components/rolesTable";
+import { createRole, getRoles } from "@/modules/roles/services/role";
+import { canAccess } from "@/shared/utils/canAccess";
+import { Spinner } from "@/shared/components/ui/spinner";
+import { RegisterRoleForm } from "../../modules/roles/components/registerRoleForm";
+import { Modal } from "@/shared/components/ui/modal";
+import { Role, RoleFormData } from "@/modules/roles/types/role";
 
 export default function Roles() {
   const [roles, setRoles] = useState<Role[]>([]);

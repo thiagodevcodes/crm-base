@@ -54,6 +54,11 @@ public class AdminUserConfig implements CommandLineRunner {
       getOrCreatePermission("ADD_BANNER");
       getOrCreatePermission("DELETE_BANNER");
       getOrCreatePermission("UPDATE_BANNER");
+      getOrCreatePermission("GET_EXPERIENCES");
+      getOrCreatePermission("ADD_EXPERIENCE");
+      getOrCreatePermission("DELETE_EXPERIENCE");
+      getOrCreatePermission("UPDATE_EXPERIENCE");
+      
 
       // ROLE → PERMISSIONS
       roleAdmin.getPermissions().add(allAccess);

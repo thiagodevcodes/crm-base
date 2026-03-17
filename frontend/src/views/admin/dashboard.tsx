@@ -1,8 +1,8 @@
 "use client";
 
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
-import { useAuth } from "@/hooks/useAuth";
-import { canAccess } from "@/utils/canAccess";
+import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

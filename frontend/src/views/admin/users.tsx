@@ -1,48 +1,34 @@
 "use client";
 
-import { RegisterUserForm } from "@/components/ui/user/registerUserForm";
-import { UsersTable } from "@/components/ui/user/usersTable";
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
-import { useAuth } from "@/hooks/useAuth";
+import { RegisterUserForm } from "@/modules/users/components/registerUserForm";
+import { UsersTable } from "@/modules/users/components/usersTable";
+import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { getUsers, createUser } from "@/services/user";
-import { User, UserFormData } from "@/types/user";
-import { canAccess } from "@/utils/canAccess";
+import { getUsers, createUser } from "@/modules/users/services/user";
+import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
-import { Modal } from "../../components/global/modal";
-import { Spinner } from "@/components/global/spinner";
+import { Modal } from "../../shared/components/ui/modal";
+import { Spinner } from "@/shared/components/ui/spinner";
+import { User, UserFormData } from "@/modules/users/types/user";
+
+import { useUserContext } from "@/modules/users/contexts/context";
 
 export default function Users() {
-  const [users, setUsers] = useState<User[]>([]);
   const { authenticated, loading, permissions } = useAuth();
   const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  async function loadUsers() {
-    setDataLoading(true);
-    const res = await getUsers();
-    setUsers(res);
-    setDataLoading(false);
-  }
+  const { users, addUser } = useUserContext()
 
   async function handleSubmit(data: UserFormData) {
     try {
       const roles = data.roles.map((opt) => opt.value);
 
-      const createdUser = await createUser(
-        data.name,
-        data.username,
-        data.password,
-        roles,
-      );
+      const createdUser = await addUser(data);
 
-      if ("userId" in createdUser) {
-        setUsers((prev) => [...prev, createdUser]);
-        setOpen(false);
-      } else {
-        console.error("Erro ao criar usuário:", createdUser);
-      }
+      setOpen(false);
     } catch (err) {
       console.error("Erro ao criar usuário", err);
     }
@@ -53,10 +39,6 @@ export default function Users() {
 
     if (!loading && authenticated && !canAccess(permissions, ["GET_USERS"])) {
       router.replace("/admin/dashboard");
-    }
-
-    if (authenticated && canAccess(permissions, ["GET_USERS"])) {
-      loadUsers();
     }
   }, [loading, authenticated, router, permissions]);
 
@@ -95,7 +77,7 @@ export default function Users() {
       {dataLoading ? (
         <Spinner width="2.5rem" height="2.5rem" />
       ) : (
-        users && <UsersTable users={users} setUsers={setUsers} />
+        users && <UsersTable />
       )}
     </div>
   );

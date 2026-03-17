@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/contexts/authContext";
+import { AuthProvider } from "@/shared/contexts/authContext";
 
 export const metadata: Metadata = {
   title: "CRM",

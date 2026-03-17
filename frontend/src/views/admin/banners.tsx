@@ -1,16 +1,16 @@
 "use client";
 
-import { SpinnerLoading } from "@/components/global/spinnerLoading";
-import { useAuth } from "@/hooks/useAuth";
+import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { canAccess } from "@/utils/canAccess";
+import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
-import { Modal } from "../../components/global/modal";
-import { Spinner } from "@/components/global/spinner";
-import { getBanners, uploadFile } from "@/services/images";
-import { RegisterImageForm } from "../../components/ui/image/registerImageForm";
-import { BannerFile, ImageFormData } from "@/types/image";
-import { BannerTable } from "../../components/ui/image/imagesTable";
+import { Modal } from "../../shared/components/ui/modal";
+import { Spinner } from "@/shared/components/ui/spinner";
+import { getBanners, uploadFile } from "@/modules/images/services/images";
+import { RegisterImageForm } from "../../modules/images/components/registerImageForm";
+import { BannerFile, ImageFormData } from "@/modules/images/types/image";
+import { BannerTable } from "../../modules/images/components/imagesTable";
 
 export default function Banners() {
   const [banners, setBanners] = useState<BannerFile[]>([]);

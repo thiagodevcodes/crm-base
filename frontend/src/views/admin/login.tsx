@@ -3,14 +3,14 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InputField } from "@/components/global/inputField";
+import { InputField } from "@/shared/components/ui/inputField";
 import Image from "next/image";
 import { AxiosError } from "axios";
-import { useAuth } from "@/hooks/useAuth";
-import { Spinner } from "@/components/global/spinner";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { Spinner } from "@/shared/components/ui/spinner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SpinnerLoading } from "../../components/global/spinnerLoading";
+import { SpinnerLoading } from "../../shared/components/ui/spinnerLoading";
 
 const loginSchema = z.object({
   email: z.string(),
