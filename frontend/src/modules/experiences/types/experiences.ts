@@ -5,3 +5,11 @@ export interface Experience {
   description: string;
   technologies: string;
 }
+
+export type ExperienceFormData = {
+  experienceId: string;
+  title: string;
+  period: string;
+  description: string;
+  technologies: string;
+}

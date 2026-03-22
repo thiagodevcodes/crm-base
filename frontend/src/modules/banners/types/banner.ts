@@ -1,5 +1,5 @@
 export type ImageFormData = {
-  image: FileList;
+  file: File;
 };
 
 export type BannerFile = {
@@ -8,3 +8,11 @@ export type BannerFile = {
   type: string;
   url: string;
 };
+
+export type BannerFormData = {
+  name: string;
+  type: string;
+  size: number;
+  file: FileList;
+};
+

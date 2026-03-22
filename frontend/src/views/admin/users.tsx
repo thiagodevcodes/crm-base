@@ -5,12 +5,11 @@ import { UsersTable } from "@/modules/users/components/usersTable";
 import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
-import { getUsers, createUser } from "@/modules/users/services/user";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
 import { Modal } from "../../shared/components/ui/modal";
 import { Spinner } from "@/shared/components/ui/spinner";
-import { User, UserFormData } from "@/modules/users/types/user";
+import { UserFormData } from "@/modules/users/types/user";
 
 import { useUserContext } from "@/modules/users/contexts/context";
 
@@ -20,14 +19,11 @@ export default function Users() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const { users, addUser } = useUserContext()
+  const { users, addUser } = useUserContext();
 
   async function handleSubmit(data: UserFormData) {
     try {
-      const roles = data.roles.map((opt) => opt.value);
-
-      const createdUser = await addUser(data);
-
+      await addUser(data);
       setOpen(false);
     } catch (err) {
       console.error("Erro ao criar usuário", err);
@@ -74,11 +70,7 @@ export default function Users() {
         </Modal>
       )}
 
-      {dataLoading ? (
-        <Spinner width="2.5rem" height="2.5rem" />
-      ) : (
-        users && <UsersTable />
-      )}
+      <UsersTable />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-package com.sos.base.shared.web.uploads;
+package com.sos.base.core.uploads;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.sos.base.core.uploads.dtos.UploadDto;
 
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;

@@ -7,27 +7,15 @@ import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { Modal } from "@/shared/components/ui/modal";
-import {
-  createExperience,
-  getExperiences,
-} from "@/modules/experiences/services/experiences";
-import {
-  Experience,
-  ExperienceFormData,
-} from "@/modules/experiences/types/experiences";
+import { ExperienceFormData } from "@/modules/experiences/types/experiences";
 import { RegisterExperienceForm } from "@/modules/experiences/components/registerExperienceForm";
 import { ExperiencesTable } from "@/modules/experiences/components/experiencesTable";
-import { useExperiences } from "@/modules/experiences/hooks/useExperiences";
-import {
-  ExperienceProvider,
-  useExperienceContext,
-} from "@/modules/experiences/contexts/context";
+import { useExperienceContext } from "@/modules/experiences/contexts/context";
 
 export default function Experiences() {
   const { experiences, addExperience } = useExperienceContext();
   const { authenticated, loading, permissions } = useAuth();
   const [open, setOpen] = useState(false);
-  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const router = useRouter();
 
   async function handleSubmit(data: ExperienceFormData) {
@@ -48,9 +36,6 @@ export default function Experiences() {
       !canAccess(permissions, ["GET_EXPERIENCES"])
     ) {
       router.replace("/admin/dashboard");
-    }
-
-    if (authenticated && canAccess(permissions, ["GET_EXPERIENCES"])) {
     }
   }, [loading, authenticated, router, permissions]);
 
@@ -86,11 +71,9 @@ export default function Experiences() {
         )}
       </div>
 
-      {dataLoading ? (
-        <Spinner width="2.5rem" height="2.5rem" />
-      ) : (
-        experiences && <ExperiencesTable />
-      )}
+
+    <ExperiencesTable />
+   
     </div>
   );
 }

@@ -6,13 +6,15 @@ import java.util.UUID;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import com.sos.base.shared.exceptions.DataIntegrityException;
 import org.springframework.stereotype.Service;
 
 import com.sos.base.core.banners.dtos.BannerDto;
+import com.sos.base.core.banners.dtos.CreateBannerRequest;
+import com.sos.base.core.uploads.UploadService;
+import com.sos.base.core.uploads.dtos.UploadDto;
 import com.sos.base.shared.exceptions.NotFoundException;
 import com.sos.base.shared.exceptions.ViolatedForeignKeyException;
-import com.sos.base.shared.web.uploads.UploadDto;
-import com.sos.base.shared.web.uploads.UploadService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,62 +22,80 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class BannerService {
+    @Autowired
+    private ModelMapper modelMapper;
 
-   @Autowired
-   private ModelMapper modelMapper;
+    @Autowired
+    private BannerRepository bannerRepository;
 
-   @Autowired
-   private BannerRepository bannerRepository;
+    @Autowired
+    private UploadService uploadService;
 
-   @Autowired
-   private UploadService uploadService;
+    public List<BannerDto> findAll() {
+        return bannerRepository.findAll()
+                .stream()
+                .map(banner -> {
+                    String signedUrl = uploadService.generateSignedUrl(banner.getKey());
 
-   public List<BannerDto> findAll() {
-      return bannerRepository.findAll()
-            .stream()
-            .map(banner -> {
-               String signedUrl = uploadService.generateSignedUrl(banner.getKey());
+                    return new BannerDto(
+                            banner.getBannerId(),
+                            banner.getName(),
+                            banner.getKey(),
+                            banner.getType(),
+                            signedUrl,
+                            banner.getSize());
+                })
+                .toList();
+    }
 
-               UUID bannerId = UUID.fromString(banner.getBannerId().toString());
+    public BannerDto findById(UUID id) {
+        var banner = bannerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Banner não encontrado"));
 
-               return new BannerDto(
-                     bannerId,
-                     banner.getName(),
-                     banner.getKey(),
-                     banner.getType(),
-                     signedUrl,
-                     banner.getSize());
-            })
-            .toList();
-   }
+        String signedUrl = uploadService.generateSignedUrl(banner.getKey());
 
-   @Transactional
-   public BannerDto save(UploadDto file) throws Exception {
+        return new BannerDto(
+                banner.getBannerId(),
+                banner.getName(),
+                banner.getKey(),
+                banner.getType(),
+                signedUrl,
+                banner.getSize());
+    }
 
-      BannerEntity img = new BannerEntity();
+    @Transactional
+    public BannerDto create(CreateBannerRequest dto) throws Exception {
+        try {
+            UploadDto uploadDto = uploadService.save(dto.getFile());
+            BannerEntity bannerEntity = new BannerEntity();
 
-      img.setName(file.getName());
-      img.setType(file.getType());
-      img.setKey(file.getKey());
-      img.setSize(file.getSize());
+            bannerEntity.setName(uploadDto.getName());
+            bannerEntity.setSize(uploadDto.getSize());
+            bannerEntity.setType(uploadDto.getType());
+            bannerEntity.setKey(uploadDto.getKey());
 
-      img = bannerRepository.save(img);
-      BannerDto bannerDto = modelMapper.map(img, BannerDto.class);
+            bannerEntity = bannerRepository.save(bannerEntity);
 
-      return bannerDto;
-   }
+            BannerDto bannerDto = modelMapper.map(bannerEntity, BannerDto.class);
 
-   @Transactional
-   public void delete(UUID id) {
-      BannerEntity banner = bannerRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("Banner não encontrado"));
+            return bannerDto;
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityException("Erro ao cadastrar role");
+        }
 
-      try {
-         uploadService.delete(banner.getKey());
-         bannerRepository.delete(banner);
-      } catch (DataIntegrityViolationException ex) {
-         throw new ViolatedForeignKeyException(
-               "Não foi possível deletar esse banner.");
-      }
-   }
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        BannerEntity banner = bannerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Banner não encontrado"));
+
+        try {
+            uploadService.delete(banner.getKey());
+            bannerRepository.delete(banner);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ViolatedForeignKeyException(
+                    "Não foi possível deletar esse banner.");
+        }
+    }
 }

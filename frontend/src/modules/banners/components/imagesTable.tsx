@@ -3,36 +3,27 @@
 import { useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { BannerFile } from "@/modules/images/types/image";
+import { BannerFile } from "@/modules/banners/types/banner";
 import Image from "next/image";
-import { deleteFile } from "@/modules/images/services/images";
 import { canAccess } from "@/shared/utils/canAccess";
 import r2Loader from "@/shared/utils/r2loader";
+import { useBannerContext } from "../contexts/context";
 
 type Props = {
   banners: BannerFile[];
   setBanners: React.Dispatch<React.SetStateAction<BannerFile[]>>; // adiciona para atualizar lista
 };
 
-export function BannerTable({ banners, setBanners }: Props) {
+export function BannerTable() {
+  const { banners, removeBanner } = useBannerContext();
   const [selectedImage, setSelectedImage] = useState<BannerFile | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
 
   async function handleDelete() {
     if (!selectedImage) return;
-
-    try {
-      await deleteFile(selectedImage.bannerId);
-      setBanners((prev) =>
-        prev.filter((img) => img.bannerId !== selectedImage.bannerId),
-      );
-    } catch (err) {
-      console.error("Erro ao deletar imagem:", err);
-    } finally {
-      setConfirmModalOpen(false);
-      setSelectedImage(null);
-    }
+    removeBanner(selectedImage.bannerId)
+    setConfirmModalOpen(false)
   }
 
   return (
@@ -59,9 +50,9 @@ export function BannerTable({ banners, setBanners }: Props) {
               </tr>
             )}
 
-            {banners.map((image) => (
+            {banners.map((image, index) => (
               <tr
-                key={image.bannerId}
+                key={index}
                 className="border-t border-white/10 hover:bg-white/5 transition"
               >
                 <td className="px-4 py-3 font-medium">{image.name}</td>

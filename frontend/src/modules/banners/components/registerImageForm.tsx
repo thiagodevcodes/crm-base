@@ -1,14 +1,18 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { ImageFormData } from "@/modules/images/types/image";
+import {
+  BannerFile,
+  BannerFormData,
+  ImageFormData,
+} from "@/modules/banners/types/banner";
 
 type Props = {
   title: string;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: ImageFormData) => Promise<void>; // recebe dados do formulário
-  selectedImage?: ImageFormData | null;
+  onSubmit: (data: BannerFormData) => Promise<void>; // recebe dados do formulário
+  selectedImage?: BannerFile | null;
 };
 
 export function RegisterImageForm({ onSubmit, title }: Props) {
@@ -17,14 +21,16 @@ export function RegisterImageForm({ onSubmit, title }: Props) {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ImageFormData>({
+  } = useForm<BannerFormData>({
     defaultValues: {
-      image: undefined,
+      file: undefined,
     },
   });
 
-  async function handleFormSubmit(data: ImageFormData) {
+  async function handleFormSubmit(data: BannerFormData) {
     try {
+      console.log(data)
+
       await onSubmit(data); // chama o prop onSubmit do pai
       reset(); // limpa o formulário // fecha o modal
     } catch (err) {
@@ -43,12 +49,12 @@ export function RegisterImageForm({ onSubmit, title }: Props) {
             type="file"
             placeholder="Imagem"
             className="w-full p-2 rounded bg-slate-800 text-white"
-            {...register("image", {
+            {...register("file", {
               required: "Imagem é obrigatória",
             })}
           />
-          {errors.image && (
-            <p className="text-red-400 text-sm">{errors.image.message}</p>
+          {errors.file && (
+            <p className="text-red-400 text-sm">{errors.file.message}</p>
           )}
         </div>
 

@@ -1,4 +1,4 @@
-package com.sos.base.shared.web.uploads;
+package com.sos.base.core.uploads.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
