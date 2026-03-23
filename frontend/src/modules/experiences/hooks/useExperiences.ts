@@ -3,9 +3,10 @@ import {
   getExperiences,
   createExperience,
   updateExperience,
-  deleteExperience
+  deleteExperience,
 } from "../services/experiences";
 import { Experience } from "../types/experiences";
+import { delay } from "@/shared/utils/functions";
 
 export function useExperiences() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -15,22 +16,34 @@ export function useExperiences() {
   const fetchExperiences = async () => {
     setLoading(true);
     const data = await getExperiences();
+    await delay(1000);
     setExperiences(data);
     setLoading(false);
   };
 
   // CREATE
   const addExperience = async (experience: Experience) => {
-    const newExp = await createExperience(experience.title, experience.description, experience.period, experience.technologies);
+    const newExp = await createExperience(
+      experience.title,
+      experience.description,
+      experience.period,
+      experience.technologies,
+    );
     setExperiences((prev) => [...prev, newExp]);
   };
 
   // UPDATE
   const editExperience = async (id: string, experience: Experience) => {
-    const updated = await updateExperience(id, experience.title, experience.description, experience.period, experience.technologies);
+    const updated = await updateExperience(
+      id,
+      experience.title,
+      experience.description,
+      experience.period,
+      experience.technologies,
+    );
 
     setExperiences((prev) =>
-      prev.map((exp) => (exp.experienceId === id ? updated : exp))
+      prev.map((exp) => (exp.experienceId === id ? updated : exp)),
     );
   };
 
@@ -38,9 +51,7 @@ export function useExperiences() {
   const removeExperience = async (id: string) => {
     await deleteExperience(id);
 
-    setExperiences((prev) =>
-      prev.filter((exp) => exp.experienceId !== id)
-    );
+    setExperiences((prev) => prev.filter((exp) => exp.experienceId !== id));
   };
 
   useEffect(() => {
@@ -53,6 +64,6 @@ export function useExperiences() {
     fetchExperiences,
     addExperience,
     editExperience,
-    removeExperience
+    removeExperience,
   };
 }

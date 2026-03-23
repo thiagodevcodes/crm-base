@@ -2,8 +2,8 @@ import Images from "@/views/admin/banners";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Imagens",
-  description: "Página de visualização de imagens",
+  title: "CRM - Banners",
+  description: "Página de visualização de banners",
 };
 
 export default async function BannersPage() {

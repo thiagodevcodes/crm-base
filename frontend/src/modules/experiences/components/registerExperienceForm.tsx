@@ -1,46 +1,25 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
-import { Experience, ExperienceFormData } from "@/modules/experiences/types/experiences";
-import { getExperiences } from "@/modules/experiences/services/experiences";
+import {
+  ExperienceFormData,
+} from "@/modules/experiences/types/experiences";
 
 type Props = {
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
   onSubmit: (data: ExperienceFormData) => Promise<void>;
-  selectedExperience?: Experience | null;
 };
 
-export function RegisterExperienceForm({ onSubmit, selectedExperience, title }: Props) {
+export function RegisterExperienceForm({
+  onSubmit,
+  title,
+}: Props) {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ExperienceFormData>({
-    defaultValues: {
-        title: selectedExperience?.title,
-        description: selectedExperience?.description,
-        period: selectedExperience?.period,
-        technologies: selectedExperience?.technologies,
-    },
-  });
-
-  useEffect(() => {
-    if (selectedExperience) {
-      reset({
-        title: selectedExperience?.title,
-        description: selectedExperience?.description,
-        period: selectedExperience?.period,
-        technologies: selectedExperience?.technologies,
-      });
-    } else {
-      reset();
-    }
-  }, [selectedExperience, reset]);
+  } = useForm<ExperienceFormData>({});
 
   async function handleFormSubmit(data: ExperienceFormData) {
     try {
@@ -120,7 +99,9 @@ export function RegisterExperienceForm({ onSubmit, selectedExperience, title }: 
             })}
           />
           {errors.technologies && (
-            <p className="text-red-400 text-sm">{errors.technologies.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.technologies.message}
+            </p>
           )}
         </div>
 

@@ -1,22 +1,21 @@
 "use client";
 
 import { Controller, useForm } from "react-hook-form";
-import Select, { ControlProps, GroupBase, StylesConfig } from "react-select";
-import { CSSObjectWithLabel } from "react-select";
+import Select, { StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
 import { getPermissions } from "@/modules/permissions/services/permission";
-import { Permission, PermissionOption } from "@/modules/permissions/types/permission";
+import {
+  Permission,
+  PermissionOption,
+} from "@/modules/permissions/types/permission";
 import { Role, RoleFormData } from "../types/role";
 
 type Props = {
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: RoleFormData) => Promise<void>; // recebe dados do formulário
-  selectedRole?: Role | null;
+  onSubmit: (data: RoleFormData) => Promise<void>;
 };
 
-export function RegisterRoleForm({ onSubmit, selectedRole, title }: Props) {
+export function RegisterRoleForm({ onSubmit, title }: Props) {
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
   const {
@@ -25,30 +24,12 @@ export function RegisterRoleForm({ onSubmit, selectedRole, title }: Props) {
     control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<RoleFormData>({
-    defaultValues: {
-      name: selectedRole?.name,
-    },
-  });
-
-  useEffect(() => {
-    if (selectedRole) {
-      reset({
-        name: selectedRole.name,
-        permissions: selectedRole.permissions.map((permission) => ({
-          value: permission.name,
-          label: permission.name,
-        })),
-      });
-    } else {
-      reset();
-    }
-  }, [selectedRole, reset]);
+  } = useForm<RoleFormData>();
 
   async function handleFormSubmit(data: RoleFormData) {
     try {
-      await onSubmit(data); // chama o prop onSubmit do pai
-      reset(); // limpa o formulário // fecha o modal
+      await onSubmit(data);
+      reset();
     } catch (err) {
       console.error("Erro ao cadastrar role:", err);
     }
@@ -70,25 +51,14 @@ export function RegisterRoleForm({ onSubmit, selectedRole, title }: Props) {
     loadPermissions();
   }, []);
 
-  const darkSelectStyles: StylesConfig<
-    PermissionOption,
-    true,
-    GroupBase<PermissionOption>
-  > = {
-    control: (
-      base: CSSObjectWithLabel,
-      state: ControlProps<PermissionOption, true, GroupBase<PermissionOption>>,
-    ) => ({
+  const darkSelectStyles: StylesConfig<PermissionOption, true> = {
+    control: (base, state) => ({
       ...base,
       backgroundColor: "#1e293b",
       borderColor: state.isFocused ? "white" : "#1e293b",
       boxShadow: "none",
-      "&:hover": {
-        borderColor: "#1e293b",
-      },
     }),
-
-    placeholder: (base: CSSObjectWithLabel) => ({
+    placeholder: (base) => ({
       ...base,
       color: "#94a3b8",
     }),

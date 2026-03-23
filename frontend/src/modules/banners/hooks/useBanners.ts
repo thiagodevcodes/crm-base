@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getBanners, deleteFile, createBanner, getBannersById } from "../services/banners";
 import { BannerFile, BannerFormData } from "../types/banner";
+import { delay } from "@/shared/utils/functions";
 
 export function useBanners() {
   const [banners, setBanners] = useState<BannerFile[]>([]);
@@ -18,6 +19,7 @@ export function useBanners() {
   const fetchBanners = async () => {
     setLoading(true);
     const data = await getBanners();
+    await delay(1000);
     setBanners(data);
     setLoading(false);
   };

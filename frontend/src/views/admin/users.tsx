@@ -8,18 +8,16 @@ import { useEffect, useState } from "react";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
 import { Modal } from "../../shared/components/ui/modal";
-import { Spinner } from "@/shared/components/ui/spinner";
 import { UserFormData } from "@/modules/users/types/user";
 
 import { useUserContext } from "@/modules/users/contexts/context";
 
 export default function Users() {
   const { authenticated, loading, permissions } = useAuth();
-  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const { users, addUser } = useUserContext();
+  const { addUser } = useUserContext();
 
   async function handleSubmit(data: UserFormData) {
     try {
@@ -63,8 +61,6 @@ export default function Users() {
         <Modal isOpen={open} onClose={() => setOpen(false)}>
           <RegisterUserForm
             title="Criar Usuário"
-            isOpen={open}
-            onClose={() => setOpen(false)}
             onSubmit={handleSubmit}
           />
         </Modal>

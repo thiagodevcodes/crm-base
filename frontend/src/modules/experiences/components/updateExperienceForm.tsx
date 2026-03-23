@@ -2,9 +2,8 @@
 
 import { useForm } from "react-hook-form";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Experience, ExperienceFormData } from "@/modules/experiences/types/experiences";
-import { Role } from "@/modules/roles/types/role";
 
 type Props = {
   isOpen: boolean;
@@ -15,13 +14,10 @@ type Props = {
 };
 
 export function UpdateExperienceForm({
-  isOpen,
-  onClose,
   onSubmit,
   selectedExperience,
   title
 }: Props) {
-  const [roles, setRoles] = useState<Role[]>([]);
 
   const {
     register,
@@ -55,7 +51,6 @@ export function UpdateExperienceForm({
     try {
       await onSubmit(data);
       reset();
-      onClose();
     } catch (err) {
       console.error("Erro ao atualizar experiência:", err);
     }

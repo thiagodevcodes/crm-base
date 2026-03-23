@@ -4,6 +4,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getMe, signIn, signOut } from "@/modules/auth/services/auth";
 import { User } from "@/modules/users/types/user";
+import { Permission } from "@/modules/permissions/types/permission";
 
 
 

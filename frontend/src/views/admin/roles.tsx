@@ -5,41 +5,25 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { RolesTable } from "../../modules/roles/components/rolesTable";
-import { createRole, getRoles } from "@/modules/roles/services/role";
 import { canAccess } from "@/shared/utils/canAccess";
-import { Spinner } from "@/shared/components/ui/spinner";
 import { RegisterRoleForm } from "../../modules/roles/components/registerRoleForm";
 import { Modal } from "@/shared/components/ui/modal";
-import { Role, RoleFormData } from "@/modules/roles/types/role";
+import { RoleFormData } from "@/modules/roles/types/role";
+import { useRoleContext } from "@/modules/roles/contexts/context";
 
 export default function Roles() {
-  const [roles, setRoles] = useState<Role[]>([]);
   const { authenticated, loading, permissions } = useAuth();
   const [open, setOpen] = useState(false);
-  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  async function loadRoles() {
-    setDataLoading(true);
-    const res = await getRoles();
-    setRoles(res);
-    setDataLoading(false);
-  }
+  const { addRole } = useRoleContext();
 
   async function handleSubmit(data: RoleFormData) {
     try {
-      const permissions = data.permissions.map((opt) => opt.value);
-
-      const createdRole = await createRole(data.name, permissions);
-
-      if ("roleId" in createdRole) {
-        setRoles((prev) => [...prev, createdRole]);
-        setOpen(false);
-      } else {
-        console.error("Erro ao criar perfil:", createdRole);
-      }
+      await addRole(data);
+      setOpen(false);
     } catch (err) {
-      console.error("Erro ao criar perfil", err);
+      console.error("Erro ao criar role", err);
     }
   }
 
@@ -48,10 +32,6 @@ export default function Roles() {
 
     if (!loading && authenticated && !canAccess(permissions, ["GET_ROLES"])) {
       router.replace("/admin/dashboard");
-    }
-
-    if (authenticated && canAccess(permissions, ["GET_ROLES"])) {
-      loadRoles();
     }
   }, [loading, authenticated, router, permissions]);
 
@@ -77,21 +57,12 @@ export default function Roles() {
 
         {canAccess(permissions, ["ADD_ROLE"]) && (
           <Modal isOpen={open} onClose={() => setOpen(false)}>
-            <RegisterRoleForm
-              title="Criar Perfil"
-              isOpen={open}
-              onClose={() => setOpen(false)}
-              onSubmit={handleSubmit}
-            />
+            <RegisterRoleForm title="Criar Perfil" onSubmit={handleSubmit} />
           </Modal>
         )}
       </div>
 
-      {dataLoading ? (
-        <Spinner width="2.5rem" height="2.5rem" />
-      ) : (
-        roles && <RolesTable roles={roles} setRoles={setRoles}></RolesTable>
-      )}
+      <RolesTable />
     </div>
   );
 }

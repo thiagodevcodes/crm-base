@@ -6,14 +6,11 @@ import { User, UserFormData } from "../types/user";
 
 type Props = {
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>; // recebe dados do formulário
   selectedUser?: User | null;
 };
 
 export function PasswordForm({
-  onClose,
   onSubmit,
   selectedUser,
   title,
@@ -43,7 +40,6 @@ export function PasswordForm({
     try {
       await onSubmit(data);
       reset();
-      onClose();
     } catch (err) {
       console.error("Erro ao cadastrar usuário:", err);
     }

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Role } from "../types/role";
+import { Permission } from "@/modules/permissions/types/permission";
 
 export async function getRoles(): Promise<Role[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {

@@ -1,27 +1,18 @@
 "use client";
 
 import { Controller, useForm } from "react-hook-form";
-import Select, { ControlProps, GroupBase, StylesConfig } from "react-select";
-import { CSSObjectWithLabel } from "react-select";
+import Select, { StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
 import { getRoles } from "@/modules/roles/services/role";
-import { User, UserFormData } from "../types/user";
+import { UserFormData } from "../types/user";
 import { Role, RoleOption } from "@/modules/roles/types/role";
 
 type Props = {
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>; // recebe dados do formulário
-  selectedUser?: User | null;
 };
 
-export function RegisterUserForm({
-  onSubmit,
-  selectedUser,
-  title,
-  isOpen,
-}: Props) {
+export function RegisterUserForm({ onSubmit, title }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
 
   const {
@@ -31,28 +22,9 @@ export function RegisterUserForm({
     control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<UserFormData>({
-    defaultValues: {
-      username: selectedUser?.username,
-      name: selectedUser?.name,
-      roles: [],
-    },
-  });
+  } = useForm<UserFormData>();
 
   const password = watch("password");
-
-  useEffect(() => {
-    if (!selectedUser) return;
-
-    reset({
-      username: selectedUser.username,
-      name: selectedUser.name,
-      roles: selectedUser.roles.map((role) => ({
-        value: role.name,
-        label: role.name,
-      })),
-    });
-  }, [selectedUser, reset]);
 
   async function handleFormSubmit(data: UserFormData) {
     try {
@@ -69,10 +41,8 @@ export function RegisterUserForm({
   }));
 
   useEffect(() => {
-    if (!isOpen) return;
-
     getRoles().then(setRoles);
-  }, [isOpen]);
+  }, []);
 
   const darkSelectStyles: StylesConfig<RoleOption, true> = {
     control: (base, state) => ({

@@ -2,12 +2,9 @@
 
 import { Controller, useForm } from "react-hook-form";
 import Select, {
-  ControlProps,
-  CSSObjectWithLabel,
-  GroupBase,
   StylesConfig,
 } from "react-select";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { User, UserFormData } from "../types/user";
 import { getRoles } from "@/modules/roles/services/role";
@@ -15,14 +12,11 @@ import { Role, RoleOption } from "@/modules/roles/types/role";
 
 type Props = {
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
   onSubmit: (data: UserFormData) => Promise<void>;
   selectedUser?: User | null;
 };
 
 export function UpdateUserForm({
-  isOpen,
   onSubmit,
   selectedUser,
   title,
@@ -50,10 +44,8 @@ export function UpdateUserForm({
 
 
   useEffect(() => {
-    if (!isOpen) return;
-
     getRoles().then(setRoles);
-  }, [isOpen]);
+  }, []);
 
   useEffect(() => {
     if (!selectedUser) return;

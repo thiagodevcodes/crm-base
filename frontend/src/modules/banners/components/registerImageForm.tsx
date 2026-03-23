@@ -4,13 +4,10 @@ import { useForm } from "react-hook-form";
 import {
   BannerFile,
   BannerFormData,
-  ImageFormData,
 } from "@/modules/banners/types/banner";
 
 type Props = {
   title: string;
-  isOpen: boolean;
-  onClose: () => void;
   onSubmit: (data: BannerFormData) => Promise<void>; // recebe dados do formulário
   selectedImage?: BannerFile | null;
 };
@@ -31,8 +28,8 @@ export function RegisterImageForm({ onSubmit, title }: Props) {
     try {
       console.log(data)
 
-      await onSubmit(data); // chama o prop onSubmit do pai
-      reset(); // limpa o formulário // fecha o modal
+      await onSubmit(data); 
+      reset();
     } catch (err) {
       console.error("Erro ao cadastrar imagem:", err);
     }

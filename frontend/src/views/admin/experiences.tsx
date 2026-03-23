@@ -5,7 +5,6 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
-import { Spinner } from "@/shared/components/ui/spinner";
 import { Modal } from "@/shared/components/ui/modal";
 import { ExperienceFormData } from "@/modules/experiences/types/experiences";
 import { RegisterExperienceForm } from "@/modules/experiences/components/registerExperienceForm";
@@ -13,7 +12,7 @@ import { ExperiencesTable } from "@/modules/experiences/components/experiencesTa
 import { useExperienceContext } from "@/modules/experiences/contexts/context";
 
 export default function Experiences() {
-  const { experiences, addExperience } = useExperienceContext();
+  const { addExperience } = useExperienceContext();
   const { authenticated, loading, permissions } = useAuth();
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -63,17 +62,13 @@ export default function Experiences() {
           <Modal isOpen={open} onClose={() => setOpen(false)}>
             <RegisterExperienceForm
               title="Criar Experiência"
-              isOpen={open}
-              onClose={() => setOpen(false)}
               onSubmit={handleSubmit}
             />
           </Modal>
         )}
       </div>
 
-
-    <ExperiencesTable />
-   
+      <ExperiencesTable />
     </div>
   );
 }

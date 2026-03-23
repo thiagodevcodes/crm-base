@@ -1,3 +1,4 @@
+import { Permission } from "@/modules/permissions/types/permission";
 import { Role, RoleOption } from "@/modules/roles/types/role";
 
 export interface User {

@@ -1,11 +1,6 @@
 "use client";
 
 import { User, UserFormData } from "../types/user";
-import {
-  deleteUser,
-  updatePassword,
-  updateUser,
-} from "@/modules/users/services/user";
 import { useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { PasswordForm } from "./passwordUserForm";
@@ -14,11 +9,8 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { Modal } from "@/shared/components/ui/modal";
 import { UpdateUserForm } from "./updateUserForm";
 import { useUserContext } from "../contexts/context";
-
-type Props = {
-  users: User[];
-  setUsers: React.Dispatch<React.SetStateAction<User[]>>; // adiciona para atualizar lista
-};
+import { Spinner } from "@/shared/components/ui/spinner";
+import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 
 export function UsersTable() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -27,7 +19,8 @@ export function UsersTable() {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const { permissions } = useAuth();
 
-  const { users, removeUser, editUser, editPassword } = useUserContext();
+  const { users, removeUser, editUser, editPassword, loading } =
+    useUserContext();
 
   async function handleUpdate(data: UserFormData) {
     if (!selectedUser) return;
@@ -86,10 +79,14 @@ export function UsersTable() {
           </thead>
 
           <tbody>
-            {users.length === 0 && (
+            {(loading || users.length === 0) && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  Nenhum usuário encontrado
+                  {loading ? (
+                    <Spinner width="30px" height="30px" />
+                  ) : (
+                    "Nenhum usuário encontrado"
+                  )}
                 </td>
               </tr>
             )}
@@ -171,8 +168,6 @@ export function UsersTable() {
         >
           <PasswordForm
             title={`Senha de ${selectedUser?.name}`}
-            isOpen={passwordModalOpen}
-            onClose={() => setPasswordModalOpen(false)}
             onSubmit={handleUpdatePassword}
             selectedUser={selectedUser}
           />
@@ -186,8 +181,6 @@ export function UsersTable() {
         >
           <UpdateUserForm
             title={`Editar ${selectedUser?.name}`}
-            isOpen={updateModalOpen}
-            onClose={() => setUpdateModalOpen(false)}
             onSubmit={handleUpdate}
             selectedUser={selectedUser}
           />

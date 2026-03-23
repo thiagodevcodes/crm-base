@@ -14,7 +14,6 @@ import { useBannerContext } from "@/modules/banners/contexts/context";
 export default function Banners() {
   const { addBanner } = useBannerContext();
   const { authenticated, loading, permissions } = useAuth();
-  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -64,12 +63,7 @@ export default function Banners() {
 
       {canAccess(permissions, ["ADD_BANNER"]) && (
         <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <RegisterImageForm
-            title="Criar Banner"
-            isOpen={open}
-            onClose={() => setOpen(false)}
-            onSubmit={handleSubmit}
-          />
+          <RegisterImageForm title="Criar Banner" onSubmit={handleSubmit} />
         </Modal>
       )}
 

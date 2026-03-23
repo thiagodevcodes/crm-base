@@ -1,3 +1,5 @@
+import { Permission } from "@/modules/permissions/types/permission";
+
 export function canAccess(
   userPermissions: string[],
   allowedPermissions: string[]

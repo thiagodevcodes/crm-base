@@ -8,14 +8,10 @@ import Image from "next/image";
 import { canAccess } from "@/shared/utils/canAccess";
 import r2Loader from "@/shared/utils/r2loader";
 import { useBannerContext } from "../contexts/context";
-
-type Props = {
-  banners: BannerFile[];
-  setBanners: React.Dispatch<React.SetStateAction<BannerFile[]>>; // adiciona para atualizar lista
-};
+import { Spinner } from "@/shared/components/ui/spinner";
 
 export function BannerTable() {
-  const { banners, removeBanner } = useBannerContext();
+  const { banners, removeBanner, loading } = useBannerContext();
   const [selectedImage, setSelectedImage] = useState<BannerFile | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
@@ -42,10 +38,14 @@ export function BannerTable() {
           </thead>
 
           <tbody>
-            {banners.length === 0 && (
+            {(loading || banners.length === 0) && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  Nenhuma imagem encontrada
+                  {banners ? (
+                    <Spinner width="30px" height="30px" />
+                  ) : (
+                    "Nenhum usuário encontrado"
+                  )}
                 </td>
               </tr>
             )}

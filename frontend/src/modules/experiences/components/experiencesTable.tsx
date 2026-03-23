@@ -8,10 +8,10 @@ import { Modal } from "@/shared/components/ui/modal";
 import { Experience } from "@/modules/experiences/types/experiences";
 import { UpdateExperienceForm } from "./updateExperienceForm";
 import { useExperienceContext } from "../contexts/context";
+import { Spinner } from "@/shared/components/ui/spinner";
 
 export function ExperiencesTable() {
-  const { experiences, editExperience, removeExperience } = useExperienceContext();
-
+  const { experiences, editExperience, removeExperience, loading } = useExperienceContext();
   const [selectedExperience, setSelectedExperience] =
     useState<Experience | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -54,10 +54,14 @@ export function ExperiencesTable() {
           </thead>
 
           <tbody>
-            {experiences.length === 0 && (
+            {(loading || experiences.length === 0) && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  Nenhum experiência encontrada
+                  {loading ? (
+                    <Spinner width="30px" height="30px" />
+                  ) : (
+                    "Nenhum usuário encontrado"
+                  )}
                 </td>
               </tr>
             )}

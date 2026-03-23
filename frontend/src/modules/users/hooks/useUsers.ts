@@ -7,6 +7,7 @@ import {
   updatePassword
 } from "../services/user";
 import { User, UserFormData } from "../types/user";
+import { delay } from "@/shared/utils/functions";
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,6 +17,7 @@ export function useUsers() {
   const fetchUsers = async () => {
     setLoading(true);
     const data = await getUsers();
+    await delay(1000);
     setUsers(data);
     setLoading(false);
   };

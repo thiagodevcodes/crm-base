@@ -4,17 +4,19 @@ import { Modal } from "@/shared/components/ui/modal";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { canAccess } from "@/shared/utils/canAccess";
 import { ConfirmAlert } from "@/shared/components/ui/confirmAlert";
-import { deleteRole, updateRole } from "@/modules/roles/services/role";
 import { useState } from "react";
 import { Role, RoleFormData } from "../types/role";
 import { UpdateRoleForm } from "./updateRoleForm";
+import { useRoleContext } from "../contexts/context";
+import { Spinner } from "@/shared/components/ui/spinner";
 
 type Props = {
   roles: Role[];
   setRoles: React.Dispatch<React.SetStateAction<Role[]>>;
 };
 
-export function RolesTable({ roles, setRoles }: Props) {
+export function RolesTable() {
+  const { roles, editRole, removeRole, loading } = useRoleContext();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -24,24 +26,12 @@ export function RolesTable({ roles, setRoles }: Props) {
     if (!selectedRole) return;
 
     try {
-      const permissions = data.permissions.map((opt) => opt.value);
-
-      const updatedRole = await updateRole(
-        selectedRole.roleId,
-        data.name,
-        permissions,
-      );
-
-      setRoles((prev) =>
-        prev.map((role) =>
-          role.roleId === updatedRole.roleId ? updatedRole : role,
-        ),
-      );
+      await editRole(selectedRole.roleId, data);
 
       setUpdateModalOpen(false);
       setSelectedRole(null);
     } catch (err) {
-      console.error("Erro ao atualizar função", err);
+      console.error("Erro ao atualizar usuário", err);
     }
   }
 
@@ -49,10 +39,9 @@ export function RolesTable({ roles, setRoles }: Props) {
     if (!selectedRole) return;
 
     try {
-      await deleteRole(selectedRole.roleId);
-      setRoles((prev) => prev.filter((r) => r.roleId !== selectedRole.roleId));
+      await removeRole(selectedRole?.roleId);
     } catch (err) {
-      console.error("Erro ao deletar função:", err);
+      console.error("Erro ao deletar usuário:", err);
     } finally {
       setConfirmModalOpen(false);
       setSelectedRole(null);
@@ -75,10 +64,14 @@ export function RolesTable({ roles, setRoles }: Props) {
           </thead>
 
           <tbody>
-            {roles.length === 0 && (
+            {(loading || roles.length === 0) && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  Nenhuma grupo de permissões encontrado
+                  {loading ? (
+                    <Spinner width="30px" height="30px" />
+                  ) : (
+                    "Nenhum usuário encontrado"
+                  )}
                 </td>
               </tr>
             )}
