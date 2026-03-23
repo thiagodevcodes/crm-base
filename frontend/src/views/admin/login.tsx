@@ -77,7 +77,7 @@ export default function Login() {
     }
   }, [loading, authenticated, router]);
 
-  if (authenticated || (loading && !isSubmitting)) return <SpinnerLoading />;
+//   if (authenticated || (loading && !isSubmitting)) return <SpinnerLoading />;
 
   return (
     <div className="grid lg:grid-cols-2 min-h-screen">
