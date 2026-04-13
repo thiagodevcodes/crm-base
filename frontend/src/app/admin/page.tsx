@@ -1,4 +1,4 @@
-import Login from "@/views/admin/login";
+import Login from "@/modules/auth/views/login";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

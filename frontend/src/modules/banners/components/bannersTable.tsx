@@ -41,10 +41,10 @@ export function BannerTable() {
             {(loading || banners.length === 0) && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  {banners ? (
+                  {loading ? (
                     <Spinner width="30px" height="30px" />
                   ) : (
-                    "Nenhum usuário encontrado"
+                    "Nenhum banner desta categoria encontrado"
                   )}
                 </td>
               </tr>
@@ -65,6 +65,7 @@ export function BannerTable() {
                     alt={image.name}
                     width={100}
                     height={100}
+                    unoptimized
                   />
                 </td>
 

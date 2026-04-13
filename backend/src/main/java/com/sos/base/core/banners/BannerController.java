@@ -27,9 +27,10 @@ public class BannerController {
     public ResponseEntity<BannerDto> create(@Valid @RequestParam("file") MultipartFile file,
             @RequestParam("name") String name,
             @RequestParam("size") Long size,
-            @RequestParam("type") String type) throws Exception {
+            @RequestParam("type") String type,
+            @RequestParam("bannerCategoryId") String categoryId) throws Exception {
         
-        CreateBannerRequest createBannerRequest = new CreateBannerRequest(name, type, type, size, file);
+        CreateBannerRequest createBannerRequest = new CreateBannerRequest(name, type, type, size, categoryId, file);
 
         return ResponseEntity.ok(bannerService.create(createBannerRequest));
     }
@@ -38,6 +39,12 @@ public class BannerController {
     @PreAuthorize("@auth.hasPermission('GET_BANNERS')")
     public ResponseEntity<List<BannerDto>> findAll() {
         return ResponseEntity.ok(bannerService.findAll());
+    }
+
+    @GetMapping("/category/{categoryId}")
+    @PreAuthorize("@auth.hasPermission('GET_BANNERS')")
+    public ResponseEntity<List<BannerDto>> findAllByCategory(@PathVariable String categoryId) {
+        return ResponseEntity.ok(bannerService.findAllByCategory(categoryId));
     }
 
     @GetMapping("/{id}")

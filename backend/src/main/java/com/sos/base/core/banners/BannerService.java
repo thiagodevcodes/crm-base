@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.sos.base.shared.exceptions.DataIntegrityException;
 import org.springframework.stereotype.Service;
 
+import com.sos.base.core.banner_categories.BannerCategoryRepository;
 import com.sos.base.core.banners.dtos.BannerDto;
 import com.sos.base.core.banners.dtos.CreateBannerRequest;
 import com.sos.base.core.uploads.UploadService;
@@ -29,10 +30,33 @@ public class BannerService {
     private BannerRepository bannerRepository;
 
     @Autowired
+    private BannerCategoryRepository bannerCategoryRepository;
+
+    @Autowired
     private UploadService uploadService;
 
     public List<BannerDto> findAll() {
         return bannerRepository.findAll()
+                .stream()
+                .map(banner -> {
+                    String signedUrl = uploadService.generateSignedUrl(banner.getKey());
+
+                    return new BannerDto(
+                            banner.getBannerId(),
+                            banner.getName(),
+                            banner.getKey(),
+                            banner.getType(),
+                            signedUrl,
+                            banner.getSize());
+                })
+                .toList();
+    }
+
+    public List<BannerDto> findAllByCategory(String categoryId) {
+        bannerCategoryRepository.findById(UUID.fromString(categoryId))
+                .orElseThrow(() -> new DataIntegrityException("Categoria de banner não encontrada"));
+
+        return bannerRepository.findByBannerCategory_BannerCategoryId(UUID.fromString(categoryId))
                 .stream()
                 .map(banner -> {
                     String signedUrl = uploadService.generateSignedUrl(banner.getKey());
@@ -73,6 +97,8 @@ public class BannerService {
             bannerEntity.setSize(uploadDto.getSize());
             bannerEntity.setType(uploadDto.getType());
             bannerEntity.setKey(uploadDto.getKey());
+            bannerEntity.setBannerCategory(bannerCategoryRepository.findById(UUID.fromString(dto.getCategoryId()))
+                    .orElseThrow(() -> new DataIntegrityException("Categoria de banner não encontrada")));
 
             bannerEntity = bannerRepository.save(bannerEntity);
 

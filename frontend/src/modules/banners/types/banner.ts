@@ -1,5 +1,6 @@
 export type ImageFormData = {
   file: File;
+  bannerCategoryId: string;
 };
 
 export type BannerFile = {
@@ -14,5 +15,6 @@ export type BannerFormData = {
   type: string;
   size: number;
   file: FileList;
+  bannerCategoryId: string;
 };
 

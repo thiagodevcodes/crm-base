@@ -4,12 +4,12 @@ import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { RolesTable } from "../../modules/roles/components/rolesTable";
 import { canAccess } from "@/shared/utils/canAccess";
-import { RegisterRoleForm } from "../../modules/roles/components/registerRoleForm";
 import { Modal } from "@/shared/components/ui/modal";
 import { RoleFormData } from "@/modules/roles/types/role";
 import { useRoleContext } from "@/modules/roles/contexts/context";
+import { RegisterRoleForm } from "../components/registerRoleForm";
+import { RolesTable } from "../components/rolesTable";
 
 export default function Roles() {
   const { authenticated, loading, permissions } = useAuth();

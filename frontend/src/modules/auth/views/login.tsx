@@ -10,7 +10,7 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SpinnerLoading } from "../../shared/components/ui/spinnerLoading";
+import { SpinnerLoading } from "../../../shared/components/ui/spinnerLoading";
 
 const loginSchema = z.object({
   email: z.string(),
@@ -72,12 +72,14 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (!loading && authenticated) {
+    if (!loading && authenticated && isSubmitting) {
       router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router]);
 
-//   if (authenticated || (loading && !isSubmitting)) return <SpinnerLoading />;
+  if (authenticated || (loading && !isSubmitting)) return (
+      <SpinnerLoading />
+  );
 
   return (
     <div className="grid lg:grid-cols-2 min-h-screen">

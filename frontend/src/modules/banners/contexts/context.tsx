@@ -7,6 +7,7 @@ type BannerContextType = {
   banners: BannerFile[];
   loading: boolean;
   fetchBanners: () => Promise<void>;
+  fetchBannersByCategory: (id: string) => Promise<void>;
   removeBanner: (id: string) => Promise<void>;
   addBanner: (banner: BannerFormData) => Promise<void>;
 };

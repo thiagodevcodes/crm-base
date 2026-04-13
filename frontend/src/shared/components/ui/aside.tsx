@@ -5,9 +5,15 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { Dropdown, DropdownItem } from "./dropdown";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBriefcase, faChartBar, faImages, faUserGroup, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBriefcase,
+  faChartBar,
+  faImages,
+  faUserGroup,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { canAccess } from "@/shared/utils/canAccess";
+import AccordionMenuItem from "@/shared/components/ui/accordion";
 
 export function Aside() {
   const pathname = usePathname();
@@ -40,33 +46,26 @@ export function Aside() {
           )}
 
           {canAccess(permissions, ["GET_USERS"]) && (
-            <Link
-              href="/admin/users"
-              className={`nav-link flex items-center ${isActive("/admin/users")}`}
-            >
-              <FontAwesomeIcon icon={faUserGroup} />
-              Usuários
-            </Link>
-          )}
-          {canAccess(permissions, ["GET_ROLES"]) && (
-            <Link
-              href="/admin/roles"
-              className={`nav-link flex items-center ${isActive("/admin/roles")}`}
-            >
-              <FontAwesomeIcon icon={faUsers} />
-              Perfis de Usuários
-            </Link>
+            <AccordionMenuItem
+              title="Usuários"
+              icon={<FontAwesomeIcon icon={faUserGroup} />}
+              items={[
+                { label: "Lista", href: "/admin/users" },
+                { label: "Perfis de Usuários", href: "/admin/roles" },
+              ]}
+            />
           )}
 
-          {canAccess(permissions, ["GET_BANNERS"]) && (
+          {canAccess(permissions, ["GET_BANNER_CATEGORIES"]) && (
             <Link
-              href="/admin/banners"
-              className={`nav-link flex items-center ${isActive("/admin/banners")}`}
+              href="/admin/banner_categories"
+              className={`nav-link flex items-center ${isActive("/admin/banner_categories")}`}
             >
               <FontAwesomeIcon icon={faImages} />
               Banners
             </Link>
           )}
+
           {canAccess(permissions, ["GET_EXPERIENCES"]) && (
             <Link
               href="/admin/experiences"

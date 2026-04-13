@@ -1,4 +1,4 @@
-import Users from "@/views/admin/users";
+import Users from "@/modules/users/views";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

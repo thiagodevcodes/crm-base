@@ -1,18 +1,16 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import {
-  BannerFile,
-  BannerFormData,
-} from "@/modules/banners/types/banner";
+import { BannerFile, BannerFormData } from "@/modules/banners/types/banner";
 
 type Props = {
   title: string;
+  categoryId: string;
   onSubmit: (data: BannerFormData) => Promise<void>; // recebe dados do formulário
   selectedImage?: BannerFile | null;
 };
 
-export function RegisterImageForm({ onSubmit, title }: Props) {
+export function RegisterImageForm({ onSubmit, title, categoryId}: Props) {
   const {
     register,
     handleSubmit,
@@ -26,9 +24,9 @@ export function RegisterImageForm({ onSubmit, title }: Props) {
 
   async function handleFormSubmit(data: BannerFormData) {
     try {
-      console.log(data)
-
-      await onSubmit(data); 
+      console.log(data);
+        
+      await onSubmit(data);
       reset();
     } catch (err) {
       console.error("Erro ao cadastrar imagem:", err);
@@ -54,6 +52,13 @@ export function RegisterImageForm({ onSubmit, title }: Props) {
             <p className="text-red-400 text-sm">{errors.file.message}</p>
           )}
         </div>
+
+        {/* Hidden com categoria */}
+        <input
+          type="hidden"
+          value={categoryId}
+          {...register("bannerCategoryId")}
+        />
 
         <button
           disabled={isSubmitting}

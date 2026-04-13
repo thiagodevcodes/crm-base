@@ -18,5 +18,6 @@ public class CreateBannerRequest {
     @NotBlank(message = "Nome da role é obrigatório")
     String key;
     Long size;
+    String categoryId;
     MultipartFile file;
 }
