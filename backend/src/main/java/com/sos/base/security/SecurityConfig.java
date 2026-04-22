@@ -54,25 +54,40 @@ public class SecurityConfig {
       this.privateKey = KeyLoader.loadPrivateKey(privateKeyRes);
    }
 
+    private static final String[] PUBLIC_GET = {
+        "/images/**",
+        "/upload/**",
+        "/experiences/**",
+        "/banners/**",
+        "/banner-categories/**",
+        "/roles/**",
+        "/permissions/**"
+    };
+
+    private static final String[] PUBLIC_POST = {
+        "/auth/sign_in",
+        "/auth/sign_out"
+    };
+
+    private static final String[] SWAGGER = {
+        "/swagger-ui/**",
+        "/v3/api-docs/**"
+    };
+
+
    // 🔐 FILTER CHAIN
    @Bean
    public SecurityFilterChain securityFilterChain(HttpSecurity http, ApplicationContext context) throws Exception {
       ClearInvalidJwtFilter clearInvalidJwtFilter = context.getBean(ClearInvalidJwtFilter.class);
 
       http
-            .authorizeHttpRequests(authorize -> authorize
-                  .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
-                  .requestMatchers(HttpMethod.POST, "/images/**").permitAll()
-                  .requestMatchers(HttpMethod.POST, "/upload/**").permitAll()
-                  .requestMatchers(HttpMethod.GET, "/upload/**").permitAll()
-                  .requestMatchers(HttpMethod.POST, "/auth/sign_in").permitAll()
-                  .requestMatchers(HttpMethod.POST, "/auth/sign_out").permitAll()
-                  .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                  .requestMatchers(
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**")
-                  .permitAll()
-                  .anyRequest().authenticated())
+        .authorizeHttpRequests(authorize -> authorize
+            .requestMatchers(HttpMethod.GET, PUBLIC_GET).permitAll()
+            .requestMatchers(HttpMethod.POST, PUBLIC_POST).permitAll()
+            .requestMatchers(SWAGGER).permitAll()
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .anyRequest().authenticated()
+)
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource))
             .addFilterBefore(clearInvalidJwtFilter,

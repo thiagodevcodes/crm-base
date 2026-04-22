@@ -4,10 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { canAccess } from "@/shared/utils/canAccess";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 type SubItem = {
   label: string;
   href: string;
+  permission: string;
 };
 
 type AccordionMenuItemProps = {
@@ -24,6 +27,7 @@ export default function AccordionMenuItem({
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isActive = (path: string) => (pathname === path ? "active" : "");
+  const { permissions } = useAuth();
 
   return (
     <div>
@@ -47,15 +51,18 @@ export default function AccordionMenuItem({
           open ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        {items.map((item, index) => (
-          <Link
-            key={index}
-            href={item.href}
-            className={`block py-2 text-gray-300 transition nav-link ${isActive(item.href)}`}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {items.map(
+          (item, index) =>
+            canAccess(permissions, [item.permission]) && (
+              <Link
+                key={index}
+                href={item.href}
+                className={`block py-2 text-gray-300 transition nav-link ${isActive(item.href)}`}
+              >
+                {item.label}
+              </Link>
+            ),
+        )}
       </div>
     </div>
   );

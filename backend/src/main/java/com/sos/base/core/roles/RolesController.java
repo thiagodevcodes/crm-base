@@ -23,7 +23,6 @@ public class RolesController {
     private RoleService roleService;
 
     @GetMapping
-    @PreAuthorize("@auth.hasPermission('GET_ROLES')")
     public ResponseEntity<List<RoleDto>> findAll() {
         return ResponseEntity.ok(roleService.findAll());
     }

@@ -36,7 +36,6 @@ public class BannerController {
     }
 
     @GetMapping
-    @PreAuthorize("@auth.hasPermission('GET_BANNERS')")
     public ResponseEntity<List<BannerDto>> findAll() {
         return ResponseEntity.ok(bannerService.findAll());
     }

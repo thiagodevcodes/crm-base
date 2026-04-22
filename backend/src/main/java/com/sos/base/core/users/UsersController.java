@@ -29,7 +29,6 @@ public class UsersController {
    }
 
    @GetMapping
-   @PreAuthorize("@auth.hasPermission('GET_USERS')")
    public ResponseEntity<List<UserEntity>> findAll() {
       return ResponseEntity.ok(userService.findAll());
    }

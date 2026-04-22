@@ -22,7 +22,7 @@ public class ExperienceController {
     private ExperienceService experienceService;
 
     @GetMapping
-    @PreAuthorize("@auth.hasPermission('GET_EXPERIENCES')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<List<ExperienceEntity>> findAll() {
         return ResponseEntity.ok(experienceService.findAll());
     }

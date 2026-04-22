@@ -1,4 +1,5 @@
-import Roles from "@/views/admin/roles";
+
+import Roles from "@/modules/roles/views";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

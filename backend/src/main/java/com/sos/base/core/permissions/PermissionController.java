@@ -22,7 +22,6 @@ public class PermissionController {
    private PermissionService permissionService;
 
    @GetMapping
-   @PreAuthorize("@auth.hasPermission('GET_PERMISSIONS')")
    public ResponseEntity<List<PermissionEntity>> findAll() {
       return ResponseEntity.ok(permissionService.findAll());
    }

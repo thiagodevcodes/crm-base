@@ -22,7 +22,6 @@ public class BannerCategoryController {
     private BannerCategoryService bannerCategoryService;
 
     @GetMapping
-    @PreAuthorize("@auth.hasPermission('GET_BANNER_CATEGORIES')")
     public ResponseEntity<List<BannerCategoryEntity>> findAll() {
         return ResponseEntity.ok(bannerCategoryService.findAll());
     }

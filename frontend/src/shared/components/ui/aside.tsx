@@ -50,8 +50,8 @@ export function Aside() {
               title="Usuários"
               icon={<FontAwesomeIcon icon={faUserGroup} />}
               items={[
-                { label: "Lista", href: "/admin/users" },
-                { label: "Perfis de Usuários", href: "/admin/roles" },
+                { label: "Lista", href: "/admin/users", permission: "GET_USERS" },
+                { label: "Perfis de Usuários", href: "/admin/roles", permission: "GET_ROLES" },
               ]}
             />
           )}
