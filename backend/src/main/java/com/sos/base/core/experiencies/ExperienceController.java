@@ -27,6 +27,13 @@ public class ExperienceController {
         return ResponseEntity.ok(experienceService.findAll());
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<ExperienceEntity> findById(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+        return ResponseEntity.ok(experienceService.findById(uuid));
+    }
+
     @PostMapping
     @PreAuthorize("@auth.hasPermission('ADD_EXPERIENCE')")
     public ResponseEntity<ExperienceEntity> create(@Valid @RequestBody CreateExperienceRequest request) {

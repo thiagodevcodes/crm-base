@@ -1,13 +1,14 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useExperiences } from "../hooks/useExperiences";
 import React from "react";
-import { Experience } from "../types/experiences";
+import { Experience } from "../types";
 
 type ExperienceContextType = {
   experiences: Experience[];
   loading: boolean;
   fetchExperiences: () => Promise<void>;
   addExperience: (experience: Experience) => Promise<void>;
+  fetchExperience: (id: string) => Promise<Experience>;
   editExperience: (id: string, experience: Experience) => Promise<void>;
   removeExperience: (id: string) => Promise<void>;
 };

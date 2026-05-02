@@ -1,10 +1,24 @@
-import { Experience } from "@/modules/experiences/types/experiences";
+import { Experience } from "@/modules/experiences/types";
 import axios from "axios";
 
 export async function getExperiences(): Promise<Experience[]> {
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/experiences`, {
-    withCredentials: true,
-  });
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/experiences`,
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+}
+
+export async function getExperience(id: string): Promise<Experience> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/experiences/${id}`,
+    {
+      withCredentials: true,
+    },
+  );
 
   return response.data;
 }
@@ -13,7 +27,7 @@ export async function createExperience(
   title: string,
   description: string,
   period: string,
-  technologies: string
+  technologies: string,
 ): Promise<Experience> {
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/experiences`,
@@ -25,9 +39,12 @@ export async function createExperience(
 }
 
 export async function deleteExperience(experienceId: string): Promise<void> {
-  await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/experiences/${experienceId}`, {
-    withCredentials: true,
-  });
+  await axios.delete(
+    `${process.env.NEXT_PUBLIC_API_URL}/experiences/${experienceId}`,
+    {
+      withCredentials: true,
+    },
+  );
 }
 
 export async function updateExperience(
@@ -35,7 +52,7 @@ export async function updateExperience(
   title: string,
   description: string,
   period: string,
-  technologies: string
+  technologies: string,
 ): Promise<Experience> {
   const response = await axios.put(
     `${process.env.NEXT_PUBLIC_API_URL}/experiences/${id}`,

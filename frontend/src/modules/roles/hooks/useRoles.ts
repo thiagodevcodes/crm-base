@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
-import { getRoles, createRole, updateRole, deleteRole } from "../services/role";
+import { getRoles, createRole, updateRole, deleteRole, getRole } from "../services/role";
 import { delay } from "@/shared/utils/functions";
-import { Role, RoleFormData } from "../types/role";
+import { Role, RoleFormData } from "../types";
 
 export function useRoles() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // READ
+  const fetchRole = async (id: string) => {
+    const data = await getRole(id);
+    return data;
+  };
 
   // READ
   const fetchRoles = async () => {
@@ -48,6 +54,7 @@ export function useRoles() {
     roles,
     loading,
     fetchRoles,
+    fetchRole,
     addRole,
     editRole,
     removeRole,

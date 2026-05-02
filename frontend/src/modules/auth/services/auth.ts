@@ -1,4 +1,4 @@
-import { User } from "@/modules/users/types/user";
+import { User } from "@/modules/users/types";
 import { delay } from "@/shared/utils/functions";
 import axios from "axios";
 

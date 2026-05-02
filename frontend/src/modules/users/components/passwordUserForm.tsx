@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import { User, UserFormData } from "../types/user";
+import { User, UserFormData } from "../types";
 
 type Props = {
   title: string;

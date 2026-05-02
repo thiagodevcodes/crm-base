@@ -6,7 +6,7 @@ import {
   deleteUser,
   updatePassword
 } from "../services/user";
-import { User, UserFormData } from "../types/user";
+import { User, UserFormData } from "../types";
 import { delay } from "@/shared/utils/functions";
 
 export function useUsers() {

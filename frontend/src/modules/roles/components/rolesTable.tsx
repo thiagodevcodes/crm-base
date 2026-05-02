@@ -4,11 +4,13 @@ import { Modal } from "@/shared/components/ui/modal";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { canAccess } from "@/shared/utils/canAccess";
 import { ConfirmAlert } from "@/shared/components/ui/confirmAlert";
-import { useState } from "react";
-import { Role, RoleFormData } from "../types/role";
+import { useEffect, useState } from "react";
+import { Role, RoleFormData } from "../types";
 import { UpdateRoleForm } from "./updateRoleForm";
 import { useRoleContext } from "../contexts/context";
 import { Spinner } from "@/shared/components/ui/spinner";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type Props = {
   roles: Role[];
@@ -16,24 +18,11 @@ type Props = {
 };
 
 export function RolesTable() {
-  const { roles, editRole, removeRole, loading } = useRoleContext();
+  const { roles, removeRole, loading, fetchRoles } = useRoleContext();
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const { permissions } = useAuth();
-
-  async function handleUpdate(data: RoleFormData) {
-    if (!selectedRole) return;
-
-    try {
-      await editRole(selectedRole.roleId, data);
-
-      setUpdateModalOpen(false);
-      setSelectedRole(null);
-    } catch (err) {
-      console.error("Erro ao atualizar usuário", err);
-    }
-  }
+  const pathname = usePathname();
 
   async function handleDelete() {
     if (!selectedRole) return;
@@ -47,6 +36,10 @@ export function RolesTable() {
       setSelectedRole(null);
     }
   }
+
+  useEffect(() => {
+    fetchRoles();
+  }, [pathname]);
 
   return (
     <>
@@ -64,88 +57,71 @@ export function RolesTable() {
           </thead>
 
           <tbody>
-            {(loading || roles.length === 0) && (
+            {loading ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  {loading ? (
-                    <Spinner width="30px" height="30px" />
-                  ) : (
-                    "Nenhum usuário encontrado"
-                  )}
+                  <Spinner width="30px" height="30px" />
                 </td>
               </tr>
-            )}
-
-            {roles.map((role) => (
-              <tr
-                key={role.roleId}
-                className="border-t border-white/10 hover:bg-white/5 transition"
-              >
-                <td className="px-4 py-3 text-white/80">{role.name}</td>
-
-                <td className="px-4 py-3 text-white/80 ">
-                  <div className="flex justify-start gap-2">
-                    {role.permissions.map((p) => (
-                      <span
-                        key={p.permissionId}
-                        className="rounded-md bg-blue-500/20 px-2 py-0.5 text-xs text-blue-400"
-                      >
-                        {p.name}
-                      </span>
-                    ))}
-                  </div>
+            ) : roles.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-4 py-6 text-center text-white/50">
+                  Nenhuma função encontrada
                 </td>
+              </tr>
+            ) : (
+              roles.map((role) => (
+                <tr
+                  key={role.roleId}
+                  className="border-t border-white/10 hover:bg-white/5 transition"
+                >
+                  <td className="px-4 py-3 text-white/80">{role.name}</td>
 
-                {(canAccess(permissions, ["UPDATE_ROLE"]) ||
-                  canAccess(permissions, ["DELETE_ROLE"])) && (
-                  <td className="px-4 py-3 text-right flex justify-center">
-                    <div className="flex justify-end gap-2">
-                      {canAccess(permissions, ["UPDATE_ROLE"]) && (
-                        <button
-                          onClick={() => {
-                            setSelectedRole(role);
-                            setUpdateModalOpen(true);
-                          }}
-                          className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer"
+                  <td className="px-4 py-3 text-white/80 ">
+                    <div className="flex justify-start gap-2">
+                      {role.permissions.map((p) => (
+                        <span
+                          key={p.permissionId}
+                          className="rounded-md bg-blue-500/20 px-2 py-0.5 text-xs text-blue-400"
                         >
-                          Editar
-                        </button>
-                      )}
-
-                      {canAccess(permissions, ["DELETE_ROLE"]) && (
-                        <button
-                          onClick={() => {
-                            setSelectedRole(role);
-                            setConfirmModalOpen(true);
-                          }}
-                          className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
-                        >
-                          Excluir
-                        </button>
-                      )}
+                          {p.name}
+                        </span>
+                      ))}
                     </div>
                   </td>
-                )}
-              </tr>
-            ))}
+
+                  {(canAccess(permissions, ["UPDATE_ROLE"]) ||
+                    canAccess(permissions, ["DELETE_ROLE"])) && (
+                    <td className="px-4 py-3 text-right flex justify-center">
+                      <div className="flex justify-end gap-2">
+                        {canAccess(permissions, ["UPDATE_ROLE"]) && (
+                          <Link href={`/admin/roles/edit/${role.roleId}`}>
+                            <button className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer">
+                              Editar
+                            </button>
+                          </Link>
+                        )}
+
+                        {canAccess(permissions, ["DELETE_ROLE"]) && (
+                          <button
+                            onClick={() => {
+                              setSelectedRole(role);
+                              setConfirmModalOpen(true);
+                            }}
+                            className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
+                          >
+                            Excluir
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
-
-      {canAccess(permissions, ["UPDATE_ROLE"]) && (
-        <Modal
-          isOpen={updateModalOpen}
-          onClose={() => setUpdateModalOpen(false)}
-        >
-          <UpdateRoleForm
-            title={`Editar ${selectedRole?.name}`}
-            isOpen={updateModalOpen}
-            onClose={() => setUpdateModalOpen(false)}
-            onSubmit={handleUpdate}
-            selectedRole={selectedRole}
-          />
-        </Modal>
-      )}
 
       {canAccess(permissions, ["DELETE_ROLE"]) && (
         <ConfirmAlert

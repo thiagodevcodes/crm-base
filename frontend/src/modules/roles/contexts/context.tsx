@@ -1,12 +1,13 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useRoles } from "../hooks/useRoles";
 import React from "react";
-import { Role, RoleFormData } from "../types/role";
+import { Role, RoleFormData } from "../types";
 
 type RoleContextType = {
   roles: Role[];
   loading: boolean;
   fetchRoles: () => Promise<void>;
+  fetchRole: (id: string) => Promise<Role>;
   addRole: (role: RoleFormData) => Promise<void>;
   editRole: (id: string, role: RoleFormData) => Promise<void>;
   removeRole: (id: string) => Promise<void>;

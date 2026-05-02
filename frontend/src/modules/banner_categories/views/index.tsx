@@ -5,23 +5,19 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
-import { Modal } from "@/shared/components/ui/modal";
-import { ExperiencesTable } from "@/modules/experiences/components/experiencesTable";
 import { useBannerCategoryContext } from "@/modules/banner_categories/contexts/context";
-import { BannerCategoryFormData } from "@/modules/banner_categories/types/bannerCategory";
-import { RegisterBannerCategoryForm } from "@/modules/banner_categories/components/registerBannerCategoryForm";
+import { BannerCategoryFormData } from "@/modules/banner_categories/types";
 import { BannerCategoryTable } from "@/modules/banner_categories/components/bannerCategoryTable";
+import Link from "next/link";
 
 export default function BannerCategories() {
   const { addBannerCategory } = useBannerCategoryContext();
   const { authenticated, loading, permissions } = useAuth();
-  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(data: BannerCategoryFormData) {
     try {
       addBannerCategory(data);
-      setOpen(false);
     } catch (err) {
       console.error("Erro ao criar categoria de banner", err);
     }
@@ -51,21 +47,9 @@ export default function BannerCategories() {
         </div>
 
         {canAccess(permissions, ["ADD_BANNER_CATEGORY"]) && (
-          <button
-            onClick={() => setOpen(true)}
-            className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
-          >
+          <Link  className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer" href={"/admin/banner_categories/new"}>
             Adicionar Categoria de Banner
-          </button>
-        )}
-
-        {canAccess(permissions, ["ADD_EXPERIENCE"]) && (
-          <Modal isOpen={open} onClose={() => setOpen(false)}>
-            <RegisterBannerCategoryForm
-              title="Criar Experiência"
-              onSubmit={handleSubmit}
-            />
-          </Modal>
+          </Link>
         )}
       </div>
 

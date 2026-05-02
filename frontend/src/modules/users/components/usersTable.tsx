@@ -1,6 +1,6 @@
 "use client";
 
-import { User, UserFormData } from "../types/user";
+import { User, UserFormData } from "../types";
 import { useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { PasswordForm } from "./passwordUserForm";

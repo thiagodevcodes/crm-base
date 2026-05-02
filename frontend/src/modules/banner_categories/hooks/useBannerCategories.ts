@@ -4,13 +4,22 @@ import {
   createBannerCategory,
   updateBannerCategory,
   deleteBannerCategory,
+  getBannerCategory,
 } from "../services/banner_categories";
-import { BannerCategory } from "../types/bannerCategory";
+import { BannerCategory } from "../types";
 import { delay } from "@/shared/utils/functions";
 
 export function useBannerCategories() {
-  const [banner_categories, setBannerCategories] = useState<BannerCategory[]>([]);
+  const [banner_categories, setBannerCategories] = useState<BannerCategory[]>(
+    [],
+  );
   const [loading, setLoading] = useState(false);
+
+  // READ
+  const fetchBannerCategory = async (id: string) => {
+    const data = await getBannerCategory(id);
+    return data;
+  };
 
   // READ
   const fetchBannerCategories = async () => {
@@ -26,18 +35,21 @@ export function useBannerCategories() {
     const newBannerCategory = await createBannerCategory(
       bannerCategory.title,
       bannerCategory.width,
-      bannerCategory.height
+      bannerCategory.height,
     );
     setBannerCategories((prev) => [...prev, newBannerCategory]);
   };
 
   // UPDATE
-  const editBannerCategory = async (id: string, bannerCategory: BannerCategory) => {
+  const editBannerCategory = async (
+    id: string,
+    bannerCategory: BannerCategory,
+  ) => {
     const updated = await updateBannerCategory(
       id,
       bannerCategory.title,
       bannerCategory.width,
-      bannerCategory.height
+      bannerCategory.height,
     );
 
     setBannerCategories((prev) =>
@@ -49,7 +61,9 @@ export function useBannerCategories() {
   const removeBannerCategory = async (id: string) => {
     await deleteBannerCategory(id);
 
-    setBannerCategories((prev) => prev.filter((cat) => cat.bannerCategoryId !== id));
+    setBannerCategories((prev) =>
+      prev.filter((cat) => cat.bannerCategoryId !== id),
+    );
   };
 
   useEffect(() => {
@@ -60,6 +74,7 @@ export function useBannerCategories() {
     banner_categories,
     loading,
     fetchBannerCategories,
+    fetchBannerCategory,
     addBannerCategory,
     editBannerCategory,
     removeBannerCategory,

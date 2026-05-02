@@ -32,6 +32,10 @@ public class ExperienceService {
         return experienceRepository.findAll();
     }
 
+    public ExperienceEntity findById(UUID id) {
+        return experienceRepository.findById(id).orElseThrow(() -> new NotFoundException("Experiência não encontrada"));
+    }
+
     @Transactional
     public ExperienceEntity create(CreateExperienceRequest dto) {
         try {

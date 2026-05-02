@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../types/user";
+import { User } from "../types";
 import { delay } from "@/shared/utils/functions";
 
 export async function createUser(

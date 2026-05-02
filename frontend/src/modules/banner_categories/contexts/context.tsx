@@ -1,12 +1,13 @@
 import { createContext, ReactNode, useContext } from "react";
 import { useBannerCategories } from "../hooks/useBannerCategories";
 import React from "react";
-import { BannerCategory } from "../types/bannerCategory";
+import { BannerCategory } from "../types";
 
 type BannerCategoryContextType = {
   banner_categories: BannerCategory[];
   loading: boolean;
   fetchBannerCategories: () => Promise<void>;
+  fetchBannerCategory: (id: string) => Promise<BannerCategory | null>;
   addBannerCategory: (bannerCategory: BannerCategory) => Promise<void>;
   editBannerCategory: (id: string, bannerCategory: BannerCategory) => Promise<void>;
   removeBannerCategory: (id: string) => Promise<void>;

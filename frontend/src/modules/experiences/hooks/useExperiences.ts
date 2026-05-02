@@ -4,13 +4,20 @@ import {
   createExperience,
   updateExperience,
   deleteExperience,
+  getExperience,
 } from "../services/experiences";
-import { Experience } from "../types/experiences";
+import { Experience } from "../types";
 import { delay } from "@/shared/utils/functions";
 
 export function useExperiences() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // READ
+  const fetchExperience = async (id: string) => {
+    const data = await getExperience(id);
+    return data;
+  };
 
   // READ
   const fetchExperiences = async () => {
@@ -62,6 +69,7 @@ export function useExperiences() {
     experiences,
     loading,
     fetchExperiences,
+    fetchExperience,
     addExperience,
     editExperience,
     removeExperience,

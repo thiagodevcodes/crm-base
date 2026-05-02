@@ -4,8 +4,8 @@ import { Controller, useForm } from "react-hook-form";
 import Select, { StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
 import { getRoles } from "@/modules/roles/services/role";
-import { UserFormData } from "../types/user";
-import { Role, RoleOption } from "@/modules/roles/types/role";
+import { UserFormData } from "../types";
+import { Role, RoleOption } from "@/modules/roles/types";
 
 type Props = {
   title: string;

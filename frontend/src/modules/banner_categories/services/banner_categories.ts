@@ -1,10 +1,21 @@
 import axios from "axios";
-import { BannerCategory } from "../types/bannerCategory";
+import { BannerCategory } from "../types";
 
 export async function getBannerCategories(): Promise<BannerCategory[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/banner_categories`, {
     withCredentials: true,
   });
+
+  return response.data;
+}
+
+export async function getBannerCategory(id: string): Promise<BannerCategory> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/banner_categories/${id}`,
+    {
+      withCredentials: true,
+    },
+  );
 
   return response.data;
 }

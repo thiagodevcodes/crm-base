@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import React from "react";
-import { User, UserFormData } from "../types/user";
+import { User, UserFormData } from "../types";
 import { useUsers } from "@/modules/users/hooks/useUsers";
 
 type UserContextType = {

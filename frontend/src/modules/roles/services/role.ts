@@ -1,11 +1,21 @@
 import axios from "axios";
-import { Role } from "../types/role";
-import { Permission } from "@/modules/permissions/types/permission";
+import { Role } from "../types";
 
 export async function getRoles(): Promise<Role[]> {
   const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/roles`, {
     withCredentials: true,
   });
+
+  return response.data;
+}
+
+export async function getRole(id: string): Promise<Role> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/roles/${id}`,
+    {
+      withCredentials: true,
+    },
+  );
 
   return response.data;
 }

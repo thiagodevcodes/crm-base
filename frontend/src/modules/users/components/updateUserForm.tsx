@@ -6,9 +6,9 @@ import Select, {
 } from "react-select";
 import { useEffect, useState } from "react";
 
-import { User, UserFormData } from "../types/user";
+import { User, UserFormData } from "../types";
 import { getRoles } from "@/modules/roles/services/role";
-import { Role, RoleOption } from "@/modules/roles/types/role";
+import { Role, RoleOption } from "@/modules/roles/types";
 
 type Props = {
   title: string;

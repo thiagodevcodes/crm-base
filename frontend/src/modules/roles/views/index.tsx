@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
 import { Modal } from "@/shared/components/ui/modal";
-import { RoleFormData } from "@/modules/roles/types/role";
+import { RoleFormData } from "@/modules/roles/types";
 import { useRoleContext } from "@/modules/roles/contexts/context";
 import { RegisterRoleForm } from "../components/registerRoleForm";
 import { RolesTable } from "../components/rolesTable";
+import Link from "next/link";
 
 export default function Roles() {
   const { authenticated, loading, permissions } = useAuth();
@@ -46,19 +47,13 @@ export default function Roles() {
           <p>Bem-vindo ao painel de Perfis de Usuários!</p>
         </div>
 
-        {canAccess(permissions, ["ADD_ROLE"]) && (
-          <button
-            onClick={() => setOpen(true)}
+        {canAccess(permissions, ["ADD_EXPERIENCE"]) && (
+          <Link
             className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
+            href={"/admin/roles/new"}
           >
             Adicionar Perfil
-          </button>
-        )}
-
-        {canAccess(permissions, ["ADD_ROLE"]) && (
-          <Modal isOpen={open} onClose={() => setOpen(false)}>
-            <RegisterRoleForm title="Criar Perfil" onSubmit={handleSubmit} />
-          </Modal>
+          </Link>
         )}
       </div>
 

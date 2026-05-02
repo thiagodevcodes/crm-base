@@ -1,37 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { Modal } from "@/shared/components/ui/modal";
-import { UpdateBannerCategoryForm } from "./updateBannerCategoryForm";
 import { useBannerCategoryContext } from "../contexts/context";
 import { Spinner } from "@/shared/components/ui/spinner";
-import { BannerCategory } from "../types/bannerCategory";
-import Link  from "next/link";
+import { BannerCategory } from "../types";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function BannerCategoryTable() {
   const {
     banner_categories,
     editBannerCategory,
     removeBannerCategory,
+    fetchBannerCategories,
     loading,
   } = useBannerCategoryContext();
   const [selectedBannerCategory, setSelectedBannerCategory] =
     useState<BannerCategory | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const { permissions } = useAuth();
+  const pathname = usePathname();
 
   async function handleUpdate(data: BannerCategory) {
     if (!selectedBannerCategory) return;
 
     try {
       editBannerCategory(selectedBannerCategory.bannerCategoryId, data);
-
-      setUpdateModalOpen(false);
-      setSelectedBannerCategory(null);
     } catch (err) {
       console.error("Erro ao atualizar usuário", err);
     }
@@ -42,6 +39,10 @@ export function BannerCategoryTable() {
     removeBannerCategory(selectedBannerCategory.bannerCategoryId);
     setConfirmModalOpen(false);
   }
+
+  useEffect(() => {
+    fetchBannerCategories();
+  }, [pathname]);
 
   return (
     <>
@@ -60,89 +61,68 @@ export function BannerCategoryTable() {
           </thead>
 
           <tbody>
-            {(loading || banner_categories.length === 0) && (
+            {loading ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
-                  {loading ? (
-                    <Spinner width="30px" height="30px" />
-                  ) : (
-                    "Nenhum categoria de banner encontrada"
-                  )}
+                  <Spinner width="30px" height="30px" />
                 </td>
               </tr>
-            )}
-
-            {banner_categories.map((banner_category) => (
-              <tr
-                key={banner_category.bannerCategoryId}
-                className="border-t border-white/10 hover:bg-white/5 transition"
-              >
-                <td className="px-4 py-3 font-medium">
-                  {banner_category.title}
+            ) : banner_categories.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-4 py-6 text-center text-white/50">
+                  Nenhuma categoria de banner encontrada
                 </td>
-                <td className="px-4 py-3 text-white/80">
-                  {banner_category.width}
-                </td>
-                <td className="px-4 py-3 text-white/80">
-                  {banner_category.height}
-                </td>
-
-                {(canAccess(permissions, ["UPDATE_BANNER_CATEGORY"]) ||
-                  canAccess(permissions, ["DELETE_BANNER_CATEGORY"])) && (
-                  <td className="px-4 py-3 text-right flex justify-center">
-                    <div className="flex justify-end gap-2">
-                      {canAccess(permissions, ["UPDATE_BANNER_CATEGORY"]) && (
-                        <button
-                          onClick={() => {
-                            setSelectedBannerCategory(banner_category);
-                            setUpdateModalOpen(true);
-                          }}
-                          className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer"
-                        >
-                          Editar
-                        </button>
-                      )}
-
-                      {canAccess(permissions, ["DELETE_BANNER_CATEGORY"]) && (
-                        <button
-                          onClick={() => {
-                            setSelectedBannerCategory(banner_category);
-                            setConfirmModalOpen(true);
-                          }}
-                          className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
-                        >
-                          Excluir
-                        </button>
-                      )}
-                      
-                      {canAccess(permissions, ["GET_BANNERS"]) && (
-                        <Link href={`/admin/banner_categories/${banner_category.bannerCategoryId}`} className="rounded-md bg-green-500/20 px-3 py-1 text-xs text-green-400 hover:bg-green-500/30 transition cursor-pointer">
-                          Ver Banners
-                        </Link>
-                      )}
-                    </div>
+              </tr>
+            ) : (
+              banner_categories.map((banner_category) => (
+                <tr
+                  key={banner_category.bannerCategoryId}
+                  className="border-t border-white/10 hover:bg-white/5 transition"
+                >
+                  <td className="px-4 py-3 font-medium">
+                    {banner_category.title}
                   </td>
-                )}
-              </tr>
-            ))}
+                  <td className="px-4 py-3 text-white/80">
+                    {banner_category.width}
+                  </td>
+                  <td className="px-4 py-3 text-white/80">
+                    {banner_category.height}
+                  </td>
+
+                  {(canAccess(permissions, ["UPDATE_BANNER_CATEGORY"]) ||
+                    canAccess(permissions, ["DELETE_BANNER_CATEGORY"])) && (
+                    <td className="px-4 py-3 text-right flex justify-center">
+                      <div className="flex justify-end gap-2">
+                        {canAccess(permissions, ["UPDATE_BANNER_CATEGORY"]) && (
+                          <Link
+                            href={`/admin/banner_categories/edit/${banner_category.bannerCategoryId}`}
+                          >
+                            <button className="rounded-md bg-yellow-500/20 px-3 py-1 text-xs text-yellow-400 hover:bg-yellow-500/30 transition cursor-pointer">
+                              Editar
+                            </button>
+                          </Link>
+                        )}
+
+                        {canAccess(permissions, ["DELETE_BANNER_CATEGORY"]) && (
+                          <button
+                            onClick={() => {
+                              setSelectedBannerCategory(banner_category);
+                              setConfirmModalOpen(true);
+                            }}
+                            className="rounded-md bg-red-500/20 px-3 py-1 text-xs text-red-400 hover:bg-red-500/30 transition cursor-pointer"
+                          >
+                            Excluir
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
-
-      {canAccess(permissions, ["UPDATE_EXPERIENCE"]) && (
-        <Modal
-          isOpen={updateModalOpen}
-          onClose={() => setUpdateModalOpen(false)}
-        >
-          <UpdateBannerCategoryForm
-            title={`Editar ${selectedBannerCategory?.title}`}
-            isOpen={updateModalOpen}
-            onClose={() => setUpdateModalOpen(false)}
-            onSubmit={handleUpdate}
-            selectedBannerCategory={selectedBannerCategory}
-          />
-        </Modal>
-      )}
 
       {canAccess(permissions, ["DELETE_BANNER_CATEGORY"]) && (
         <ConfirmAlert

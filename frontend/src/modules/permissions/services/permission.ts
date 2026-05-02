@@ -1,4 +1,4 @@
-import { Permission } from "@/modules/permissions/types/permission";
+import { Permission } from "@/modules/permissions/types";
 import axios from "axios";
 
 export async function getPermissions(): Promise<Permission[]> {

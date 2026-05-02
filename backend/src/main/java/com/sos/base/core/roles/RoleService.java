@@ -40,6 +40,10 @@ public class RoleService {
                 .toList();
     }
 
+    public RoleEntity findById(UUID id) {
+        return roleRepository.findById(id).orElseThrow(() -> new NotFoundException("Role não encontrada"));
+    }
+
     @Transactional
     public RoleDto create(CreateRoleRequest dto) {
         try {

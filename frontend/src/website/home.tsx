@@ -1,8 +1,5 @@
 "use client";
 
-import "swiper/css";
-import "swiper/css/navigation";
-
 import Image from "next/image";
 import Link from "next/link";
 

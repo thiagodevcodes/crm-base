@@ -27,6 +27,13 @@ public class RolesController {
         return ResponseEntity.ok(roleService.findAll());
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<RoleEntity> findById(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+        return ResponseEntity.ok(roleService.findById(uuid));
+    }
+
     @PostMapping
     @PreAuthorize("@auth.hasPermission('ADD_ROLE')")
     public ResponseEntity<RoleDto> create(@Valid @RequestBody CreateRoleRequest request) {

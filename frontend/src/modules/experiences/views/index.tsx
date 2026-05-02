@@ -6,21 +6,20 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
 import { Modal } from "@/shared/components/ui/modal";
-import { ExperienceFormData } from "@/modules/experiences/types/experiences";
+import { ExperienceFormData } from "@/modules/experiences/types";
 import { RegisterExperienceForm } from "@/modules/experiences/components/registerExperienceForm";
 import { ExperiencesTable } from "@/modules/experiences/components/experiencesTable";
 import { useExperienceContext } from "@/modules/experiences/contexts/context";
+import Link from "next/link";
 
 export default function Experiences() {
   const { addExperience } = useExperienceContext();
   const { authenticated, loading, permissions } = useAuth();
-  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(data: ExperienceFormData) {
     try {
       addExperience(data);
-      setOpen(false);
     } catch (err) {
       console.error("Erro ao criar experiência", err);
     }
@@ -50,21 +49,9 @@ export default function Experiences() {
         </div>
 
         {canAccess(permissions, ["ADD_EXPERIENCE"]) && (
-          <button
-            onClick={() => setOpen(true)}
-            className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
-          >
+          <Link  className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer" href={"/admin/experiences/new"}>
             Adicionar Experiência
-          </button>
-        )}
-
-        {canAccess(permissions, ["ADD_EXPERIENCE"]) && (
-          <Modal isOpen={open} onClose={() => setOpen(false)}>
-            <RegisterExperienceForm
-              title="Criar Experiência"
-              onSubmit={handleSubmit}
-            />
-          </Modal>
+          </Link>
         )}
       </div>
 

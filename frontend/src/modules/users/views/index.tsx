@@ -7,7 +7,7 @@ import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
-import { UserFormData } from "@/modules/users/types/user";
+import { UserFormData } from "@/modules/users/types";
 
 import { useUserContext } from "@/modules/users/contexts/context";
 import { Modal } from "@/shared/components/ui/modal";

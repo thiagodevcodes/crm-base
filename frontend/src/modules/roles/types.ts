@@ -1,4 +1,4 @@
-import { Permission, PermissionOption } from "@/modules/permissions/types/permission";
+import { Permission, PermissionOption } from "@/modules/permissions/types";
 
 export type Role = {
   roleId: string;

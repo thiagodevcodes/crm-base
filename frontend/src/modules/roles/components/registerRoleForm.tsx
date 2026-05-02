@@ -4,19 +4,20 @@ import { Controller, useForm } from "react-hook-form";
 import Select, { StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
 import { getPermissions } from "@/modules/permissions/services/permission";
-import {
-  Permission,
-  PermissionOption,
-} from "@/modules/permissions/types/permission";
-import { Role, RoleFormData } from "../types/role";
+import { Permission, PermissionOption } from "@/modules/permissions/types";
+import { Role, RoleFormData } from "../types";
+import { useRoleContext } from "../contexts/context";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Props = {
   title: string;
-  onSubmit: (data: RoleFormData) => Promise<void>;
 };
 
-export function RegisterRoleForm({ onSubmit, title }: Props) {
+export function RegisterRoleForm({ title }: Props) {
   const [permissions, setPermissions] = useState<Permission[]>([]);
+  const { addRole } = useRoleContext();
+  const router = useRouter();
 
   const {
     register,
@@ -28,8 +29,10 @@ export function RegisterRoleForm({ onSubmit, title }: Props) {
 
   async function handleFormSubmit(data: RoleFormData) {
     try {
-      await onSubmit(data);
+      await addRole(data);
       reset();
+      router.push("/admin/roles");
+      router.refresh();
     } catch (err) {
       console.error("Erro ao cadastrar role:", err);
     }
@@ -54,9 +57,11 @@ export function RegisterRoleForm({ onSubmit, title }: Props) {
   const darkSelectStyles: StylesConfig<PermissionOption, true> = {
     control: (base, state) => ({
       ...base,
-      backgroundColor: "#1e293b",
-      borderColor: state.isFocused ? "white" : "#1e293b",
       boxShadow: "none",
+      marginTop: "0.75rem",
+      padding: "0.15rem",
+      borderColor: state.isFocused ? "black" : "#d1d5dc",
+      outline: state.isFocused ? "1px solid black" : "none",
     }),
     placeholder: (base) => ({
       ...base,
@@ -65,57 +70,77 @@ export function RegisterRoleForm({ onSubmit, title }: Props) {
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-bold text-white mb-4 text-center">{title}</h2>
+    <div className="px-10">
+      <div className="py-8">
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <p>Bem-vindo ao painel de Permissões!</p>
+      </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-        <div>
-          <input
-            type="text"
-            placeholder="Nome"
-            className="w-full p-2 rounded bg-slate-800 text-white"
-            {...register("name", {
-              required: "Nome é obrigatório",
-            })}
-          />
-          {errors.name && (
-            <p className="text-red-400 text-sm">{errors.name.message}</p>
-          )}
-        </div>
-
-        <div>
-          <Controller
-            control={control}
-            name="permissions"
-            rules={{
-              validate: (value) =>
-                (value && value.length > 0) ||
-                "Selecione pelo menos uma permissão",
-            }}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={permissionOptions}
-                isMulti
-                placeholder="Selecione as permissões"
-                styles={darkSelectStyles}
-              />
+        <div className="grid grid-cols-1 gap-5">
+          <div>
+            <label className="font-bold" htmlFor="name">
+              Nome
+            </label>
+            <input
+              type="text"
+              placeholder="Nome"
+              className="w-full p-2 rounded text-black border border-gray-300 mt-3 focus:outline-2"
+              {...register("name", {
+                required: "Nome é obrigatório",
+              })}
+            />
+            {errors.name && (
+              <p className="text-red-400 text-sm">{errors.name.message}</p>
             )}
-          />
+          </div>
 
-          {errors.permissions && (
-            <p className="text-red-400 text-sm">
-              {errors.permissions.message as string}
-            </p>
-          )}
+          <div>
+            <label className="font-bold" htmlFor="permissions">
+              Permissões
+            </label>
+            <Controller
+              control={control}
+              name="permissions"
+              rules={{
+                validate: (value) =>
+                  (value && value.length > 0) ||
+                  "Selecione pelo menos uma permissão",
+              }}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  options={permissionOptions}
+                  isMulti
+                  placeholder="Selecione as permissões"
+                  styles={darkSelectStyles}
+                  instanceId="permissions-select"
+                />
+              )}
+            />
+
+            {errors.permissions && (
+              <p className="text-red-400 text-sm">
+                {errors.permissions.message as string}
+              </p>
+            )}
+          </div>
         </div>
 
-        <button
-          disabled={isSubmitting}
-          className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer"
-        >
-          {isSubmitting ? "Cadastrando..." : "Cadastrar"}
-        </button>
+        <div className="flex justify-start gap-5 items-center mt-10">
+          <button
+            disabled={isSubmitting}
+            className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
+          >
+            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+          </button>
+          <Link
+            href={"/admin/roles"}
+            className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white text-center py-2 rounded disabled:opacity-50 cursor-pointer max-w-60 "
+          >
+            Voltar
+          </Link>
+        </div>
       </form>
     </div>
   );

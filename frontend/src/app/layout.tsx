@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+
+import "swiper/css";
+import "swiper/css/navigation";
+
 import { AuthProvider } from "@/shared/contexts/authContext";
 
 export const metadata: Metadata = {

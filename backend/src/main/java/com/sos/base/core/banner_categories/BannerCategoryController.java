@@ -26,6 +26,13 @@ public class BannerCategoryController {
         return ResponseEntity.ok(bannerCategoryService.findAll());
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<BannerCategoryEntity> findById(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+        return ResponseEntity.ok(bannerCategoryService.findById(uuid));
+    }
+
     @PostMapping
     @PreAuthorize("@auth.hasPermission('ADD_BANNER_CATEGORY')")
     public ResponseEntity<BannerCategoryEntity> create(@Valid @RequestBody CreateBannerCategoryRequest request) {
