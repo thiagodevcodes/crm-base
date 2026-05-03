@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   description: "Editar Categoria de Banner",
 };
 
-export default async function BannerCategoriesPage({ params }: { params: { id: string } }) {
-  return <UpdateBannerCategoryForm title="Editar Categoria de Banner" id={params.id} />;
+export default async function BannerCategoriesPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <UpdateBannerCategoryForm title="Editar Categoria de Banner" id={id} />
+  );
 }

@@ -11,6 +11,7 @@ import { UserFormData } from "@/modules/users/types";
 
 import { useUserContext } from "@/modules/users/contexts/context";
 import { Modal } from "@/shared/components/ui/modal";
+import Link from "next/link";
 
 export default function Users() {
   const { authenticated, loading, permissions } = useAuth();
@@ -48,24 +49,11 @@ export default function Users() {
         </div>
 
         {canAccess(permissions, ["ADD_USER"]) && (
-          <button
-            onClick={() => setOpen(true)}
-            className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
-          >
+          <Link  className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer" href={"/admin/users/new"}>
             Adicionar Usuário
-          </button>
+          </Link>
         )}
       </div>
-
-      {canAccess(permissions, ["ADD_USER"]) && (
-        <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <RegisterUserForm
-            title="Criar Usuário"
-            onSubmit={handleSubmit}
-          />
-        </Modal>
-      )}
-
       <UsersTable />
     </div>
   );

@@ -40,6 +40,10 @@ public class UserService {
       return userRepository.findAll();
    }
 
+    public UserEntity findById(UUID id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+    }
+
    @Transactional
    public UserEntity create(CreateUserRequest dto) {
       try {

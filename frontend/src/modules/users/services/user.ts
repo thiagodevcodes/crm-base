@@ -59,6 +59,17 @@ export async function getUsers(): Promise<User[]> {
   return response.data;
 }
 
+export async function getUser(id: string): Promise<User> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+}
+
 export async function deleteUser(userId: string): Promise<void> {
   await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
     withCredentials: true,

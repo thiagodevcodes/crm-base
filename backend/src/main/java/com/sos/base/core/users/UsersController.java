@@ -28,6 +28,14 @@ public class UsersController {
       return ResponseEntity.ok(userService.create(request));
    }
 
+
+    @GetMapping("/{id}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<UserEntity> findById(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+        return ResponseEntity.ok(userService.findById(uuid));
+    }
+
    @GetMapping
    public ResponseEntity<List<UserEntity>> findAll() {
       return ResponseEntity.ok(userService.findAll());

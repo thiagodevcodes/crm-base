@@ -1,4 +1,5 @@
 import { UpdateExperienceForm } from "@/modules/experiences/components/updateExperienceForm";
+import { UpdateUserForm } from "@/modules/users/components/updateUserForm";
 import { Metadata } from "next";
 
 export default async function ExperiencesPage({
@@ -8,5 +9,5 @@ export default async function ExperiencesPage({
 }) {
   const { id } = await params;
 
-  return <UpdateExperienceForm title="Editar Experiência" id={id} />;
+  return <UpdateUserForm title="Editar Usuário" id={id} />;
 }

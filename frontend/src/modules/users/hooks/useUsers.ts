@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getUsers,
   createUser,
+  getUser,
   updateUser,
   deleteUser,
   updatePassword
@@ -12,6 +13,12 @@ import { delay } from "@/shared/utils/functions";
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // READ
+  const fetchUser = async (id: string) => {
+    const data = await getUser(id);
+    return data;
+  };
 
   // READ
   const fetchUsers = async () => {
@@ -68,6 +75,7 @@ export function useUsers() {
     users,
     loading,
     fetchUsers,
+    fetchUser,
     addUser,
     editUser,
     editPassword,

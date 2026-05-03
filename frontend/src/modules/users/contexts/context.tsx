@@ -7,6 +7,7 @@ type UserContextType = {
   users: User[];
   loading: boolean;
   fetchUsers: () => Promise<void>;
+  fetchUser: (id: string) => Promise<User>;
   addUser: (user: UserFormData) => Promise<void>;
   editUser: (id: string, user: UserFormData) => Promise<void>;
   editPassword: (id: string, password: string) => Promise<void>;

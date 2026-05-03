@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   description: "Editar Experiência",
 };
 
-export default async function RolesPage({ params }: { params: { id: string } }) {
-  return <UpdateRoleForm title="Editar Função" id={params.id} />;
+export default async function RolesPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+    const { id } = await params;
+
+  return <UpdateRoleForm title="Editar Função" id={id} />;
 }

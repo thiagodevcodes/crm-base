@@ -72,7 +72,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (!loading && authenticated && isSubmitting) {
+    if (!loading && authenticated) {
       router.replace("/admin/dashboard");
     }
   }, [loading, authenticated, router]);
