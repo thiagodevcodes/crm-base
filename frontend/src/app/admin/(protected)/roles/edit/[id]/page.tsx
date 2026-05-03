@@ -1,9 +1,9 @@
-import { UpdateRoleForm } from "@/modules/roles/components/updateRoleForm";
+import { EditView } from "@/modules/roles/views/edit";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Experiências",
-  description: "Editar Experiência",
+  title: "CRM - Editar Perfil",
+  description: "Editar Perfil",
 };
 
 export default async function RolesPage({
@@ -13,5 +13,5 @@ export default async function RolesPage({
 }) {
     const { id } = await params;
 
-  return <UpdateRoleForm title="Editar Função" id={id} />;
+  return <EditView title="Editar Função" id={id} />;
 }

@@ -1,6 +1,10 @@
-import { UpdateExperienceForm } from "@/modules/experiences/components/updateExperienceForm";
-import { UpdateUserForm } from "@/modules/users/components/updateUserForm";
+import { EditView } from "@/modules/users/views/edit";
 import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "CRM - Editar Usuário",
+  description: "Página de edição de usuário",
+};
 
 export default async function ExperiencesPage({
   params,
@@ -9,5 +13,5 @@ export default async function ExperiencesPage({
 }) {
   const { id } = await params;
 
-  return <UpdateUserForm title="Editar Usuário" id={id} />;
+  return <EditView title="Editar Usuário" id={id} />;
 }

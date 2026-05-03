@@ -1,11 +1,11 @@
-import { RegisterRoleForm } from "@/modules/roles/components/registerRoleForm";
+import { NewView } from "@/modules/roles/views/new";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Perfis",
+  title: "CRM - Cadastrar Perfil",
   description: "Cadastro de Perfis",
 };
 
 export default async function RolesPage() {
-  return <RegisterRoleForm title="Cadastrar Perfil" />;
+  return <NewView title="Cadastrar Perfil" />;
 }

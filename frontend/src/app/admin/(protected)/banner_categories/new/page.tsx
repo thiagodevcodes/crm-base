@@ -1,11 +1,12 @@
-import { RegisterBannerCategoryForm } from "@/modules/banner_categories/components/registerBannerCategoryForm";
+
+import { NewView } from "@/modules/banner_categories/views/new";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Categorias de Banner",
-  description: "Cadastro de Categorias de Banner",
+  title: "CRM - Cadastrar Categoria de Banner",
+  description: "Cadastro de Categoria de Banner",
 };
 
 export default async function BannerCategoriesPage() {
-  return <RegisterBannerCategoryForm title="Cadastrar Categoria de Banner" />;
+  return <NewView title="Cadastrar Categoria de Banner" />;
 }

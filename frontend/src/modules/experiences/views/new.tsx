@@ -1,84 +1,46 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-
-import { useEffect, useState } from "react";
-import { Experience, ExperienceFormData } from "@/modules/experiences/types";
+import { ExperienceFormData } from "@/modules/experiences/types";
 import { useExperienceContext } from "../contexts/context";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 type Props = {
   title: string;
-  id: string;
 };
 
-export function UpdateExperienceForm({ title, id }: Props) {
-  const { editExperience, fetchExperience } = useExperienceContext();
-  const [experienceData, setExperienceData] = useState<Experience | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    async function load() {
-      const data = await fetchExperience(id);
-      setExperienceData(data);
-    }
-    if (id) load();
-  }, [id]);
-
+export function NewView({ title }: Props) {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ExperienceFormData>({
-    defaultValues: {
-      title: experienceData?.title,
-      description: experienceData?.description,
-      period: experienceData?.period,
-      technologies: experienceData?.technologies,
-    },
-  });
+  } = useForm<ExperienceFormData>({});
 
-  useEffect(() => {
-    if (experienceData) {
-      reset({
-        title: experienceData?.title,
-        description: experienceData?.description,
-        period: experienceData?.period,
-        technologies: experienceData?.technologies,
-      });
-    } else {
-      reset();
-    }
-  }, [experienceData, reset]);
+  const { addExperience } = useExperienceContext();
 
   async function handleFormSubmit(data: ExperienceFormData) {
     try {
-      editExperience(id, data);
+      addExperience(data);
       reset();
-      router.push("/admin/experiences");
-      router.refresh();
     } catch (err) {
-      console.error("Erro ao atualizar experiência:", err);
+      console.error("Erro ao cadastrar experiência:", err);
     }
   }
 
   return (
     <div className="px-10">
       <div className="py-8">
-          <h1 className="text-2xl font-bold">{title} - {experienceData?.title}</h1>
-          <p>Bem-vindo ao painel de edição de experiências!</p>
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <p>Bem-vindo ao painel de cadastro de Experiências!</p>
       </div>
 
-      <form
-        onSubmit={handleSubmit(handleFormSubmit)}
-        className="space-y-4"
-      >
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <div className="grid sm:grid-cols-2 grid-cols-1 gap-5">
           <div>
-            <label className="font-bold" htmlFor="title">Titulo</label>
+            <label className="font-bold" htmlFor="title">
+              Titulo
+            </label>
             <input
               type="text"
               placeholder="Titulo"
@@ -93,7 +55,9 @@ export function UpdateExperienceForm({ title, id }: Props) {
           </div>
 
           <div>
-            <label className="font-bold" htmlFor="description">Descrição</label>
+            <label className="font-bold" htmlFor="description">
+              Descrição
+            </label>
             <input
               type="text"
               placeholder="Descrição"
@@ -114,7 +78,9 @@ export function UpdateExperienceForm({ title, id }: Props) {
           </div>
 
           <div>
-            <label className="font-bold" htmlFor="period">Período</label>
+            <label className="font-bold" htmlFor="period">
+              Período
+            </label>
             <input
               type="text"
               placeholder="Período"
@@ -133,7 +99,9 @@ export function UpdateExperienceForm({ title, id }: Props) {
           </div>
 
           <div>
-            <label className="font-bold" htmlFor="technologies">Tecnologias</label>
+            <label className="font-bold" htmlFor="technologies">
+              Tecnologias
+            </label>
             <input
               type="text"
               placeholder="Tecnologias"
@@ -159,9 +127,12 @@ export function UpdateExperienceForm({ title, id }: Props) {
             disabled={isSubmitting}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
           >
-            {isSubmitting ? "Atualizando..." : "Atualizar"}
+            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
           </button>
-          <Link href={"/admin/experiences"} className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white text-center py-2 rounded disabled:opacity-50 cursor-pointer max-w-60 ">
+          <Link
+            href={"/admin/experiences"}
+            className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white text-center py-2 rounded disabled:opacity-50 cursor-pointer max-w-60 "
+          >
             Voltar
           </Link>
         </div>

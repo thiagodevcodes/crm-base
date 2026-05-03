@@ -12,7 +12,7 @@ type Props = {
   id: string;
 };
 
-export function PasswordForm({ title, id }: Props) {
+export function PasswordView({ title, id }: Props) {
   const {
     register,
     handleSubmit,

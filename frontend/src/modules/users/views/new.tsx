@@ -3,46 +3,40 @@
 import { Controller, useForm } from "react-hook-form";
 import Select, { StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
-
-import { User, UserFormData } from "../types";
 import { getRoles } from "@/modules/roles/services/role";
+import { UserFormData } from "../types";
 import { Role, RoleOption } from "@/modules/roles/types";
-import { useRouter } from "next/navigation";
-import { useUserContext } from "../contexts/context";
 import Link from "next/link";
+import { useUserContext } from "../contexts/context";
 
 type Props = {
   title: string;
-  id: string;
 };
 
-export function UpdateUserForm({ title, id }: Props) {
-  const { editUser, fetchUser } = useUserContext();
+export function NewView({ title }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
-  const [userData, setUserData] = useState<User | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    async function load() {
-      const data = await fetchUser(id);
-      setUserData(data);
-    }
-    if (id) load();
-  }, [id]);
 
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<UserFormData>({
-    defaultValues: {
-      name: "",
-      username: "",
-      roles: [],
-    },
-  });
+  } = useForm<UserFormData>();
+
+  const { addUser } = useUserContext();
+
+  const password = watch("password");
+
+  async function handleFormSubmit(data: UserFormData) {
+    try {
+      await addUser(data);
+      reset();
+    } catch (err) {
+      console.error("Erro ao cadastrar usuário:", err);
+    }
+  }
 
   const roleOptions: RoleOption[] = roles.map((role) => ({
     value: role.name,
@@ -52,30 +46,6 @@ export function UpdateUserForm({ title, id }: Props) {
   useEffect(() => {
     getRoles().then(setRoles);
   }, []);
-
-  useEffect(() => {
-    if (!userData) return;
-
-    reset({
-      name: userData.name,
-      username: userData.username,
-      roles: userData.roles.map((role) => ({
-        value: role.name,
-        label: role.name,
-      })),
-    });
-  }, [userData, reset]);
-
-  async function handleFormSubmit(data: UserFormData) {
-    try {
-      await editUser(id, data);
-      reset();
-      router.push("/admin/users");
-      router.refresh();
-    } catch (err) {
-      console.error("Erro ao cadastrar usuário:", err);
-    }
-  }
 
   const darkSelectStyles: StylesConfig<RoleOption, true> = {
     control: (base, state) => ({
@@ -95,8 +65,8 @@ export function UpdateUserForm({ title, id }: Props) {
   return (
     <div className="px-10">
       <div className="py-8">
-        <h1 className="text-2xl font-bold">{title} - {userData?.name}</h1>
-        <p>Bem-vindo ao painel de edição de usuários!</p>
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <p>Bem-vindo ao painel de cadastro de Usuários!</p>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -134,6 +104,46 @@ export function UpdateUserForm({ title, id }: Props) {
             )}
           </div>
           <div>
+            <label className="font-bold" htmlFor="password">
+              Senha
+            </label>
+            <input
+              type="password"
+              placeholder="Senha"
+              className="w-full p-2 rounded text-black border border-gray-300 mt-3"
+              {...register("password", {
+                required: "Senha é obrigatória",
+                minLength: {
+                  value: 6,
+                  message: "Mínimo de 6 caracteres",
+                },
+              })}
+            />
+            {errors.password && (
+              <p className="text-red-400 text-sm">{errors.password.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="font-bold" htmlFor="confirmPassword">
+              Confirmar Senha
+            </label>
+            <input
+              type="password"
+              placeholder="Confirmar senha"
+              className="w-full p-2 rounded text-black border border-gray-300 mt-3"
+              {...register("confirmPassword", {
+                required: "Confirme a senha",
+                validate: (value) =>
+                  value === password || "As senhas não coincidem",
+              })}
+            />
+            {errors.confirmPassword && (
+              <p className="text-red-400 text-sm">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+          <div>
             <label className="font-bold" htmlFor="roles">
               Perfis de Usuário
             </label>
@@ -163,10 +173,10 @@ export function UpdateUserForm({ title, id }: Props) {
             disabled={isSubmitting}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
           >
-            {isSubmitting ? "Atualizando..." : "Atualizar"}
+            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
           </button>
           <Link
-            href={"/admin/users"}
+            href={"/admin/experiences"}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white text-center py-2 rounded disabled:opacity-50 cursor-pointer max-w-60 "
           >
             Voltar

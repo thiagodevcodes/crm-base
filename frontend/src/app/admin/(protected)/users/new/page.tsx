@@ -1,13 +1,11 @@
-import { RegisterExperienceForm } from "@/modules/experiences/components/registerExperienceForm";
-import Experiences from "@/modules/experiences/views";
-import { RegisterUserForm } from "@/modules/users/components/registerUserForm";
+import { NewView } from "@/modules/users/views/new";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Experiências",
-  description: "Cadastro de Experiências",
+  title: "CRM - Cadastrar Usuário",
+  description: "Cadastro de Usuários",
 };
 
 export default async function ExperiencesPage() {
-  return <RegisterUserForm title="Cadastrar Usuário" />;
+  return <NewView title="Cadastrar Usuário" />;
 }

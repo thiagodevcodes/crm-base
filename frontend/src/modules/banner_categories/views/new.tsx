@@ -1,77 +1,42 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-
-import { useEffect, useState } from "react";
-import { BannerCategory, BannerCategoryFormData } from "../types";
-import { useBannerCategoryContext } from "../contexts/context";
+import { BannerCategoryFormData } from "../types";
 import Link from "next/link";
+import { useBannerCategoryContext } from "../contexts/context";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  id: string;
   title: string;
 };
 
-export function UpdateBannerCategoryForm({
-  id,
-  title
-}: Props) {
-  const { editBannerCategory, fetchBannerCategory } = useBannerCategoryContext();
-  const [bannerCategoryData, setBannerCategoryData] = useState<BannerCategory | null>(null);
-  const router = useRouter()
-
-  useEffect(() => {
-    async function load() {
-      const data = await fetchBannerCategory(id);
-      setBannerCategoryData(data);
-    }
-    if (id) load();
-  }, [id]);
-
+export function NewView({ title }: Props) {
+  const { addBannerCategory } = useBannerCategoryContext();
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<BannerCategoryFormData>({
-    defaultValues: {
-      title: bannerCategoryData?.title,
-      width: bannerCategoryData?.width,
-      height: bannerCategoryData?.height,
-    },
-  });
-
-  useEffect(() => {
-    if (bannerCategoryData) {
-      reset({
-        title: bannerCategoryData?.title,
-        width: bannerCategoryData?.width,
-        height: bannerCategoryData?.height,
-      });
-    } else {
-      reset();
-    }
-  }, [bannerCategoryData, reset]);
+  } = useForm<BannerCategoryFormData>({});
 
   async function handleFormSubmit(data: BannerCategoryFormData) {
     try {
-      editBannerCategory(id, data)
+      await addBannerCategory(data);
       reset();
       router.push("/admin/banner_categories");
       router.refresh();
     } catch (err) {
-      console.error("Erro ao atualizar categoria de banner:", err);
+      console.error("Erro ao cadastrar categoria de banner:", err);
     }
   }
 
   return (
-      <div className="px-10">
+    <div className="px-10">
       <div className="py-8">
-        <h1 className="text-2xl font-bold">{title} - {bannerCategoryData?.title}</h1>
-        <p>Bem-vindo ao painel de edição de categorias de Banner!</p>
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <p>Bem-vindo ao painel de cadastro de Categorias de Banner!</p>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -98,7 +63,7 @@ export function UpdateBannerCategoryForm({
               Largura
             </label>
             <input
-              type="number"
+              type="text"
               placeholder="Largura"
               className="w-full p-2 rounded text-black border border-gray-300 mt-3"
               {...register("width", {
@@ -119,7 +84,7 @@ export function UpdateBannerCategoryForm({
               Altura
             </label>
             <input
-              type="number"
+              type="text"
               placeholder="Altura"
               className="w-full p-2 rounded text-black border border-gray-300 mt-3"
               {...register("height", {
@@ -141,7 +106,7 @@ export function UpdateBannerCategoryForm({
             disabled={isSubmitting}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
           >
-            {isSubmitting ? "Atualizando..." : "Atualizar"}
+            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
           </button>
           <Link
             href={"/admin/banner_categories"}

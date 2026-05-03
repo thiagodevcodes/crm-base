@@ -1,7 +1,11 @@
-import { UpdateExperienceForm } from "@/modules/experiences/components/updateExperienceForm";
-import { PasswordForm } from "@/modules/users/components/passwordUserForm";
-import { UpdateUserForm } from "@/modules/users/components/updateUserForm";
+
+import { PasswordView } from "@/modules/users/views/password";
 import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "CRM - Redefinir Senha",
+  description: "Página para redefinir a senha do usuário",
+};
 
 export default async function UserPasswordPage({
   params,
@@ -10,5 +14,5 @@ export default async function UserPasswordPage({
 }) {
   const { id } = await params;
 
-  return <PasswordForm title="Editar Senha" id={id} />;
+  return <PasswordView title="Editar Senha" id={id} />;
 }

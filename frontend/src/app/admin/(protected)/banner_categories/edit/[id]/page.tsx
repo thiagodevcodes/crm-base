@@ -1,9 +1,8 @@
-import { UpdateBannerCategoryForm } from "@/modules/banner_categories/components/updateBannerCategoryForm";
-import { UpdateExperienceForm } from "@/modules/experiences/components/updateExperienceForm";
+import { EditView } from "@/modules/banner_categories/views/edit";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "CRM - Categorias de Banner",
+  title: "CRM - Editar Categorias de Banner",
   description: "Editar Categoria de Banner",
 };
 
@@ -15,6 +14,6 @@ export default async function BannerCategoriesPage({
   const { id } = await params;
 
   return (
-    <UpdateBannerCategoryForm title="Editar Categoria de Banner" id={id} />
+    <EditView title="Editar Categoria de Banner" id={id} />
   );
 }
