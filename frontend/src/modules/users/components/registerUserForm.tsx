@@ -66,7 +66,7 @@ export function RegisterUserForm({ title }: Props) {
     <div className="px-10">
       <div className="py-8">
         <h1 className="text-2xl font-bold">{title}</h1>
-        <p>Bem-vindo ao painel de Uusuários!</p>
+        <p>Bem-vindo ao painel de cadastro de Usuários!</p>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">

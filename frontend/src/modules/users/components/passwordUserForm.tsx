@@ -59,7 +59,7 @@ export function PasswordForm({ title, id }: Props) {
   return (
     <div className="px-10">
       <div className="py-8">
-        <h1 className="text-2xl font-bold">{title} de {userData?.name}</h1>
+        <h1 className="text-2xl font-bold">{title} - {userData?.name}</h1>
         <p>Bem-vindo ao painel de edição de senhas!</p>
       </div>
 
@@ -110,7 +110,7 @@ export function PasswordForm({ title, id }: Props) {
             disabled={isSubmitting}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
           >
-            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+            {isSubmitting ? "Atualizando..." : "Atualizar"}
           </button>
           <Link
             href={"/admin/users"}

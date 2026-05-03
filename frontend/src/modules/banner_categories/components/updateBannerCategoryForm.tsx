@@ -18,13 +18,13 @@ export function UpdateBannerCategoryForm({
   title
 }: Props) {
   const { editBannerCategory, fetchBannerCategory } = useBannerCategoryContext();
-  const [experienceData, setExperienceData] = useState<BannerCategory | null>(null);
+  const [bannerCategoryData, setBannerCategoryData] = useState<BannerCategory | null>(null);
   const router = useRouter()
 
   useEffect(() => {
     async function load() {
       const data = await fetchBannerCategory(id);
-      setExperienceData(data);
+      setBannerCategoryData(data);
     }
     if (id) load();
   }, [id]);
@@ -38,23 +38,23 @@ export function UpdateBannerCategoryForm({
     reset,
   } = useForm<BannerCategoryFormData>({
     defaultValues: {
-      title: experienceData?.title,
-      width: experienceData?.width,
-      height: experienceData?.height,
+      title: bannerCategoryData?.title,
+      width: bannerCategoryData?.width,
+      height: bannerCategoryData?.height,
     },
   });
 
   useEffect(() => {
-    if (experienceData) {
+    if (bannerCategoryData) {
       reset({
-        title: experienceData?.title,
-        width: experienceData?.width,
-        height: experienceData?.height,
+        title: bannerCategoryData?.title,
+        width: bannerCategoryData?.width,
+        height: bannerCategoryData?.height,
       });
     } else {
       reset();
     }
-  }, [experienceData, reset]);
+  }, [bannerCategoryData, reset]);
 
   async function handleFormSubmit(data: BannerCategoryFormData) {
     try {
@@ -70,8 +70,8 @@ export function UpdateBannerCategoryForm({
   return (
       <div className="px-10">
       <div className="py-8">
-        <h1 className="text-2xl font-bold">{title}</h1>
-        <p>Bem-vindo ao painel de Categorias de Banner!</p>
+        <h1 className="text-2xl font-bold">{title} - {bannerCategoryData?.title}</h1>
+        <p>Bem-vindo ao painel de edição de categorias de Banner!</p>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -141,7 +141,7 @@ export function UpdateBannerCategoryForm({
             disabled={isSubmitting}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
           >
-            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+            {isSubmitting ? "Atualizando..." : "Atualizar"}
           </button>
           <Link
             href={"/admin/banner_categories"}

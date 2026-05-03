@@ -98,8 +98,8 @@ export function UpdateRoleForm({ id, title }: Props) {
   return (
     <div className="px-10">
       <div className="py-8">
-        <h1 className="text-2xl font-bold">{title}</h1>
-        <p>Bem-vindo ao painel de Permissões!</p>
+        <h1 className="text-2xl font-bold">{title} - {roleData?.name}</h1>
+        <p>Bem-vindo ao painel de edição de Perfis de Usuário!</p>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -158,7 +158,7 @@ export function UpdateRoleForm({ id, title }: Props) {
             disabled={isSubmitting}
             className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white py-2 rounded disabled:opacity-50 cursor-pointer max-w-60"
           >
-            {isSubmitting ? "Cadastrando..." : "Cadastrar"}
+            {isSubmitting ? "Atualizando..." : "Atualizar"}
           </button>
           <Link
             href={"/admin/roles"}

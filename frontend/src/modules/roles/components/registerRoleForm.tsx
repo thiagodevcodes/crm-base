@@ -73,7 +73,7 @@ export function RegisterRoleForm({ title }: Props) {
     <div className="px-10">
       <div className="py-8">
         <h1 className="text-2xl font-bold">{title}</h1>
-        <p>Bem-vindo ao painel de Permissões!</p>
+        <p>Bem-vindo ao painel de cadastro de Perfis de Usuário!</p>
       </div>
 
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
