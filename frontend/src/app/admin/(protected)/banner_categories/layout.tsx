@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { BannerCategoryProvider } from "@/modules/banner_categories/contexts/context";
+import { BannerProvider } from "@/modules/banners/contexts/context";
 
 type Props = {
   children: ReactNode;
@@ -10,7 +11,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <BannerCategoryProvider>
-      {children}
+      <BannerProvider>{children}</BannerProvider>
     </BannerCategoryProvider>
   );
 }

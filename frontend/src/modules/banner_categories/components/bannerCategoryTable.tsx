@@ -114,6 +114,16 @@ export function BannerCategoryTable() {
                             Excluir
                           </button>
                         )}
+
+                        {canAccess(permissions, ["UPDATE_BANNER_CATEGORY"]) && (
+                          <Link
+                            href={`/admin/banner_categories/show/${banner_category.bannerCategoryId}`}
+                          >
+                            <button className="rounded-md bg-green-500/20 px-3 py-1 text-xs text-green-400 hover:bg-green-500/30 transition cursor-pointer">
+                              Visualizar
+                            </button>
+                          </Link>
+                        )}
                       </div>
                     </td>
                   )}

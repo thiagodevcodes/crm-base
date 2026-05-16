@@ -1,6 +1,8 @@
 package com.sos.base.core.uploads;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignReques
 
 @Service
 @RequiredArgsConstructor
-public class UploadService {
+public class UploaderService {
 
    @Autowired
    private S3Client s3Client;
@@ -60,6 +62,38 @@ public class UploadService {
 
       return uploadDto;
    }
+
+   public List<UploadDto> saveMulti(List<MultipartFile> files) throws Exception {
+
+    List<UploadDto> uploads = new ArrayList<>();
+
+    for (MultipartFile file : files) {
+        
+        String key = UUID.randomUUID() + "-" + file.getOriginalFilename();
+
+        PutObjectRequest request = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .contentType(file.getContentType())
+                .build();
+
+        s3Client.putObject(
+                request,
+                RequestBody.fromBytes(file.getBytes())
+        );
+
+        UploadDto uploadDto = new UploadDto();
+
+        uploadDto.setName(file.getOriginalFilename());
+        uploadDto.setType(file.getContentType());
+        uploadDto.setKey(key);
+        uploadDto.setSize(file.getSize());
+
+        uploads.add(uploadDto);
+    }
+
+    return uploads;
+}
 
    public String generateSignedUrl(String key) {
       GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
