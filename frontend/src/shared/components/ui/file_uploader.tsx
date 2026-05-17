@@ -32,7 +32,7 @@ export function FileUploader({
   });
 
   return (
-    <div className="w-full max-w-xl mx-auto">
+    <div className="w-full">
       <div
         {...getRootProps()}
         className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition

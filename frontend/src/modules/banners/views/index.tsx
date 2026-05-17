@@ -11,12 +11,11 @@ import { RegisterImageForm } from "../components/registerImageForm";
 import { Modal } from "@/shared/components/ui/modal";
 import { BannerTable } from "../components/bannersTable";
 import { getBannersByCategory, createBanner } from "../services/banners";
-import { Spinner } from "@/shared/components/ui/spinner";
+import Link from "next/link";
 
 export default function Banners({ id }: { id: string }) {
   const { authenticated, loading, permissions } = useAuth();
   const params = useParams();
-  const [open, setOpen] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const router = useRouter();
   const [banners, setBanners] = useState<BannerFile[]>([]);
@@ -24,7 +23,7 @@ export default function Banners({ id }: { id: string }) {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const data = await getBannersByCategory(params.id as string);
+        const data = await getBannersByCategory(id);
         setBanners(data);
       } catch (err) {
         console.error(err);
@@ -34,7 +33,7 @@ export default function Banners({ id }: { id: string }) {
     };
 
     fetchBanners();
-  }, [params.id]);
+  }, [id]);
 
   async function handleSubmit(data: BannerFormData) {
     try {
@@ -42,11 +41,10 @@ export default function Banners({ id }: { id: string }) {
         console.error("Nenhuma imagem selecionada");
         return;
       }
-      const newBanners = await createBanner(data.files, params.id as string);
+      const newBanners = await createBanner(data.files, id);
       console.log("Banners criados:", newBanners);
       setBanners((prev) => [...prev, ...newBanners]);
 
-      setOpen(false);
     } catch (err) {
       console.error("Erro ao enviar imagem", err);
     }
@@ -71,28 +69,21 @@ export default function Banners({ id }: { id: string }) {
           <p>Bem-vindo ao painel de Banners!</p>
         </div>
 
-        {canAccess(permissions, ["ADD_BANNER"]) && (
-          <button
-            onClick={() => setOpen(true)}
+        {canAccess(permissions, ["ADD_BANNER_CATEGORY"]) && (
+          <Link
             className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
+            href={"/admin/banners/new/" + params.id}
           >
             Adicionar Banner
-          </button>
+          </Link>
         )}
       </div>
 
-      {canAccess(permissions, ["ADD_BANNER"]) && (
-        <Modal isOpen={open} onClose={() => setOpen(false)}>
-          <RegisterImageForm
-            title="Criar Banner"
-            categoryId={id}
-            onSubmit={handleSubmit}
-          />
-        </Modal>
-      )}
-
-
-      <BannerTable banners={banners} setBanners={setBanners} loadingData={loadingData} />
+      <BannerTable
+        banners={banners}
+        setBanners={setBanners}
+        loadingData={loadingData}
+      />
     </div>
   );
 }
