@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   getBanners,
   deleteFile,
@@ -11,7 +11,7 @@ import { delay } from "@/shared/utils/functions";
 
 export function useBanners() {
   const [banners, setBanners] = useState<BannerFile[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
   // CREATE
   const addBanner = async (banner: BannerFormData) => {
@@ -29,20 +29,20 @@ export function useBanners() {
 
   // READ
   const fetchBanners = async () => {
-    setLoading(true);
+    setLoadingData(true);
     const data = await getBanners();
     await delay(1000);
     setBanners(data);
-    setLoading(false);
+    setLoadingData(false);
   };
 
   // READ
   const fetchBannersByCategory = async (id: string) => {
-    setLoading(true);
+    setLoadingData(true);
     const data = await getBannersByCategory(id);
     await delay(1000);
     setBanners(data);
-    setLoading(false);
+    setLoadingData(false);
   };
 
   // DELETE
@@ -54,7 +54,7 @@ export function useBanners() {
 
   return {
     banners,
-    loading,
+    loadingData,
     fetchBanners,
     removeBanner,
     fetchBannersByCategory,

@@ -2,30 +2,33 @@
 
 import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useParams, useRouter } from "next/navigation";
-import { BannerFile, BannerFormData } from "@/modules/banners/types/banner";
+import { BannerFormData } from "@/modules/banners/types/banner";
 import { BannerTable } from "../components/bannersTable";
-import { getBannersByCategory, createBanner } from "../services/banners";
 import Link from "next/link";
+import { useBanners } from "../hooks/useBanners";
 
 export default function Banners({ id }: { id: string }) {
+  const {
+    fetchBannersByCategory,
+    banners,
+    addBanner,
+    removeBanner,
+    loadingData,
+  } = useBanners();
   const { authenticated, loading, permissions } = useAuth();
+
   const params = useParams();
-  const [loadingData, setLoadingData] = useState(true);
   const router = useRouter();
-  const [banners, setBanners] = useState<BannerFile[]>([]);
 
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const data = await getBannersByCategory(id);
-        setBanners(data);
+        await fetchBannersByCategory(id);
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoadingData(false);
       }
     };
 
@@ -38,10 +41,7 @@ export default function Banners({ id }: { id: string }) {
         console.error("Nenhuma imagem selecionada");
         return;
       }
-      const newBanners = await createBanner(data.files, id);
-      console.log("Banners criados:", newBanners);
-      setBanners((prev) => [...prev, ...newBanners]);
-
+      await addBanner(data);
     } catch (err) {
       console.error("Erro ao enviar imagem", err);
     }
@@ -78,7 +78,7 @@ export default function Banners({ id }: { id: string }) {
 
       <BannerTable
         banners={banners}
-        setBanners={setBanners}
+        onDelete={removeBanner}
         loadingData={loadingData}
       />
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { BannerFile } from "@/modules/banners/types/banner";
@@ -9,29 +9,27 @@ import { canAccess } from "@/shared/utils/canAccess";
 import r2Loader from "@/shared/utils/r2loader";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { deleteFile } from "../services/banners";
+import { useBanners } from "../hooks/useBanners";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 interface BannerTableProps {
   banners: any[];
-  title?: string;
-  setBanners: React.Dispatch<React.SetStateAction<BannerFile[]>>;
   loadingData?: boolean;
+  onDelete: (id: string) => void;
 }
 
-export function BannerTable({ banners, setBanners, title, loadingData }: BannerTableProps) {
+export function BannerTable({
+  banners,
+  loadingData,
+  onDelete
+}: BannerTableProps) {
   const [selectedImage, setSelectedImage] = useState<BannerFile | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const { permissions } = useAuth();
 
   async function handleDelete() {
     if (!selectedImage) return;
-
-    await deleteFile(selectedImage.bannerId);
-
-    setBanners((prev) =>
-      prev.filter((banner) => banner.bannerId !== selectedImage.bannerId),
-    );
-
+    onDelete(selectedImage.bannerId);
     setConfirmModalOpen(false);
   }
 
