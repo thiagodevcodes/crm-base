@@ -1,49 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { Experience } from "@/modules/experiences/types";
-import { useExperienceContext } from "../contexts/context";
 import { Spinner } from "@/shared/components/ui/spinner";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export function ExperiencesTable() {
-  const {
-    experiences,
-    editExperience,
-    removeExperience,
-    fetchExperiences,
-    loading,
-  } = useExperienceContext();
+interface ExperiencesTableProps {
+  data: any[];
+  loadingData?: boolean;
+  onDelete: (id: string) => void;
+}
+
+export function ExperiencesTable({
+  data,
+  loadingData,
+  onDelete,
+}: ExperiencesTableProps) {
   const [selectedExperience, setSelectedExperience] =
     useState<Experience | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
-  const pathname = usePathname();
-
-  async function handleUpdate(data: Experience) {
-    if (!selectedExperience) return;
-
-    try {
-      editExperience(selectedExperience.experienceId, data);
-      setSelectedExperience(null);
-    } catch (err) {
-      console.error("Erro ao atualizar usuário", err);
-    }
-  }
 
   async function handleDelete() {
     if (!selectedExperience) return;
-    removeExperience(selectedExperience.experienceId);
+    onDelete(selectedExperience.experienceId);
     setConfirmModalOpen(false);
   }
-
-  useEffect(() => {
-    fetchExperiences();
-  }, [pathname]);
 
   return (
     <>
@@ -62,20 +47,20 @@ export function ExperiencesTable() {
           </thead>
 
           <tbody>
-            {loading ? (
+            {loadingData ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   <Spinner width="30px" height="30px" />
                 </td>
               </tr>
-            ) : experiences.length === 0 ? (
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   Nenhuma experiência encontrada
                 </td>
               </tr>
             ) : (
-              experiences.map((experience) => (
+              data.map((experience) => (
                 <tr
                   key={experience.experienceId}
                   className="border-t border-white/10 hover:bg-white/5 transition"

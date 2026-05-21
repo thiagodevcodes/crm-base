@@ -11,7 +11,7 @@ import { delay } from "@/shared/utils/functions";
 
 export function useExperiences() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
   // READ
   const fetchExperience = async (id: string) => {
@@ -21,11 +21,11 @@ export function useExperiences() {
 
   // READ
   const fetchExperiences = async () => {
-    setLoading(true);
+    setLoadingData(true);
     const data = await getExperiences();
     await delay(1000);
     setExperiences(data);
-    setLoading(false);
+    setLoadingData(false);
   };
 
   // CREATE
@@ -67,7 +67,7 @@ export function useExperiences() {
 
   return {
     experiences,
-    loading,
+    loadingData,
     fetchExperiences,
     fetchExperience,
     addExperience,

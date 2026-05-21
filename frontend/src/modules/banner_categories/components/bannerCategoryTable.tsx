@@ -8,7 +8,7 @@ import { Spinner } from "@/shared/components/ui/spinner";
 import { BannerCategory } from "../types";
 import Link from "next/link";
 
-interface BannerTableProps {
+interface BannerCategoryTableProps {
   data: any[];
   loadingData?: boolean;
   onDelete: (id: string) => void;
@@ -18,7 +18,7 @@ export function BannerCategoryTable({
   data,
   loadingData,
   onDelete,
-}: BannerTableProps) {
+}: BannerCategoryTableProps) {
   const [selectedBannerCategory, setSelectedBannerCategory] =
     useState<BannerCategory | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);

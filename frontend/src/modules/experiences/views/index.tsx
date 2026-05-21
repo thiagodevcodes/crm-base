@@ -9,19 +9,12 @@ import { ExperienceFormData } from "@/modules/experiences/types";
 import { ExperiencesTable } from "@/modules/experiences/components/experiencesTable";
 import { useExperienceContext } from "@/modules/experiences/contexts/context";
 import Link from "next/link";
+import { useExperiences } from "../hooks/useExperiences";
 
 export default function Experiences() {
-  const { addExperience } = useExperienceContext();
+  const { experiences, loadingData, removeExperience } = useExperiences();
   const { authenticated, loading, permissions } = useAuth();
   const router = useRouter();
-
-  async function handleSubmit(data: ExperienceFormData) {
-    try {
-      addExperience(data);
-    } catch (err) {
-      console.error("Erro ao criar experiência", err);
-    }
-  }
 
   useEffect(() => {
     if (!loading && !authenticated) router.replace("/admin");
@@ -47,13 +40,20 @@ export default function Experiences() {
         </div>
 
         {canAccess(permissions, ["ADD_EXPERIENCE"]) && (
-          <Link  className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer" href={"/admin/experiences/new"}>
+          <Link
+            className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
+            href={"/admin/experiences/new"}
+          >
             Adicionar Experiência
           </Link>
         )}
       </div>
 
-      <ExperiencesTable />
+      <ExperiencesTable
+        data={experiences}
+        loadingData={loadingData}
+        onDelete={removeExperience}
+      />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { Experience, ExperienceFormData } from "@/modules/experiences/types";
 import { useExperienceContext } from "../contexts/context";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useExperiences } from "../hooks/useExperiences";
 
 type Props = {
   title: string;
@@ -14,17 +15,9 @@ type Props = {
 };
 
 export function EditView({ title, id }: Props) {
-  const { editExperience, fetchExperience } = useExperienceContext();
+  const { editExperience, fetchExperience } = useExperiences();
   const [experienceData, setExperienceData] = useState<Experience | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    async function load() {
-      const data = await fetchExperience(id);
-      setExperienceData(data);
-    }
-    if (id) load();
-  }, [id]);
 
   const {
     register,
@@ -40,6 +33,14 @@ export function EditView({ title, id }: Props) {
       technologies: experienceData?.technologies,
     },
   });
+
+  useEffect(() => {
+    async function load() {
+      const data = await fetchExperience(id);
+      setExperienceData(data);
+    }
+    if (id) load();
+  }, [id]);
 
   useEffect(() => {
     if (experienceData) {
@@ -68,17 +69,18 @@ export function EditView({ title, id }: Props) {
   return (
     <div className="px-10">
       <div className="py-8">
-          <h1 className="text-2xl font-bold">{title} - {experienceData?.title}</h1>
-          <p>Bem-vindo ao painel de edição de experiências!</p>
+        <h1 className="text-2xl font-bold">
+          {title} - {experienceData?.title}
+        </h1>
+        <p>Bem-vindo ao painel de edição de experiências!</p>
       </div>
 
-      <form
-        onSubmit={handleSubmit(handleFormSubmit)}
-        className="space-y-4"
-      >
+      <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
         <div className="grid sm:grid-cols-2 grid-cols-1 gap-5">
           <div>
-            <label className="font-bold" htmlFor="title">Titulo</label>
+            <label className="font-bold" htmlFor="title">
+              Titulo
+            </label>
             <input
               type="text"
               placeholder="Titulo"
@@ -93,7 +95,9 @@ export function EditView({ title, id }: Props) {
           </div>
 
           <div>
-            <label className="font-bold" htmlFor="description">Descrição</label>
+            <label className="font-bold" htmlFor="description">
+              Descrição
+            </label>
             <input
               type="text"
               placeholder="Descrição"
@@ -114,7 +118,9 @@ export function EditView({ title, id }: Props) {
           </div>
 
           <div>
-            <label className="font-bold" htmlFor="period">Período</label>
+            <label className="font-bold" htmlFor="period">
+              Período
+            </label>
             <input
               type="text"
               placeholder="Período"
@@ -133,7 +139,9 @@ export function EditView({ title, id }: Props) {
           </div>
 
           <div>
-            <label className="font-bold" htmlFor="technologies">Tecnologias</label>
+            <label className="font-bold" htmlFor="technologies">
+              Tecnologias
+            </label>
             <input
               type="text"
               placeholder="Tecnologias"
@@ -161,7 +169,10 @@ export function EditView({ title, id }: Props) {
           >
             {isSubmitting ? "Atualizando..." : "Atualizar"}
           </button>
-          <Link href={"/admin/experiences"} className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white text-center py-2 rounded disabled:opacity-50 cursor-pointer max-w-60 ">
+          <Link
+            href={"/admin/experiences"}
+            className="w-full bg-[#0d8cd7] hover:bg-blue-700 transition text-white text-center py-2 rounded disabled:opacity-50 cursor-pointer max-w-60 "
+          >
             Voltar
           </Link>
         </div>

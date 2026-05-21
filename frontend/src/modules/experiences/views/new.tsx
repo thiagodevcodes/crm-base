@@ -2,14 +2,18 @@
 
 import { useForm } from "react-hook-form";
 import { ExperienceFormData } from "@/modules/experiences/types";
-import { useExperienceContext } from "../contexts/context";
 import Link from "next/link";
+import { useExperiences } from "../hooks/useExperiences";
+import { useRouter } from "next/navigation";
 
 type Props = {
   title: string;
 };
 
 export function NewView({ title }: Props) {
+  const router = useRouter();
+  const { addExperience } = useExperiences();
+
   const {
     register,
     handleSubmit,
@@ -17,12 +21,12 @@ export function NewView({ title }: Props) {
     reset,
   } = useForm<ExperienceFormData>({});
 
-  const { addExperience } = useExperienceContext();
-
   async function handleFormSubmit(data: ExperienceFormData) {
     try {
       addExperience(data);
       reset();
+      router.push("/admin/experiences");
+      router.refresh();
     } catch (err) {
       console.error("Erro ao cadastrar experiência:", err);
     }
