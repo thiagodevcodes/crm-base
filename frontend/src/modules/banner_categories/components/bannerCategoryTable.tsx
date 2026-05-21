@@ -1,48 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useBannerCategoryContext } from "../contexts/context";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { BannerCategory } from "../types";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export function BannerCategoryTable() {
-  const {
-    banner_categories,
-    editBannerCategory,
-    removeBannerCategory,
-    fetchBannerCategories,
-    loading,
-  } = useBannerCategoryContext();
+interface BannerTableProps {
+  data: any[];
+  loadingData?: boolean;
+  onDelete: (id: string) => void;
+}
+
+export function BannerCategoryTable({
+  data,
+  loadingData,
+  onDelete,
+}: BannerTableProps) {
   const [selectedBannerCategory, setSelectedBannerCategory] =
     useState<BannerCategory | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
-  const pathname = usePathname();
-
-  async function handleUpdate(data: BannerCategory) {
-    if (!selectedBannerCategory) return;
-
-    try {
-      editBannerCategory(selectedBannerCategory.bannerCategoryId, data);
-    } catch (err) {
-      console.error("Erro ao atualizar usuário", err);
-    }
-  }
 
   async function handleDelete() {
     if (!selectedBannerCategory) return;
-    removeBannerCategory(selectedBannerCategory.bannerCategoryId);
+    onDelete(selectedBannerCategory.bannerCategoryId);
     setConfirmModalOpen(false);
   }
-
-  useEffect(() => {
-    fetchBannerCategories();
-  }, [pathname]);
 
   return (
     <>
@@ -61,20 +47,20 @@ export function BannerCategoryTable() {
           </thead>
 
           <tbody>
-            {loading ? (
+            {loadingData ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   <Spinner width="30px" height="30px" />
                 </td>
               </tr>
-            ) : banner_categories.length === 0 ? (
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   Nenhuma categoria de banner encontrada
                 </td>
               </tr>
             ) : (
-              banner_categories.map((banner_category) => (
+              data.map((banner_category) => (
                 <tr
                   key={banner_category.bannerCategoryId}
                   className="border-t border-white/10 hover:bg-white/5 transition"

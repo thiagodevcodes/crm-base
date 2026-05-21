@@ -1,39 +1,26 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-
 import { useEffect, useState } from "react";
 import { BannerCategory, BannerCategoryFormData } from "../types";
-import { useBannerCategoryContext } from "../contexts/context";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useBannerCategories } from "../hooks/useBannerCategories";
 
 type Props = {
   id: string;
   title: string;
 };
 
-export function EditView({
-  id,
-  title
-}: Props) {
-  const { editBannerCategory, fetchBannerCategory } = useBannerCategoryContext();
-  const [bannerCategoryData, setBannerCategoryData] = useState<BannerCategory | null>(null);
-  const router = useRouter()
-
-  useEffect(() => {
-    async function load() {
-      const data = await fetchBannerCategory(id);
-      setBannerCategoryData(data);
-    }
-    if (id) load();
-  }, [id]);
-
+export function EditView({ id, title }: Props) {
+  const { editBannerCategory, fetchBannerCategory } = useBannerCategories();
+  const [bannerCategoryData, setBannerCategoryData] =
+    useState<BannerCategory | null>(null);
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<BannerCategoryFormData>({
@@ -43,6 +30,14 @@ export function EditView({
       height: bannerCategoryData?.height,
     },
   });
+
+  useEffect(() => {
+    async function load() {
+      const data = await fetchBannerCategory(id);
+      setBannerCategoryData(data);
+    }
+    if (id) load();
+  }, [id]);
 
   useEffect(() => {
     if (bannerCategoryData) {
@@ -58,7 +53,7 @@ export function EditView({
 
   async function handleFormSubmit(data: BannerCategoryFormData) {
     try {
-      editBannerCategory(id, data)
+      editBannerCategory(id, data);
       reset();
       router.push("/admin/banner_categories");
       router.refresh();
@@ -68,9 +63,11 @@ export function EditView({
   }
 
   return (
-      <div className="px-10">
+    <div className="px-10">
       <div className="py-8">
-        <h1 className="text-2xl font-bold">{title} - {bannerCategoryData?.title}</h1>
+        <h1 className="text-2xl font-bold">
+          {title} - {bannerCategoryData?.title}
+        </h1>
         <p>Bem-vindo ao painel de edição de categorias de Banner!</p>
       </div>
 

@@ -2,9 +2,12 @@ import axios from "axios";
 import { BannerCategory } from "../types";
 
 export async function getBannerCategories(): Promise<BannerCategory[]> {
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/banner_categories`, {
-    withCredentials: true,
-  });
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/banner_categories`,
+    {
+      withCredentials: true,
+    },
+  );
 
   return response.data;
 }
@@ -23,7 +26,7 @@ export async function getBannerCategory(id: string): Promise<BannerCategory> {
 export async function createBannerCategory(
   title: string,
   width: number,
-  height: number
+  height: number,
 ): Promise<BannerCategory> {
   const response = await axios.post(
     `${process.env.NEXT_PUBLIC_API_URL}/banner_categories`,
@@ -34,17 +37,22 @@ export async function createBannerCategory(
   return response.data;
 }
 
-export async function deleteBannerCategory(bannerCategoryId: string): Promise<void> {
-  await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/banner_categories/${bannerCategoryId}`, {
-    withCredentials: true,
-  });
+export async function deleteBannerCategory(
+  bannerCategoryId: string,
+): Promise<void> {
+  await axios.delete(
+    `${process.env.NEXT_PUBLIC_API_URL}/banner_categories/${bannerCategoryId}`,
+    {
+      withCredentials: true,
+    },
+  );
 }
 
 export async function updateBannerCategory(
   id: string,
   title: string,
   width: number,
-  height: number
+  height: number,
 ): Promise<BannerCategory> {
   const response = await axios.put(
     `${process.env.NEXT_PUBLIC_API_URL}/banner_categories/${id}`,

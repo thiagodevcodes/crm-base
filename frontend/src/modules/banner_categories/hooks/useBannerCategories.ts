@@ -13,7 +13,7 @@ export function useBannerCategories() {
   const [banner_categories, setBannerCategories] = useState<BannerCategory[]>(
     [],
   );
-  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
   // READ
   const fetchBannerCategory = async (id: string) => {
@@ -23,11 +23,11 @@ export function useBannerCategories() {
 
   // READ
   const fetchBannerCategories = async () => {
-    setLoading(true);
+    setLoadingData(true);
     const data = await getBannerCategories();
     await delay(1000);
     setBannerCategories(data);
-    setLoading(false);
+    setLoadingData(false);
   };
 
   // CREATE
@@ -72,7 +72,7 @@ export function useBannerCategories() {
 
   return {
     banner_categories,
-    loading,
+    loadingData,
     fetchBannerCategories,
     fetchBannerCategory,
     addBannerCategory,

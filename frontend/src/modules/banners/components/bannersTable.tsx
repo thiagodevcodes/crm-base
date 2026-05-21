@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { BannerFile } from "@/modules/banners/types/banner";
@@ -8,21 +8,15 @@ import Image from "next/image";
 import { canAccess } from "@/shared/utils/canAccess";
 import r2Loader from "@/shared/utils/r2loader";
 import { Spinner } from "@/shared/components/ui/spinner";
-import { deleteFile } from "../services/banners";
-import { useBanners } from "../hooks/useBanners";
-import { useParams, usePathname, useRouter } from "next/navigation";
+
 
 interface BannerTableProps {
-  banners: any[];
+  data: any[];
   loadingData?: boolean;
   onDelete: (id: string) => void;
 }
 
-export function BannerTable({
-  banners,
-  loadingData,
-  onDelete
-}: BannerTableProps) {
+export function BannerTable({ data, loadingData, onDelete }: BannerTableProps) {
   const [selectedImage, setSelectedImage] = useState<BannerFile | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
@@ -49,7 +43,7 @@ export function BannerTable({
           </thead>
 
           <tbody>
-            {(loadingData || banners.length === 0) && (
+            {(loadingData || data.length === 0) && (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   {loadingData ? (
@@ -61,7 +55,7 @@ export function BannerTable({
               </tr>
             )}
 
-            {banners.map((image, index) => (
+            {data.map((image, index) => (
               <tr
                 key={index}
                 className="border-t border-white/10 hover:bg-white/5 transition"

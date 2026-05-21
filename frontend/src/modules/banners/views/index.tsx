@@ -77,7 +77,7 @@ export default function Banners({ id }: { id: string }) {
       </div>
 
       <BannerTable
-        banners={banners}
+        data={banners}
         onDelete={removeBanner}
         loadingData={loadingData}
       />

@@ -3,15 +3,15 @@
 import { useForm } from "react-hook-form";
 import { BannerCategoryFormData } from "../types";
 import Link from "next/link";
-import { useBannerCategoryContext } from "../contexts/context";
 import { useRouter } from "next/navigation";
+import { useBannerCategories } from "../hooks/useBannerCategories";
 
 type Props = {
   title: string;
 };
 
 export function NewView({ title }: Props) {
-  const { addBannerCategory } = useBannerCategoryContext();
+  const { addBannerCategory } = useBannerCategories();
   const router = useRouter();
 
   const {

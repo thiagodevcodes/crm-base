@@ -2,26 +2,18 @@
 
 import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
-import { useBannerCategoryContext } from "@/modules/banner_categories/contexts/context";
-import { BannerCategoryFormData } from "@/modules/banner_categories/types";
 import { BannerCategoryTable } from "@/modules/banner_categories/components/bannerCategoryTable";
 import Link from "next/link";
+import { useBannerCategories } from "../hooks/useBannerCategories";
 
 export default function BannerCategories() {
-  const { addBannerCategory } = useBannerCategoryContext();
+  const { banner_categories, loadingData, removeBannerCategory } =
+    useBannerCategories();
   const { authenticated, loading, permissions } = useAuth();
   const router = useRouter();
-
-  async function handleSubmit(data: BannerCategoryFormData) {
-    try {
-      addBannerCategory(data);
-    } catch (err) {
-      console.error("Erro ao criar categoria de banner", err);
-    }
-  }
 
   useEffect(() => {
     if (!loading && !authenticated) router.replace("/admin");
@@ -35,7 +27,11 @@ export default function BannerCategories() {
     }
   }, [loading, authenticated, router, permissions]);
 
-  if (loading || !authenticated || !canAccess(permissions, ["GET_BANNER_CATEGORIES"]))
+  if (
+    loading ||
+    !authenticated ||
+    !canAccess(permissions, ["GET_BANNER_CATEGORIES"])
+  )
     return <SpinnerLoading />;
 
   return (
@@ -47,13 +43,20 @@ export default function BannerCategories() {
         </div>
 
         {canAccess(permissions, ["ADD_BANNER_CATEGORY"]) && (
-          <Link  className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer" href={"/admin/banner_categories/new"}>
+          <Link
+            className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
+            href={"/admin/banner_categories/new"}
+          >
             Adicionar Categoria de Banner
           </Link>
         )}
       </div>
 
-      <BannerCategoryTable />
+      <BannerCategoryTable
+        data={banner_categories}
+        loadingData={loadingData}
+        onDelete={removeBannerCategory}
+      />
     </div>
   );
 }
