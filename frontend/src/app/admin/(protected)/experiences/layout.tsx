@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { ExperienceProvider } from "@/modules/experiences/contexts/context";
 
 type Props = {
   children: ReactNode;
@@ -9,8 +8,8 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <ExperienceProvider>
+    <div>
       {children}
-    </ExperienceProvider>
+    </div>
   );
 }

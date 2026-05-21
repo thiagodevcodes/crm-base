@@ -2,12 +2,10 @@
 
 import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
-import { ExperienceFormData } from "@/modules/experiences/types";
 import { ExperiencesTable } from "@/modules/experiences/components/experiencesTable";
-import { useExperienceContext } from "@/modules/experiences/contexts/context";
 import Link from "next/link";
 import { useExperiences } from "../hooks/useExperiences";
 
