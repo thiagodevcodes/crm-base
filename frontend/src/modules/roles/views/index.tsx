@@ -2,31 +2,17 @@
 
 import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { canAccess } from "@/shared/utils/canAccess";
-import { Modal } from "@/shared/components/ui/modal";
-import { RoleFormData } from "@/modules/roles/types";
-import { useRoleContext } from "@/modules/roles/contexts/context";
-import { RegisterRoleForm } from "../components/registerRoleForm";
 import { RolesTable } from "../components/rolesTable";
 import Link from "next/link";
+import { useRoles } from "../hooks/useRoles";
 
 export default function Roles() {
+  const { roles, loadingData, removeRole } = useRoles();
   const { authenticated, loading, permissions } = useAuth();
-  const [open, setOpen] = useState(false);
   const router = useRouter();
-
-  const { addRole } = useRoleContext();
-
-  async function handleSubmit(data: RoleFormData) {
-    try {
-      await addRole(data);
-      setOpen(false);
-    } catch (err) {
-      console.error("Erro ao criar role", err);
-    }
-  }
 
   useEffect(() => {
     if (!loading && !authenticated) router.replace("/admin");
@@ -57,7 +43,11 @@ export default function Roles() {
         )}
       </div>
 
-      <RolesTable />
+      <RolesTable
+        data={roles}
+        loadingData={loadingData}
+        onDelete={removeRole}
+      />
     </div>
   );
 }

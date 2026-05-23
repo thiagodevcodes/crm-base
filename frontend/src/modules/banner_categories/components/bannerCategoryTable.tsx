@@ -9,7 +9,7 @@ import { BannerCategory } from "../types";
 import Link from "next/link";
 
 interface BannerCategoryTableProps {
-  data: any[];
+  data: BannerCategory[];
   loadingData?: boolean;
   onDelete: (id: string) => void;
 }

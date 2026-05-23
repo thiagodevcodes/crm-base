@@ -12,7 +12,7 @@ import { delay } from "@/shared/utils/functions";
 
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
   // READ
   const fetchUser = async (id: string) => {
@@ -22,11 +22,11 @@ export function useUsers() {
 
   // READ
   const fetchUsers = async () => {
-    setLoading(true);
+    setLoadingData(true);
     const data = await getUsers();
     await delay(1000);
     setUsers(data);
-    setLoading(false);
+    setLoadingData(false);
   };
 
   // CREATE
@@ -73,7 +73,7 @@ export function useUsers() {
 
   return {
     users,
-    loading,
+    loadingData,
     fetchUsers,
     fetchUser,
     addUser,

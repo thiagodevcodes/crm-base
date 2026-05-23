@@ -11,7 +11,7 @@ import { Spinner } from "@/shared/components/ui/spinner";
 
 
 interface BannerTableProps {
-  data: any[];
+  data: BannerFile[];
   loadingData?: boolean;
   onDelete: (id: string) => void;
 }

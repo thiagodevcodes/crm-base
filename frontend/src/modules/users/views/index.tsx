@@ -1,33 +1,19 @@
 "use client";
 
-import { RegisterUserForm } from "@/modules/users/components/registerUserForm";
 import { UsersTable } from "@/modules/users/components/usersTable";
 import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useRouter } from "next/navigation";
-import { UserFormData } from "@/modules/users/types";
 
-import { useUserContext } from "@/modules/users/contexts/context";
-import { Modal } from "@/shared/components/ui/modal";
 import Link from "next/link";
+import { useUsers } from "../hooks/useUsers";
 
 export default function Users() {
   const { authenticated, loading, permissions } = useAuth();
-  const [open, setOpen] = useState(false);
+  const { users, loadingData, removeUser } = useUsers();
   const router = useRouter();
-
-  const { addUser } = useUserContext();
-
-  async function handleSubmit(data: UserFormData) {
-    try {
-      await addUser(data);
-      setOpen(false);
-    } catch (err) {
-      console.error("Erro ao criar usuário", err);
-    }
-  }
 
   useEffect(() => {
     if (!loading && !authenticated) router.replace("/admin");
@@ -49,12 +35,20 @@ export default function Users() {
         </div>
 
         {canAccess(permissions, ["ADD_USER"]) && (
-          <Link  className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer" href={"/admin/users/new"}>
+          <Link
+            className="bg-slate-900 text-white px-4 py-2 rounded-xl cursor-pointer"
+            href={"/admin/users/new"}
+          >
             Adicionar Usuário
           </Link>
         )}
       </div>
-      <UsersTable />
+
+      <UsersTable
+        data={users}
+        loadingData={loadingData}
+        onDelete={removeUser}
+      />
     </div>
   );
 }

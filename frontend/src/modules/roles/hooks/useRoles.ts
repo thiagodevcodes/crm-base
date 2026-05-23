@@ -5,7 +5,7 @@ import { Role, RoleFormData } from "../types";
 
 export function useRoles() {
   const [roles, setRoles] = useState<Role[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(false);
 
   // READ
   const fetchRole = async (id: string) => {
@@ -15,11 +15,11 @@ export function useRoles() {
 
   // READ
   const fetchRoles = async () => {
-    setLoading(true);
+    setLoadingData(true);
     const data = await getRoles();
     await delay(1000);
     setRoles(data);
-    setLoading(false);
+    setLoadingData(false);
   };
 
   // CREATE
@@ -52,7 +52,7 @@ export function useRoles() {
 
   return {
     roles,
-    loading,
+    loadingData,
     fetchRoles,
     fetchRole,
     addRole,

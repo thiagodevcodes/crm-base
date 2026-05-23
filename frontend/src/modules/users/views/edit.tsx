@@ -8,8 +8,8 @@ import { User, UserFormData } from "../types";
 import { getRoles } from "@/modules/roles/services/role";
 import { Role, RoleOption } from "@/modules/roles/types";
 import { useRouter } from "next/navigation";
-import { useUserContext } from "../contexts/context";
 import Link from "next/link";
+import { useUsers } from "../hooks/useUsers";
 
 type Props = {
   title: string;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 export function EditView({ title, id }: Props) {
-  const { editUser, fetchUser } = useUserContext();
+  const { editUser, fetchUser } = useUsers();
   const [roles, setRoles] = useState<Role[]>([]);
   const [userData, setUserData] = useState<User | null>(null);
   const router = useRouter();

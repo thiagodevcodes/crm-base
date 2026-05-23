@@ -1,7 +1,6 @@
 "use client";
 
 import { ReactNode } from "react";
-import { RoleProvider } from "@/modules/roles/contexts/context";
 
 type Props = {
   children: ReactNode;
@@ -9,8 +8,8 @@ type Props = {
 
 export default function Layout({ children }: Props) {
   return (
-    <RoleProvider>
+    <div>
       {children}
-    </RoleProvider>
+    </div>
   );
 }

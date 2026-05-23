@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { User, UserFormData } from "../types";
 import { useRouter } from "next/navigation";
-import { useUserContext } from "../contexts/context";
 import Link from "next/link";
+import { useUsers } from "../hooks/useUsers";
 
 type Props = {
   title: string;
@@ -21,7 +21,7 @@ export function PasswordView({ title, id }: Props) {
     reset,
   } = useForm<UserFormData>();
 
-  const { editPassword, fetchUser } = useUserContext();
+  const { editPassword, fetchUser } = useUsers();
   const [userData, setUserData] = useState<User | null>(null);
   const router = useRouter();
   const password = watch("password");

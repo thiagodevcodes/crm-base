@@ -9,7 +9,7 @@ import { Spinner } from "@/shared/components/ui/spinner";
 import Link from "next/link";
 
 interface ExperiencesTableProps {
-  data: any[];
+  data: Experience[];
   loadingData?: boolean;
   onDelete: (id: string) => void;
 }

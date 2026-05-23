@@ -5,10 +5,10 @@ import Select, { StylesConfig } from "react-select";
 import { useEffect, useState } from "react";
 import { getPermissions } from "@/modules/permissions/services/permission";
 import { Permission, PermissionOption } from "@/modules/permissions/types";
-import { Role, RoleFormData } from "../types";
-import { useRoleContext } from "../contexts/context";
+import { RoleFormData } from "../types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useRoles } from "../hooks/useRoles";
 
 type Props = {
   title: string;
@@ -16,7 +16,7 @@ type Props = {
 
 export function NewView({ title }: Props) {
   const [permissions, setPermissions] = useState<Permission[]>([]);
-  const { addRole } = useRoleContext();
+  const { addRole } = useRoles();
   const router = useRouter();
 
   const {

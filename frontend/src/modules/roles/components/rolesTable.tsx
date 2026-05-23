@@ -1,45 +1,29 @@
 "use client";
 
-import { Modal } from "@/shared/components/ui/modal";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { canAccess } from "@/shared/utils/canAccess";
 import { ConfirmAlert } from "@/shared/components/ui/confirmAlert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Role, RoleFormData } from "../types";
-import { UpdateRoleForm } from "./updateRoleForm";
-import { useRoleContext } from "../contexts/context";
 import { Spinner } from "@/shared/components/ui/spinner";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-type Props = {
-  roles: Role[];
-  setRoles: React.Dispatch<React.SetStateAction<Role[]>>;
-};
+interface RoleTableProps {
+  data: Role[];
+  loadingData?: boolean;
+  onDelete: (id: string) => void;
+}
 
-export function RolesTable() {
-  const { roles, removeRole, loading, fetchRoles } = useRoleContext();
+export function RolesTable({ data, loadingData, onDelete }: RoleTableProps) {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const { permissions } = useAuth();
-  const pathname = usePathname();
 
   async function handleDelete() {
     if (!selectedRole) return;
-
-    try {
-      await removeRole(selectedRole?.roleId);
-    } catch (err) {
-      console.error("Erro ao deletar usuário:", err);
-    } finally {
-      setConfirmModalOpen(false);
-      setSelectedRole(null);
-    }
+    onDelete(selectedRole.roleId);
+    setConfirmModalOpen(false);
   }
-
-  useEffect(() => {
-    fetchRoles();
-  }, [pathname]);
 
   return (
     <>
@@ -57,20 +41,20 @@ export function RolesTable() {
           </thead>
 
           <tbody>
-            {loading ? (
+            {loadingData ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   <Spinner width="30px" height="30px" />
                 </td>
               </tr>
-            ) : roles.length === 0 ? (
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   Nenhuma função encontrada
                 </td>
               </tr>
             ) : (
-              roles.map((role) => (
+              data.map((role) => (
                 <tr
                   key={role.roleId}
                   className="border-t border-white/10 hover:bg-white/5 transition"

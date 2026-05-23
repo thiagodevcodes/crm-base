@@ -3,57 +3,34 @@
 import { User, UserFormData } from "../types";
 import { useEffect, useState } from "react";
 import { ConfirmAlert } from "../../../shared/components/ui/confirmAlert";
-import { PasswordForm } from "./passwordUserForm";
 import { canAccess } from "@/shared/utils/canAccess";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
-import { Modal } from "@/shared/components/ui/modal";
-import { UpdateUserForm } from "./updateUserForm";
-import { useUserContext } from "../contexts/context";
 import { Spinner } from "@/shared/components/ui/spinner";
-import { SpinnerLoading } from "@/shared/components/ui/spinnerLoading";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-export function UsersTable() {
+interface UsersTableProps {
+  data: User[];
+  loadingData?: boolean;
+  onDelete: (id: string) => void;
+}
+
+export function UsersTable({
+  data,
+  loadingData,
+  onDelete,
+}: UsersTableProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
-  const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const { permissions } = useAuth();
   const pathname = usePathname();
 
-  const { users, removeUser, editUser, editPassword, fetchUsers, loading } =
-    useUserContext();
-
-  async function handleUpdatePassword(data: UserFormData) {
-    if (!selectedUser) return;
-
-    try {
-      await editPassword(selectedUser.userId, data.password);
-
-      setPasswordModalOpen(false);
-      setSelectedUser(null);
-    } catch (err) {
-      console.error("Erro ao atualizar usuário", err);
-    }
-  }
 
   async function handleDelete() {
     if (!selectedUser) return;
-
-    try {
-      await removeUser(selectedUser.userId);
-    } catch (err) {
-      console.error("Erro ao deletar usuário:", err);
-    } finally {
-      setConfirmModalOpen(false);
-      setSelectedUser(null);
-    }
+    onDelete(selectedUser.userId);
+    setConfirmModalOpen(false);
   }
-
-  useEffect(() => {
-    fetchUsers();
-  }, [pathname]);
 
   return (
     <>
@@ -73,20 +50,20 @@ export function UsersTable() {
           </thead>
 
           <tbody>
-            {loading ? (
+            {loadingData ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   <Spinner width="30px" height="30px" />
                 </td>
               </tr>
-            ) : users.length === 0 ? (
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-center text-white/50">
                   Nenhum usuário encontrado
                 </td>
               </tr>
             ) : (
-              users.map((user) => (
+              data.map((user) => (
                 <tr
                   key={user.userId}
                   className="border-t border-white/10 hover:bg-white/5 transition"
