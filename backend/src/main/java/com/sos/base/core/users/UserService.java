@@ -24,105 +24,109 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-   @Autowired
-   private RoleRepository roleRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
-   @Autowired
-   private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-   @Autowired
-   private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-   @Autowired
-   private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-   public List<UserEntity> findAll() {
-      return userRepository.findAll();
-   }
+    public List<UserEntity> findAll() {
+        return userRepository.findAll();
+    }
+
+    public long getCount() {
+        return userRepository.count();
+    }
 
     public UserEntity findById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
     }
 
-   @Transactional
-   public UserEntity create(CreateUserRequest dto) {
-      try {
-         var roles = roleRepository.findByNameIn(dto.roles());
+    @Transactional
+    public UserEntity create(CreateUserRequest dto) {
+        try {
+            var roles = roleRepository.findByNameIn(dto.roles());
 
-         if (roles.isEmpty()) {
-            throw new BusinessRuleException("Usuário deve possuir ao menos um papel válido");
-         }
+            if (roles.isEmpty()) {
+                throw new BusinessRuleException("Usuário deve possuir ao menos um papel válido");
+            }
 
-         if (roles.size() != dto.roles().size()) {
-            throw new BusinessRuleException("Uma ou mais roles informadas não existem");
-         }
+            if (roles.size() != dto.roles().size()) {
+                throw new BusinessRuleException("Uma ou mais roles informadas não existem");
+            }
 
-         if (userRepository.findByUsername(dto.username()).isPresent()) {
-            throw new DataIntegrityException("Usuário já cadastrado");
-         }
+            if (userRepository.findByUsername(dto.username()).isPresent()) {
+                throw new DataIntegrityException("Usuário já cadastrado");
+            }
 
-         UserEntity user = modelMapper.map(dto, UserEntity.class);
+            UserEntity user = modelMapper.map(dto, UserEntity.class);
 
-         user.setRoles(roles);
-         user.setPassword(passwordEncoder.encode(dto.password()));
-
-         return userRepository.save(user);
-      } catch (DataIntegrityViolationException ex) {
-         throw new DataIntegrityException("Erro ao cadastrar usuário");
-      }
-   }
-
-   @Transactional
-   public UserEntity update(UUID id, UpdateUserRequest dto) {
-      try {
-         UserEntity user = userRepository.findById(id)
-               .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
-
-         var roles = roleRepository.findByNameIn(dto.roles());
-
-         if (!roles.isEmpty() && roles.size() != dto.roles().size())
-            throw new BusinessRuleException("Uma ou mais roles informadas não existem");
-
-         if (!roles.isEmpty())
             user.setRoles(roles);
+            user.setPassword(passwordEncoder.encode(dto.password()));
 
-         modelMapper.map(dto, user);
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new DataIntegrityException("Erro ao cadastrar usuário");
+        }
+    }
 
-         return userRepository.save(user);
-      } catch (DataIntegrityViolationException ex) {
-         throw new ViolatedForeignKeyException(
-               "Não foi possível atualizar o usuário.");
-      }
+    @Transactional
+    public UserEntity update(UUID id, UpdateUserRequest dto) {
+        try {
+            UserEntity user = userRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
-   }
+            var roles = roleRepository.findByNameIn(dto.roles());
 
-   @Transactional
-   public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
-      try {
-         UserEntity user = userRepository.findById(id)
-               .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+            if (!roles.isEmpty() && roles.size() != dto.roles().size())
+                throw new BusinessRuleException("Uma ou mais roles informadas não existem");
 
-         user.setPassword(passwordEncoder.encode(dto.password()));
-         userRepository.save(user);
+            if (!roles.isEmpty())
+                user.setRoles(roles);
 
-         return userRepository.save(user);
-      } catch (DataIntegrityViolationException ex) {
-         throw new ViolatedForeignKeyException(
-               "Não foi possível atualizar a senha do usuário.");
-      }
+            modelMapper.map(dto, user);
 
-   }
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ViolatedForeignKeyException(
+                    "Não foi possível atualizar o usuário.");
+        }
 
-   @Transactional
-   public void delete(UUID id) {
-      try {
-         if (!userRepository.existsById(id))
-            throw new NotFoundException("Usuário não encontrado");
+    }
 
-         userRepository.deleteById(id);
-      } catch (DataIntegrityViolationException ex) {
-         throw new ViolatedForeignKeyException(
-               "Não foi possível deletar esse usuário.");
-      }
-   }
+    @Transactional
+    public UserEntity updatePassword(UUID id, UpdatePasswordRequest dto) {
+        try {
+            UserEntity user = userRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+            user.setPassword(passwordEncoder.encode(dto.password()));
+            userRepository.save(user);
+
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ViolatedForeignKeyException(
+                    "Não foi possível atualizar a senha do usuário.");
+        }
+
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+        try {
+            if (!userRepository.existsById(id))
+                throw new NotFoundException("Usuário não encontrado");
+
+            userRepository.deleteById(id);
+        } catch (DataIntegrityViolationException ex) {
+            throw new ViolatedForeignKeyException(
+                    "Não foi possível deletar esse usuário.");
+        }
+    }
 }

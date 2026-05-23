@@ -36,6 +36,10 @@ public class ExperienceService {
         return experienceRepository.findById(id).orElseThrow(() -> new NotFoundException("Experiência não encontrada"));
     }
 
+    public long getCount() {
+        return experienceRepository.count();
+    }
+
     @Transactional
     public ExperienceEntity create(CreateExperienceRequest dto) {
         try {

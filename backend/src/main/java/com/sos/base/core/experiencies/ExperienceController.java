@@ -34,6 +34,11 @@ public class ExperienceController {
         return ResponseEntity.ok(experienceService.findById(uuid));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        return ResponseEntity.ok(experienceService.getCount());
+    }
+
     @PostMapping
     @PreAuthorize("@auth.hasPermission('ADD_EXPERIENCE')")
     public ResponseEntity<ExperienceEntity> create(@Valid @RequestBody CreateExperienceRequest request) {

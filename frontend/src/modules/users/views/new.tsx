@@ -7,7 +7,8 @@ import { getRoles } from "@/modules/roles/services/role";
 import { UserFormData } from "../types";
 import { Role, RoleOption } from "@/modules/roles/types";
 import Link from "next/link";
-import { useUserContext } from "../contexts/context";
+import { useUsers } from "../hooks/useUsers";
+import { useRouter } from "next/navigation";
 
 type Props = {
   title: string;
@@ -15,6 +16,8 @@ type Props = {
 
 export function NewView({ title }: Props) {
   const [roles, setRoles] = useState<Role[]>([]);
+  const { addUser } = useUsers();
+  const router = useRouter();
 
   const {
     register,
@@ -25,14 +28,14 @@ export function NewView({ title }: Props) {
     reset,
   } = useForm<UserFormData>();
 
-  const { addUser } = useUserContext();
-
   const password = watch("password");
 
   async function handleFormSubmit(data: UserFormData) {
     try {
       await addUser(data);
       reset();
+      router.push("/admin/users");
+      router.refresh();
     } catch (err) {
       console.error("Erro ao cadastrar usuário:", err);
     }

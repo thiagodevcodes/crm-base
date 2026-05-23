@@ -70,6 +70,17 @@ export async function getUser(id: string): Promise<User> {
   return response.data;
 }
 
+export async function getCount(): Promise<number> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/users/count`,
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+}
+
 export async function deleteUser(userId: string): Promise<void> {
   await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
     withCredentials: true,

@@ -5,6 +5,7 @@ import {
   updateBannerCategory,
   deleteBannerCategory,
   getBannerCategory,
+  getCount,
 } from "../services/banner_categories";
 import { BannerCategory } from "../types";
 import { delay } from "@/shared/utils/functions";
@@ -15,7 +16,17 @@ export function useBannerCategories() {
   );
   const [loadingData, setLoadingData] = useState(false);
 
-  // READ
+  const [countBannerCategories, setCountBannerCategories] = useState<number>(0);
+
+  // COUNT
+  const getCountBannerCategories = async () => {
+    const data = await getCount();
+    setCountBannerCategories(data);
+    return data;
+  };
+
+
+  // READ  
   const fetchBannerCategory = async (id: string) => {
     const data = await getBannerCategory(id);
     return data;
@@ -77,6 +88,8 @@ export function useBannerCategories() {
     fetchBannerCategory,
     addBannerCategory,
     editBannerCategory,
+    countBannerCategories,
+    getCountBannerCategories,
     removeBannerCategory,
   };
 }

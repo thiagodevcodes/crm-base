@@ -40,6 +40,11 @@ public class UsersController {
    public ResponseEntity<List<UserEntity>> findAll() {
       return ResponseEntity.ok(userService.findAll());
    }
+   
+   @GetMapping("/count")
+   public ResponseEntity<Long> getCount() {
+      return ResponseEntity.ok(userService.getCount());
+   }
 
    @PutMapping("/{id}")
    @PreAuthorize("@auth.hasPermission('UPDATE_USER')")

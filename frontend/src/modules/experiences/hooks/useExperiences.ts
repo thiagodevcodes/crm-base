@@ -5,13 +5,22 @@ import {
   updateExperience,
   deleteExperience,
   getExperience,
+  getCount,
 } from "../services/experiences";
 import { Experience } from "../types";
 import { delay } from "@/shared/utils/functions";
 
 export function useExperiences() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [countExperiences, setCountExperiences] = useState<number>(0);
   const [loadingData, setLoadingData] = useState(false);
+
+  // COUNT
+  const getCountExperiences = async () => {
+    const data = await getCount();
+    setCountExperiences(data);
+    return data;
+  };
 
   // READ
   const fetchExperience = async (id: string) => {
@@ -71,7 +80,9 @@ export function useExperiences() {
     fetchExperiences,
     fetchExperience,
     addExperience,
+    getCountExperiences,
     editExperience,
     removeExperience,
+    countExperiences
   };
 }

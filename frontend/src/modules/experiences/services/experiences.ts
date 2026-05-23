@@ -38,6 +38,18 @@ export async function createExperience(
   return response.data;
 }
 
+export async function getCount(): Promise<number> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/experiences/count`,
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+}
+
+
 export async function deleteExperience(experienceId: string): Promise<void> {
   await axios.delete(
     `${process.env.NEXT_PUBLIC_API_URL}/experiences/${experienceId}`,

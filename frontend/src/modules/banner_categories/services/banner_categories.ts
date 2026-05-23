@@ -23,6 +23,17 @@ export async function getBannerCategory(id: string): Promise<BannerCategory> {
   return response.data;
 }
 
+export async function getCount(): Promise<number> {
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/banner_categories/count`,
+    {
+      withCredentials: true,
+    },
+  );
+
+  return response.data;
+}
+
 export async function createBannerCategory(
   title: string,
   width: number,

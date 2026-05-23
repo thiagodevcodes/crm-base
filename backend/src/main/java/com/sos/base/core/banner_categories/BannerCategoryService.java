@@ -32,9 +32,13 @@ public class BannerCategoryService {
     }
 
     public BannerCategoryEntity findById(UUID id) {
-        return bannerCategoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Categoria de banner não encontrada"));
+        return bannerCategoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Categoria de banner não encontrada"));
     }
 
+    public long getCount() {
+        return bannerCategoryRepository.count();
+    }
 
     @Transactional
     public BannerCategoryEntity create(CreateBannerCategoryRequest dto) {

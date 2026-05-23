@@ -5,7 +5,8 @@ import {
   getUser,
   updateUser,
   deleteUser,
-  updatePassword
+  updatePassword,
+  getCount
 } from "../services/user";
 import { User, UserFormData } from "../types";
 import { delay } from "@/shared/utils/functions";
@@ -13,6 +14,14 @@ import { delay } from "@/shared/utils/functions";
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
   const [loadingData, setLoadingData] = useState(false);
+  const [countUsers, setCountUsers] = useState<number>(0);
+
+  // COUNT
+  const getCountUsers= async () => {
+    const data = await getCount();
+    setCountUsers(data);
+    return data;
+  };
 
   // READ
   const fetchUser = async (id: string) => {
@@ -79,6 +88,8 @@ export function useUsers() {
     addUser,
     editUser,
     editPassword,
+    getCountUsers,
+    countUsers,
     removeUser
   };
 }

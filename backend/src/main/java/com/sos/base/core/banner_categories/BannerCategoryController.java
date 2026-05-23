@@ -33,6 +33,11 @@ public class BannerCategoryController {
         return ResponseEntity.ok(bannerCategoryService.findById(uuid));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getCount() {
+        return ResponseEntity.ok(bannerCategoryService.getCount());
+    }
+
     @PostMapping
     @PreAuthorize("@auth.hasPermission('ADD_BANNER_CATEGORY')")
     public ResponseEntity<BannerCategoryEntity> create(@Valid @RequestBody CreateBannerCategoryRequest request) {
