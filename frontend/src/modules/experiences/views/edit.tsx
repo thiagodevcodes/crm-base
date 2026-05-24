@@ -1,12 +1,13 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { useEffect, useState } from "react";
 import { Experience, ExperienceFormData } from "@/modules/experiences/types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useExperiences } from "../hooks/useExperiences";
+import Editor from "../components/editor";
 
 type Props = {
   title: string;
@@ -66,8 +67,8 @@ export function EditView({ title, id }: Props) {
   }
 
   return (
-    <div className="px-10">
-      <div className="py-8">
+    <div className="p-10">
+      <div className="pb-8">
         <h1 className="text-2xl font-bold">
           {title} - {experienceData?.title}
         </h1>
@@ -90,29 +91,6 @@ export function EditView({ title, id }: Props) {
             />
             {errors.title && (
               <p className="text-red-400 text-sm">{errors.title.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="font-bold" htmlFor="description">
-              Descrição
-            </label>
-            <input
-              type="text"
-              placeholder="Descrição"
-              className="w-full p-2 rounded text-black border border-gray-300 mt-3"
-              {...register("description", {
-                required: "Descrição é obrigatório",
-                minLength: {
-                  value: 3,
-                  message: "Mínimo de 3 caracteres",
-                },
-              })}
-            />
-            {errors.description && (
-              <p className="text-red-400 text-sm">
-                {errors.description.message}
-              </p>
             )}
           </div>
 
@@ -158,6 +136,22 @@ export function EditView({ title, id }: Props) {
                 {errors.technologies.message}
               </p>
             )}
+          </div>
+        </div>
+
+        <div className="sm:col-span-2 mt-10">
+          <label className="font-bold" htmlFor="description">
+            Descrição
+          </label>
+
+          <div className="mt-3">
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Editor value={field.value} onChange={field.onChange} />
+              )}
+            />
           </div>
         </div>
 

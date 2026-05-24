@@ -63,8 +63,8 @@ export function EditView({ id, title }: Props) {
   }
 
   return (
-    <div className="px-10">
-      <div className="py-8">
+    <div className="p-10">
+      <div className="pb-8">
         <h1 className="text-2xl font-bold">
           {title} - {bannerCategoryData?.title}
         </h1>

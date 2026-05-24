@@ -1,10 +1,13 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { ExperienceFormData } from "@/modules/experiences/types";
 import Link from "next/link";
 import { useExperiences } from "../hooks/useExperiences";
 import { useRouter } from "next/navigation";
+
+import Editor from "../components/editor";
+import { useState } from "react";
 
 type Props = {
   title: string;
@@ -12,11 +15,13 @@ type Props = {
 
 export function NewView({ title }: Props) {
   const router = useRouter();
+  const [editorContent, setEditorContent] = useState<string>("");
   const { addExperience } = useExperiences();
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<ExperienceFormData>({});
@@ -33,8 +38,8 @@ export function NewView({ title }: Props) {
   }
 
   return (
-    <div className="px-10">
-      <div className="py-8">
+    <div className="p-10">
+      <div className="pb-8">
         <h1 className="text-2xl font-bold">{title}</h1>
         <p>Bem-vindo ao painel de cadastro de Experiências!</p>
       </div>
@@ -55,29 +60,6 @@ export function NewView({ title }: Props) {
             />
             {errors.title && (
               <p className="text-red-400 text-sm">{errors.title.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="font-bold" htmlFor="description">
-              Descrição
-            </label>
-            <input
-              type="text"
-              placeholder="Descrição"
-              className="w-full p-2 rounded text-black border border-gray-300 mt-3"
-              {...register("description", {
-                required: "Descrição é obrigatório",
-                minLength: {
-                  value: 3,
-                  message: "Mínimo de 3 caracteres",
-                },
-              })}
-            />
-            {errors.description && (
-              <p className="text-red-400 text-sm">
-                {errors.description.message}
-              </p>
             )}
           </div>
 
@@ -123,6 +105,22 @@ export function NewView({ title }: Props) {
                 {errors.technologies.message}
               </p>
             )}
+          </div>
+
+          <div className="sm:col-span-2 mt-10">
+            <label className="font-bold" htmlFor="description">
+              Descrição
+            </label>
+
+            <div className="mt-3">
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <Editor value={field.value} onChange={field.onChange} />
+                )}
+              />
+            </div>
           </div>
         </div>
 

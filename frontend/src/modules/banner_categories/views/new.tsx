@@ -33,8 +33,8 @@ export function NewView({ title }: Props) {
   }
 
   return (
-    <div className="px-10">
-      <div className="py-8">
+    <div className="p-10">
+      <div className="pb-8">
         <h1 className="text-2xl font-bold">{title}</h1>
         <p>Bem-vindo ao painel de cadastro de Categorias de Banner!</p>
       </div>

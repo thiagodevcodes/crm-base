@@ -67,7 +67,7 @@ export function ExperiencesTable({
                 >
                   <td className="px-4 py-3 font-medium">{experience.title}</td>
                   <td className="px-4 py-3 text-white/80">
-                    {experience.description}
+                    {experience.description.replace(/<[^>]*>/g, "")}
                   </td>
                   <td className="px-4 py-3 text-white/80">
                     {experience.period}

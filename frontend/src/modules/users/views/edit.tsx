@@ -93,8 +93,8 @@ export function EditView({ title, id }: Props) {
   };
 
   return (
-    <div className="px-10">
-      <div className="py-8">
+    <div className="p-10">
+      <div className="pb-8">
         <h1 className="text-2xl font-bold">{title} - {userData?.name}</h1>
         <p>Bem-vindo ao painel de edição de usuários!</p>
       </div>
