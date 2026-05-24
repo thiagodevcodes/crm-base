@@ -8,19 +8,41 @@ import { useEffect, useState } from "react";
 import { useUsers } from "@/modules/users/hooks/useUsers";
 import { useExperiences } from "@/modules/experiences/hooks/useExperiences";
 import { useBannerCategories } from "@/modules/banner_categories/hooks/useBannerCategories";
+import InfoBox from "../components/infoBox";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBriefcase,
+  faImages,
+  faUserGroup,
+} from "@fortawesome/free-solid-svg-icons";
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Dashboard() {
   const { authenticated, loading, permissions } = useAuth();
-  const { getCountUsers, countUsers } = useUsers();
-  const { getCountBannerCategories, countBannerCategories } =
-    useBannerCategories();
-  const { getCountExperiences, countExperiences } = useExperiences();
+  const { getCountUsers } = useUsers();
+  const { getCountBannerCategories } = useBannerCategories();
+  const { getCountExperiences } = useExperiences();
   const router = useRouter();
 
+  const [countUsers, setCountUsers] = useState<number>(0);
+  const [countExperiences, setCountExperiences] = useState<number>(0);
+  const [countBannerCategories, setCountBannerCategories] = useState<number>(0);
+
   useEffect(() => {
-    getCountExperiences();
-    getCountUsers();
-    getCountBannerCategories();
+    const fetchCount = async () => {
+      const countExperiences = await getCountExperiences();
+      const countUsers = await getCountUsers();
+      const countBannerCategories = await getCountBannerCategories();
+
+      setCountExperiences(countExperiences);
+      setCountBannerCategories(countBannerCategories);
+      setCountUsers(countUsers);
+    };
+    fetchCount();
   }, []);
 
   useEffect(() => {
@@ -43,21 +65,24 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <p>Bem-vindo ao painel administrativo!</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4">
-          <div className="mt-6 p-4 bg-slate-900 text-white rounded-4xl shadow flex items-center gap-4 flex-col">
-            <h2 className="text-5xl font-bold">{countUsers}</h2>
-            <h3>Usuários</h3>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-4">
+          <InfoBox
+            title="Usuários Totais"
+            totalItems={countUsers}
+            icon={<FontAwesomeIcon className="text-4xl" icon={faUserGroup} />}
+          />
 
-          <div className="mt-6 p-4 bg-slate-900 text-white rounded-4xl shadow flex items-center gap-4 flex-col">
-            <h2 className="text-5xl font-bold">{countExperiences}</h2>
-            <h3>Experiências</h3>
-          </div>
+          <InfoBox
+            title="Experiências"
+            totalItems={countExperiences}
+            icon={<FontAwesomeIcon className="text-4xl" icon={faBriefcase} />}
+          />
 
-          <div className="mt-6 p-4 bg-slate-900 text-white rounded-4xl shadow flex items-center gap-4 flex-col">
-            <h2 className="text-5xl font-bold">{countBannerCategories}</h2>
-            <h3>Categorias de Banner</h3>
-          </div>
+          <InfoBox
+            title="Categorias de Banner"
+            totalItems={countBannerCategories}
+            icon={<FontAwesomeIcon className="text-4xl" icon={faImages} />}
+          />
         </div>
       </div>
     </div>

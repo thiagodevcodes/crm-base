@@ -17,8 +17,8 @@ export function useUsers() {
   const [countUsers, setCountUsers] = useState<number>(0);
 
   // COUNT
-  const getCountUsers= async () => {
-    const data = await getCount();
+  const getCountUsers= async (role?: string) => {
+    const data = await getCount(role);
     setCountUsers(data);
     return data;
   };

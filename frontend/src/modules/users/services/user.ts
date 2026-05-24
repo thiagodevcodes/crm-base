@@ -70,11 +70,12 @@ export async function getUser(id: string): Promise<User> {
   return response.data;
 }
 
-export async function getCount(): Promise<number> {
+export async function getCount(role?: string): Promise<number> {
   const response = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/users/count`,
     {
       withCredentials: true,
+      params: { role }
     },
   );
 
